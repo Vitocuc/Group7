@@ -5,6 +5,7 @@
 #include "qemu/fifo8.h"
 #include "qom/object.h"
 #include "hw/ssi/ssi.h"
+#include "hw/qdev-clock.h"
 
 #define TYPE_NXPS32K358_LPSPI "nxps32k358-lpspi"
 OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
@@ -51,6 +52,7 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 struct NXPS32K358LPSPIState
 {
     SysBusDevice parent_obj;
+    Clock *clk;
 
     MemoryRegion mmio;
     SSIBus *ssi;

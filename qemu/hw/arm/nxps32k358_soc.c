@@ -17,8 +17,8 @@
 /* stm32f100_soc implementation is derived from stm32f205_soc */
 
 // // The variables represent addresses on our nxp_s32k and need to be changed(is also present the number of pins that we have for usart and spi)
-static const uint32_t lpuart_addr[NXP_NUM_LPUARTS] = {0x40328000, 0x4032C000, 0x40330000, 0x40334000, 0x40338000, 0x4033C000, 0x40340000, 0x40344000, 0x4048C000, 0x40490000,0x40494000,0x40498000,0x4049C000,0x404A0000,0x404A4000,0x404A8000};
-static const uint32_t lpspi_addr[NXP_NUM_LPSPIS] = {0x40358000, 0x4035C000, 0x40360000, 0x40364000, 0x404BC000,0x404C0000};
+static const uint32_t lpuart_addr[NXP_NUM_LPUARTS] = {0x40328000, 0x4032C000, 0x40330000, 0x40334000, 0x40338000, 0x4033C000, 0x40340000, 0x40344000, 0x4048C000, 0x40490000, 0x40494000, 0x40498000, 0x4049C000, 0x404A0000, 0x404A4000, 0x404A8000};
+static const uint32_t lpspi_addr[NXP_NUM_LPSPIS] = {0x40358000, 0x4035C000, 0x40360000, 0x40364000, 0x404BC000, 0x404C0000};
 
 static const int lpuart_irq[NXP_NUM_LPUARTS] = {141, 142, 143, 144, 145, 146, 147};
 static const int lpspi_irq[NXP_NUM_LPSPIS] = {165, 166, 167, 168, 169, 170};
@@ -265,7 +265,6 @@ static void nxps32k358_soc_initfn(Object *obj)
 static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
 {
 
-
     NXPS32K358State *s = NXPS32K358_SOC(dev_soc);
     DeviceState *dev, *armv7m;
     SysBusDevice *busdev;
@@ -278,6 +277,16 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
      * so it is correctly parented and not leaked on an init/deinit; it is not
      * intended as an externally exposed clock.
      */
+
+    // Add fixed clock sources for AIPS clocks
+    Clock *aips_plat_fixed = clock_new(OBJECT(s), "aips_plat_fixed");
+    clock_set_hz(aips_plat_fixed, 80000000);
+    clock_set_source(s->aips_plat_clk, aips_plat_fixed);
+
+    Clock *aips_slow_fixed = clock_new(OBJECT(s), "aips_slow_fixed");
+    clock_set_hz(aips_slow_fixed, 40000000);
+    clock_set_source(s->aips_slow_clk, aips_slow_fixed);
+
     if (clock_has_source(s->refclk))
     {
         error_setg(errp, "refclk clock must not be wired up by the board code");
@@ -294,13 +303,13 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
     /* The refclk always runs at frequency HCLK / 8 */
     clock_set_mul_div(s->refclk, 8, 1);
     clock_set_source(s->refclk, s->sysclk);
-    clock_set_hz(s->aips_plat_clk, 80000000);
-    clock_set_hz(s->aips_slow_clk, 40000000);
+    // clock_set_hz(s->aips_plat_clk, 80000000);
+    // clock_set_hz(s->aips_slow_clk, 40000000);
 
     // FLASH SIZE DEFINED IN .H
 
     // Set up the memory region for our board
-   /*
+    /*
      * Init code flash region
      */
     memory_region_init_rom(&s->code_flash_0, OBJECT(dev_soc),
@@ -362,7 +371,6 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
                            ITCM_SIZE, &error_fatal);
     memory_region_add_subregion(system_memory, ITCM_BASE_ADDRESS, &s->itcm);
 
-    
     // Set up the CPU -> CONNECTING TO PINS
     armv7m = DEVICE(&s->armv7m);
     qdev_prop_set_uint32(armv7m, "num-irq", 240); // definisce i numeri delle IRQ
@@ -400,9 +408,12 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
         qdev_prop_set_chr(dev, "chardev", serial_hd(i));
         // LPUART 0, 1 and 8 use AIPS_PLAT_CLK (MUX_0_DC_1)
         // LPUART 2 to 7 and 9 to 15 use AIPS_SLOW_CLK (MUX_0_DC_2)
-        if (i < 2 || i == 8) {
+        if (i < 2 || i == 8)
+        {
             qdev_connect_clock_in(dev, "clk", s->aips_plat_clk);
-        } else {
+        }
+        else
+        {
             qdev_connect_clock_in(dev, "clk", s->aips_slow_clk);
         }
         if (!sysbus_realize(SYS_BUS_DEVICE(&s->lpuarts[i]), errp))
@@ -418,10 +429,14 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
     for (i = 0; i < NXP_NUM_LPSPIS; i++)
     {
         dev = DEVICE(&(s->lpspis[i]));
+
+        qdev_connect_clock_in(dev, "clk", s->aips_plat_clk);
+
         if (!sysbus_realize(SYS_BUS_DEVICE(&s->lpspis[i]), errp))
         {
             return;
         }
+
         busdev = SYS_BUS_DEVICE(dev);
         sysbus_mmio_map(busdev, 0, lpspi_addr[i]);
         sysbus_connect_irq(busdev, 0, qdev_get_gpio_in(armv7m, lpspi_irq[i]));

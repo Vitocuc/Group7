@@ -6,6 +6,10 @@
 #include "hw/qdev-properties.h"
 #include "hw/ssi/ssi.h"
 #include "hw/ssi/nxps32k358_lpspi.h"
+#include "hw/qdev-clock.h"
+#include "hw/qdev-properties-system.h"
+#include "qapi/error.h"
+#include "trace.h" // tracing system of qemu
 
 #ifndef NXP_LPSPI_ERR_DEBUG
 #define NXP_LPSPI_ERR_DEBUG 1
@@ -100,50 +104,32 @@ static void lpspi_update_irq(NXPS32K358LPSPIState *s)
  */
 static void lpspi_flush_txfifo(NXPS32K358LPSPIState *s)
 {
-    if ((fifo8_num_used(&s->tx_fifo) < 4) || (fifo8_num_free(&s->rx_fifo) < 4))
-    {
-        DB_PRINT("Flush requested, but blocked. TX has %d bytes, RX has %d free.\n",
-                 fifo8_num_used(&s->tx_fifo), fifo8_num_free(&s->rx_fifo));
-        lpspi_update_irq(s);
-        return;
-    }
-
     uint8_t pcs = (s->lpspi_tcr & TCR_PCS_MASK) >> TCR_PCS_SHIFT;
-    if (pcs >= s->num_cs_lines)
+
+    /* 1) on first data word, assert CS (active low) */
+    if (!s->busy)
     {
-        qemu_log_mask(LOG_GUEST_ERROR, "%s: Invalid Chip Select %d\n", __func__, pcs);
-        return;
+        qemu_set_irq(s->cs_lines[pcs], 0);
+        s->busy = true;
+        s->lpspi_sr |= LPSPI_SR_MBF;
     }
 
-    DB_PRINT("Asserting CS%d for transfer burst.\n", pcs);
-    qemu_set_irq(s->cs_lines[pcs], 0);
-
-    while ((fifo8_num_used(&s->tx_fifo) >= 4) && (fifo8_num_free(&s->rx_fifo) >= 4))
+    /* 2) shift data until TX empty or RX full */
+    while (!fifo8_is_empty(&s->tx_fifo) && /* rx space */)
     {
-        uint32_t tx_word = 0;
-        tx_word |= (uint32_t)fifo8_pop(&s->tx_fifo);
-        tx_word |= (uint32_t)fifo8_pop(&s->tx_fifo) << 8;
-        tx_word |= (uint32_t)fifo8_pop(&s->tx_fifo) << 16;
-        tx_word |= (uint32_t)fifo8_pop(&s->tx_fifo) << 24;
-
-        uint32_t rx_word = ssi_transfer(s->ssi, tx_word);
-
-        fifo8_push(&s->rx_fifo, rx_word & 0xFF);
-        fifo8_push(&s->rx_fifo, (rx_word >> 8) & 0xFF);
-        fifo8_push(&s->rx_fifo, (rx_word >> 16) & 0xFF);
-        fifo8_push(&s->rx_fifo, (rx_word >> 24) & 0xFF);
+        uint32_t tx = fifo8_get(&s->tx_fifo);
+        uint32_t rx = ssi_transfer(s->ssi, tx);
+        fifo8_put(&s->rx_fifo, rx);
     }
+    lpspi_update_status(s);
 
-    DB_PRINT("De-asserting CS%d after transfer burst.\n", pcs);
-    qemu_set_irq(s->cs_lines[pcs], 1);
-
-    if (fifo8_is_empty(&s->tx_fifo))
+    /* 3) when TX is empty, deassert CS and clear busy/MBF */
+    if (fifo8_is_empty(&s->tx_fifo) && s->busy)
     {
+        qemu_set_irq(s->cs_lines[pcs], 1); // ← deassert CS
+        s->busy = false;
         s->lpspi_sr &= ~LPSPI_SR_MBF;
-        DB_PRINT("TX FIFO is now empty, MBF cleared.\n");
     }
-
-    lpspi_update_irq(s);
 }
 
 static void nxps32k358_lpspi_do_reset(NXPS32K358LPSPIState *s)
@@ -288,21 +274,21 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
             }
             else
             {
-                if (!(s->lpspi_sr & LPSPI_SR_MBF))
+                // Push data in little-endian order
+                fifo8_push(&s->tx_fifo, val64 & 0xFF);
+                fifo8_push(&s->tx_fifo, (val64 >> 8) & 0xFF);
+                fifo8_push(&s->tx_fifo, (val64 >> 16) & 0xFF);
+                fifo8_push(&s->tx_fifo, (val64 >> 24) & 0xFF);
+
+                DB_PRINT("Pushed 0x%08" PRIx64 " to TX FIFO (used: %d)\n",
+                         val64, fifo8_num_used(&s->tx_fifo));
+
+                // Only flush if we have a full word (4 bytes)
+                if (fifo8_num_used(&s->tx_fifo) >= 4)
                 {
-                    s->lpspi_sr |= LPSPI_SR_MBF;
+                    lpspi_flush_txfifo(s);
                 }
-                s->lpspi_tdr = value;
-                fifo8_push(&s->tx_fifo, value & 0xFF);
-                fifo8_push(&s->tx_fifo, (value >> 8) & 0xFF);
-                fifo8_push(&s->tx_fifo, (value >> 16) & 0xFF);
-                fifo8_push(&s->tx_fifo, (value >> 24) & 0xFF);
             }
-            lpspi_flush_txfifo(s);
-        }
-        else
-        {
-            qemu_log_mask(LOG_GUEST_ERROR, "LPSPI is not enabled, cannot write to TDR\n");
         }
         return;
 
@@ -367,26 +353,45 @@ static const VMStateDescription vmstate_nxps32k358_lpspi = {
 
 static const Property nxps32k358_lpspi_properties[] = {
     DEFINE_PROP_UINT8("num-cs-lines", NXPS32K358LPSPIState, num_cs_lines, 1),
+    DEFINE_PROP_CLOCK("clk", NXPS32K358LPSPIState, clk), // ← enable clock binding
+    DEFINE_PROP_END_OF_LIST(),
 };
 
-static void nxps32k358_lpspi_realize(DeviceState *dev, Error **errp)
+static void nxps32k358_lpspi_init(Object *dev)
 {
     SysBusDevice *sbd = SYS_BUS_DEVICE(dev);
     NXPS32K358LPSPIState *s = NXPS32K358_LPSPI(dev);
 
+    DeviceState *d1 = DEVICE(dev);
+
+    s->clk = qdev_init_clock_in(DEVICE(s), "clk", NULL, s, 0);
+
     memory_region_init_io(&s->mmio, OBJECT(s), &nxps32k358_lpspi_ops, s,
-                          TYPE_NXPS32K358_LPSPI, S32K_LPSPI_REG_MAX_OFFSET);
+                          TYPE_NXPS32K358_LPSPI, 0x4000);
     sysbus_init_mmio(sbd, &s->mmio);
 
-    s->ssi = ssi_create_bus(dev, "spi");
+    s->ssi = ssi_create_bus(d1, "spi");
 
     sysbus_init_irq(sbd, &s->irq);
 
     s->cs_lines = g_new0(qemu_irq, s->num_cs_lines);
-    qdev_init_gpio_out_named(dev, s->cs_lines, "cs", s->num_cs_lines);
+    qdev_init_gpio_out_named(d1, s->cs_lines, "cs", s->num_cs_lines);
 
     fifo8_create(&s->tx_fifo, LPSPI_FIFO_BYTE_CAPACITY);
     fifo8_create(&s->rx_fifo, LPSPI_FIFO_BYTE_CAPACITY);
+}
+
+static void nxps32k358_lpspi_realize(DeviceState *dev, Error **errp)
+{
+    NXPS32K358LPSPIState *s = NXPS32K358_LPSPI(dev);
+
+    if (!s->clk)
+    {
+        error_setg(errp, "LPSPI: no clock connected");
+        return;
+    }
+    s->input_clk = clock_get_rate(s->clk); // ← grab 80 MHz
+    // …then compute prescalers etc before MEN=1…
 }
 
 static void nxps32k358_lpspi_class_init(ObjectClass *klass, const void *data)
@@ -396,12 +401,14 @@ static void nxps32k358_lpspi_class_init(ObjectClass *klass, const void *data)
     device_class_set_legacy_reset(dc, nxps32k358_lpspi_reset);
     device_class_set_props(dc, nxps32k358_lpspi_properties);
     dc->vmsd = &vmstate_nxps32k358_lpspi;
+    // device_class_add_clock_in(dc, "clk", NULL, NULL, 0);
 }
 
 static const TypeInfo nxps32k358_lpspi_info = {
     .name = TYPE_NXPS32K358_LPSPI,
     .parent = TYPE_SYS_BUS_DEVICE,
     .instance_size = sizeof(NXPS32K358LPSPIState),
+    .instance_init = nxps32k358_lpspi_init,
     .class_init = nxps32k358_lpspi_class_init,
 };
 
