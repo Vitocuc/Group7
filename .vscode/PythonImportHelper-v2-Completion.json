@@ -39821,5 +39821,23 @@
         "peekOfCode": "class UbuntuVM(basevm.BaseVM):\n    def __init__(self, args, config=None):\n        self.login_prompt = \"ubuntu-{}-guest login:\".format(self.arch)\n        basevm.BaseVM.__init__(self, args, config)\n    def build_image(self, img):\n        \"\"\"Build an Ubuntu VM image.  The child class will\n           define the install_cmds to init the VM.\"\"\"\n        os_img = self._download_with_cache(self.image_link,\n                                           sha256sum=self.image_sha256)\n        img_tmp = img + \".tmp\"",
         "detail": "qemu.tests.vm.ubuntuvm",
         "documentation": {}
+    },
+    {
+        "label": "test_lpspi_with_gdb",
+        "kind": 2,
+        "importPath": "test_lpspi",
+        "description": "test_lpspi",
+        "peekOfCode": "def test_lpspi_with_gdb():\n    \"\"\"Test LPSPI using GDB to inject correct register values\"\"\"\n    print(\"Starting QEMU with GDB server...\")\n    # Start QEMU with GDB server\n    qemu_cmd = [\n        './qemu-system-arm',\n        '-M', 'nxps32k358evb',\n        '-nographic',\n        '-kernel', '../../Demo_FreeRTOS.elf',\n        '-serial', 'none',",
+        "detail": "test_lpspi",
+        "documentation": {}
+    },
+    {
+        "label": "test_lpspi_monitor",
+        "kind": 2,
+        "importPath": "test_lpspi",
+        "description": "test_lpspi",
+        "peekOfCode": "def test_lpspi_monitor():\n    \"\"\"Test LPSPI using QEMU monitor commands\"\"\"\n    print(\"Testing LPSPI with QEMU monitor commands...\")\n    # Start QEMU with monitor\n    qemu_cmd = [\n        './qemu-system-arm',\n        '-M', 'nxps32k358evb',\n        '-nographic', \n        '-kernel', '../../Demo_FreeRTOS.elf',\n        '-serial', 'none',",
+        "detail": "test_lpspi",
+        "documentation": {}
     }
 ]

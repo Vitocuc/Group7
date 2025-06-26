@@ -12,20 +12,60 @@
 #include "string.h" // Per memset e memcmp
 #include "stdio.h"  // Per i messaggi di debug (se si usa una LPUART)
 
-/* Priorit� dei Task */
+/* Priorità dei Task */
 #define main_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 
 /* Definizioni per LPSPI */
-#define LPSPI_INSTANCE (0)   // Usi2mo LPSPI0
+#define LPSPI_INSTANCE (0)   // Usiamo LPSPI0
 #define SPI_BUFFER_SIZE (12) // Dimensione del buffer di trasferimento
 
 #define UART_LPUART_INTERNAL_CHANNEL 3
 
-/* Messaggi di debug (opzionali, richiedono una LPUART configurata) */
-#define SEND_MSG "SendTask: Preparo e invio dati via SPI...\n"
+/* Direct register access for LPSPI configuration */
+#define LPSPI0_BASE_ADDR 0x40330000
+
+/* LPSPI Register offsets */
+#define LPSPI_CR_OFFSET     0x10
+#define LPSPI_SR_OFFSET     0x14
+#define LPSPI_IER_OFFSET    0x18
+#define LPSPI_CFGR0_OFFSET  0x20
+#define LPSPI_CFGR1_OFFSET  0x24
+#define LPSPI_CCR_OFFSET    0x40
+#define LPSPI_FCR_OFFSET    0x58
+#define LPSPI_FSR_OFFSET    0x5C
+#define LPSPI_TCR_OFFSET    0x60
+#define LPSPI_TDR_OFFSET    0x64
+#define LPSPI_RSR_OFFSET    0x70
+#define LPSPI_RDR_OFFSET    0x74
+
+/* LPSPI Register bit definitions */
+#define LPSPI_CR_MEN        (1U << 0)
+#define LPSPI_CR_RST        (1U << 1)
+#define LPSPI_CR_RTF        (1U << 8)
+#define LPSPI_CR_RRF        (1U << 9)
+
+#define LPSPI_SR_TDF        (1U << 0)
+#define LPSPI_SR_RDF        (1U << 1)
+#define LPSPI_SR_TCF        (1U << 10)
+#define LPSPI_SR_MBF        (1U << 24)
+
+#define LPSPI_CFGR1_MASTER  (1U << 0)
+#define LPSPI_CFGR1_PINCFG_LOOPBACK (1U << 24)  // Loopback mode for testing
+
+#define LPSPI_TCR_FRAMESZ(n) ((n-1) << 0)  // Frame size (n-1), so for 8-bit use n=8
+#define LPSPI_TCR_PCS(n)     ((n) << 24)    // Chip select
+#define LPSPI_TCR_CPOL       (1U << 31)     // Clock polarity
+#define LPSPI_TCR_CPHA       (1U << 30)     // Clock phase
+
+/* Register access macros */
+#define REG32(addr) (*(volatile uint32_t*)(addr))
+#define LPSPI0_REG(offset) REG32(LPSPI0_BASE_ADDR + offset)
+
+/* Messaggi di debug */
+#define SEND_MSG "SendTask: Preparo e invio dati via SPI (8-bit frames)...\n"
 #define RECV_SUCCESS_MSG "ReceiveTask: Trasferimento SPI completato con SUCCESSO!\n"
 #define RECV_FAILURE_MSG "ReceiveTask: ERRORE nel trasferimento SPI!\n"
-#define START_MSG "Inizializzazione completata!\n"
+#define START_MSG "Inizializzazione completata! LPSPI configurato per 8-bit frames in loopback.\n"
 #define CALLBACK_MSG "Sono nella callback! \n"
 #define SEND_SUCCESS_MSG "SendTask: Trasferimento SPI completato con SUCCESSO!\n"
 
@@ -37,36 +77,91 @@ SemaphoreHandle_t transfer_complete_sem;
 uint8_t txBuffer[SPI_BUFFER_SIZE];
 uint8_t rxBuffer[SPI_BUFFER_SIZE];
 
-/* Contatore per vedere l'attivit� */
+/* Contatore per vedere l'attività */
 volatile uint32_t g_transfer_count = 0;
 
-/*
- * Dichiarazione delle configurazioni dei driver (devono essere definite altrove,
- * tipicamente generate da uno strumento come EB Tresos o S32 Design Studio)
+/**
+ * @brief Configurazione diretta del registri LPSPI per test
  */
+void configure_lpspi_direct(void)
+{
+    char msg_buffer[100];
+    
+    // Reset LPSPI
+    LPSPI0_REG(LPSPI_CR_OFFSET) = LPSPI_CR_RST;
+    vTaskDelay(pdMS_TO_TICKS(10));
+    
+    // Clear reset
+    LPSPI0_REG(LPSPI_CR_OFFSET) = 0;
+    
+    // Configure as master with loopback for testing
+    LPSPI0_REG(LPSPI_CFGR1_OFFSET) = LPSPI_CFGR1_MASTER | LPSPI_CFGR1_PINCFG_LOOPBACK;
+    
+    // Configure clock divider (simple setup)
+    LPSPI0_REG(LPSPI_CCR_OFFSET) = 0x04040404; // Set clock dividers
+    
+    // Configure FIFO watermarks
+    LPSPI0_REG(LPSPI_FCR_OFFSET) = 0x00000000; // TX watermark=0, RX watermark=0
+    
+    // Enable module
+    LPSPI0_REG(LPSPI_CR_OFFSET) = LPSPI_CR_MEN;
+    
+    sprintf(msg_buffer, "LPSPI configurato: CR=0x%08lx, CFGR1=0x%08lx\n", 
+            LPSPI0_REG(LPSPI_CR_OFFSET), LPSPI0_REG(LPSPI_CFGR1_OFFSET));
+    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+}
 
 /**
- * @brief Questa � la funzione di callback che viene chiamata dalla ISR della LPSPI
- * quando il trasferimento asincrono � completato o fallito.
+ * @brief Transfer SPI diretto usando i registri
  */
-void Lpspi_Callback(uint8 Instance, Lpspi_Ip_EventType Event)
+int direct_spi_transfer(uint8_t *tx_data, uint8_t *rx_data, size_t len)
 {
-    (void)Instance;
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)CALLBACK_MSG, strlen(CALLBACK_MSG), 100);
-
-    if (Event == LPSPI_IP_EVENT_END_TRANSFER)
+    char msg_buffer[100];
+    
+    for (size_t i = 0; i < len; i++)
     {
-        // Il trasferimento � finito. Sblocca il ReceiveTask.
-        xSemaphoreGiveFromISR(transfer_complete_sem, &xHigherPriorityTaskWoken);
+        // Configure TCR for 8-bit frame
+        uint32_t tcr_val = LPSPI_TCR_FRAMESZ(8) | LPSPI_TCR_PCS(0);
+        LPSPI0_REG(LPSPI_TCR_OFFSET) = tcr_val;
+        
+        sprintf(msg_buffer, "TCR configurato: 0x%08lx (frame_size=8)\n", tcr_val);
+        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+        
+        // Wait for TDF (TX FIFO ready)
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TDF))
+        {
+            vTaskDelay(pdMS_TO_TICKS(1));
+        }
+        
+        // Send data
+        LPSPI0_REG(LPSPI_TDR_OFFSET) = tx_data[i];
+        
+        sprintf(msg_buffer, "Inviato: 0x%02x\n", tx_data[i]);
+        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+        
+        // Wait for TCF (Transfer Complete)
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TCF))
+        {
+            vTaskDelay(pdMS_TO_TICKS(1));
+        }
+        
+        // Clear TCF flag
+        LPSPI0_REG(LPSPI_SR_OFFSET) = LPSPI_SR_TCF;
+        
+        // Wait for RDF (RX data available)
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_RDF))
+        {
+            vTaskDelay(pdMS_TO_TICKS(1));
+        }
+        
+        // Read received data
+        rx_data[i] = LPSPI0_REG(LPSPI_RDR_OFFSET) & 0xFF;
+        
+        sprintf(msg_buffer, "Ricevuto: 0x%02x\n", rx_data[i]);
+        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
     }
-    else if (Event == LPSPI_IP_EVENT_FAULT)
-    {
-        // Si � verificato un errore. Sblocca comunque il task per gestire l'errore.
-        xSemaphoreGiveFromISR(transfer_complete_sem, &xHigherPriorityTaskWoken);
-    }
-
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    
+    return 0; // Success
 }
 
 /**
@@ -84,39 +179,24 @@ void SendTask(void *pvParameters)
         // Prepara i dati da inviare
         for (uint16_t i = 0; i < SPI_BUFFER_SIZE; i++)
         {
-            txBuffer[i] = (uint8_t)(i + txBuffer[i]); // Dati variabili per ogni ciclo
+            txBuffer[i] = (uint8_t)(0x10 + i); // Dati di test: 0x10, 0x11, 0x12, ...
         }
         // Pulisci il buffer di ricezione
         memset(rxBuffer, 0, SPI_BUFFER_SIZE);
 
-        // (Opzionale) Invia messaggio di debug
+        // Invia messaggio di debug
         Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)SEND_MSG, strlen(SEND_MSG), 100);
 
-        // Avvia il trasferimento SPI in modo ASINCRONO
-        // La funzione ritorna immediatamente. Il trasferimento avviene in background via interrupt.
-        //        Lpspi_Ip_AsyncTransmit(
-        //            &Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_0,
-        //            txBuffer,
-        //            rxBuffer,
-        //            SPI_BUFFER_SIZE,
-        //            Lpspi_Callback // La nostra callback per la notifica di fine trasferimento
-        //        );
-        // In SendTask, sostituisci Lpspi_Ip_AsyncTransmit con questo:
-        Lpspi_Ip_StatusType spi_status = Lpspi_Ip_SyncTransmit(
-            &Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_0,
-            txBuffer,
-            rxBuffer,
-            SPI_BUFFER_SIZE,
-            1000 // Timeout in millisecondi
-        );
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        // Dopo la chiamata, dai direttamente il semaforo al task ricevente
-        if (spi_status == LPSPI_IP_STATUS_SUCCESS)
+        // Esegui trasferimento SPI diretto
+        int result = direct_spi_transfer(txBuffer, rxBuffer, SPI_BUFFER_SIZE);
+        
+        if (result == 0)
         {
             Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)SEND_SUCCESS_MSG, strlen(SEND_SUCCESS_MSG), 100);
             xSemaphoreGive(transfer_complete_sem);
         }
+        
+        vTaskDelay(pdMS_TO_TICKS(2000)); // Wait 2 seconds between transfers
     }
 }
 
@@ -126,27 +206,39 @@ void SendTask(void *pvParameters)
 void ReceiveTask(void *pvParameters)
 {
     (void)pvParameters;
+    char msg_buffer[100];
 
     for (;;)
     {
-        // Attendi che il trasferimento sia completo (il semaforo viene dato dalla callback)
+        // Attendi che il trasferimento sia completo
         xSemaphoreTake(transfer_complete_sem, portMAX_DELAY);
 
         g_transfer_count++;
+        
+        sprintf(msg_buffer, "Transfer #%lu completato\n", g_transfer_count);
+        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
 
-        // Verifica i dati ricevuti. Per un test reale, questo richiede un loopback fisico
-        // (collegare il pin MISO al pin MOSI) o uno slave SPI che rimandi indietro i dati.
-        if (memcmp(txBuffer, rxBuffer, SPI_BUFFER_SIZE) == 0)
+        // Verifica i dati ricevuti (in loopback dovrebbero essere uguali)
+        bool success = true;
+        for (int i = 0; i < SPI_BUFFER_SIZE; i++)
         {
-            // (Opzionale) Invia messaggio di successo
+            sprintf(msg_buffer, "TX[%d]=0x%02x, RX[%d]=0x%02x\n", i, txBuffer[i], i, rxBuffer[i]);
+            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+            
+            if (txBuffer[i] != rxBuffer[i])
+            {
+                success = false;
+            }
+        }
+        
+        if (success)
+        {
             Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)RECV_SUCCESS_MSG, strlen(RECV_SUCCESS_MSG), 100);
         }
         else
         {
-            // (Opzionale) Invia messaggio di errore
             Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)RECV_FAILURE_MSG, strlen(RECV_FAILURE_MSG), 100);
         }
-        // vTaskDelay(pdMS_TO_TICKS(1000));
 
         // Dai il via libera al produttore per iniziare un nuovo ciclo
         xSemaphoreGive(producer_go);
@@ -165,40 +257,13 @@ int main(void)
     /* Inizializzazione del controllore degli interrupt */
     IntCtrl_Ip_Init(&IntCtrlConfig_0);
     Lpuart_Uart_Ip_Init(UART_LPUART_INTERNAL_CHANNEL, &Lpuart_Uart_Ip_xHwConfigPB_3);
+    
     char msg_buffer[100];
-
-    /* Sostituisci 'LPSPI0_CLK' con il nome esatto del tuo clock se diverso.
-       Questo nome si trova nel file Clock_Ip_Cfg.h generato dal tool. */
-
-    /* Inizializza la periferica LPSPI usando la configurazione fornita */
-    Lpspi_Ip_Init(&Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_0);
-    uint32_t lpspi_clk_freq = Clock_Ip_GetClockFrequency(LPSPI0_CLK);
-
-    if (lpspi_clk_freq == 0)
-    {
-        Clock_Ip_EnableModuleClock(LPSPI0_CLK);
-        lpspi_clk_freq = Clock_Ip_GetClockFrequency(LPSPI0_CLK);
-    }
-
-    uint32_t lpspi_clk_freq = 80000000; // Hardcode 80MHz for QEMU
-    if (lpspi_clk_freq > 0)
-    {
-        sprintf(msg_buffer, "PROVA CLOCK: OK! Frequenza LPSPI0: %lu Hz\n", lpspi_clk_freq);
-    }
-    else
-    {
-        sprintf(msg_buffer, "PROVA CLOCK: FALLITA! Clock LPSPI0 e' SPENTO o il nome e' errato!\n");
-    }
+    sprintf(msg_buffer, "Sistema inizializzato. Configurazione LPSPI diretta...\n");
     Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
-    // vTaskDelay(pdMS_TO_TICKS(1000));
 
-    /*
-     * Installa e abilita l'handler per l'interrupt della LPSPI.
-     * Questo � il passo FONDAMENTALE per la modalit� a interrupt.
-     * Il nome dell'IRQ (es. LPSPI0_IRQn) dipende dal microcontrollore.
-     */
-    IntCtrl_Ip_InstallHandler(LPSPI0_IRQn, Lpspi_Ip_LPSPI_0_IRQHandler, NULL_PTR);
-    IntCtrl_Ip_EnableIrq(LPSPI0_IRQn); // if enabled problem with clock
+    /* Configurazione diretta LPSPI */
+    configure_lpspi_direct();
 
     /* Crea i semafori binari */
     producer_go = xSemaphoreCreateBinary();

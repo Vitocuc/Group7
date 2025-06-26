@@ -183,6 +183,9 @@ static void lpspi_flush_txfifo(NXPS32K358LPSPIState *s)
         return; // No space for response
     }
 
+    DB_PRINT("Starting transfer: frame_size=%d bits, bytes_per_frame=%d, tx_fifo_used=%d\n",
+             frame_size, bytes_per_frame, fifo8_num_used(&s->tx_fifo));
+
     /* Assert CS on first transfer or if not in continuous mode */
     if (!s->busy || (!cont && !contc))
     {
@@ -217,12 +220,24 @@ static void lpspi_flush_txfifo(NXPS32K358LPSPIState *s)
     // Perform SPI transfer
     if (!txmsk)
     {
-        rx_data = ssi_transfer(s->ssi, tx_data);
+        // Check if loopback mode is enabled (PINCFG bits in CFGR1)
+        uint8_t pincfg = (s->lpspi_cfgr1 & LPSPI_CFGR1_PINCFG_MASK) >> LPSPI_CFGR1_PINCFG_SHIFT;
+        if (pincfg == 0x1) // Loopback mode (SOUT internally connected to SIN)
+        {
+            rx_data = tx_data; // Perfect loopback for testing
+            DB_PRINT("SPI transfer (loopback): tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
+        }
+        else
+        {
+            rx_data = ssi_transfer(s->ssi, tx_data);
+            DB_PRINT("SPI transfer: tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
+        }
     }
     else
     {
         // TX masked - just generate dummy data for RX
         rx_data = ssi_transfer(s->ssi, 0);
+        DB_PRINT("SPI transfer (TX masked): tx=0x00000000 -> rx=0x%08x\n", rx_data);
     }
 
     // Store received data in RX FIFO
@@ -268,6 +283,7 @@ static void lpspi_flush_txfifo(NXPS32K358LPSPIState *s)
         }
         // Set Transfer Complete Flag
         s->lpspi_sr |= LPSPI_SR_TCF;
+        DB_PRINT("Transfer completed - setting TCF flag\n");
     }
 }
 
@@ -431,6 +447,8 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
         // Update frame size for next transfers
         s->frame_size = ((value & TCR_FRAMESZ_MASK) >> TCR_FRAMESZ_SHIFT) + 1;
         s->continuous_mode = !!(value & (TCR_CONT | TCR_CONTC));
+        
+        DB_PRINT("TCR write: 0x%08x, calculated frame_size: %d\n", value, s->frame_size);
 
         if (s->lpspi_cr & LPSPI_CR_MEN)
         {
@@ -452,6 +470,9 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
             {
                 bytes_per_frame = 4; // Limit to 32-bit words
             }
+            
+            DB_PRINT("TDR write: TCR=0x%08x, frame_size=%d, bytes_per_frame=%d\n", 
+                     s->lpspi_tcr, frame_size, bytes_per_frame);
 
             if (fifo8_num_free(&s->tx_fifo) < bytes_per_frame)
             {
