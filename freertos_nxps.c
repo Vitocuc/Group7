@@ -22,43 +22,43 @@
 #define UART_LPUART_INTERNAL_CHANNEL 3
 
 /* Direct register access for LPSPI configuration */
-#define LPSPI0_BASE_ADDR 0x40330000
+#define LPSPI0_BASE_ADDR 0x40358000
 
 /* LPSPI Register offsets */
-#define LPSPI_CR_OFFSET     0x10
-#define LPSPI_SR_OFFSET     0x14
-#define LPSPI_IER_OFFSET    0x18
-#define LPSPI_CFGR0_OFFSET  0x20
-#define LPSPI_CFGR1_OFFSET  0x24
-#define LPSPI_CCR_OFFSET    0x40
-#define LPSPI_FCR_OFFSET    0x58
-#define LPSPI_FSR_OFFSET    0x5C
-#define LPSPI_TCR_OFFSET    0x60
-#define LPSPI_TDR_OFFSET    0x64
-#define LPSPI_RSR_OFFSET    0x70
-#define LPSPI_RDR_OFFSET    0x74
+#define LPSPI_CR_OFFSET 0x10
+#define LPSPI_SR_OFFSET 0x14
+#define LPSPI_IER_OFFSET 0x18
+#define LPSPI_CFGR0_OFFSET 0x20
+#define LPSPI_CFGR1_OFFSET 0x24
+#define LPSPI_CCR_OFFSET 0x40
+#define LPSPI_FCR_OFFSET 0x58
+#define LPSPI_FSR_OFFSET 0x5C
+#define LPSPI_TCR_OFFSET 0x60
+#define LPSPI_TDR_OFFSET 0x64
+#define LPSPI_RSR_OFFSET 0x70
+#define LPSPI_RDR_OFFSET 0x74
 
 /* LPSPI Register bit definitions */
-#define LPSPI_CR_MEN        (1U << 0)
-#define LPSPI_CR_RST        (1U << 1)
-#define LPSPI_CR_RTF        (1U << 8)
-#define LPSPI_CR_RRF        (1U << 9)
+#define LPSPI_CR_MEN (1U << 0)
+#define LPSPI_CR_RST (1U << 1)
+#define LPSPI_CR_RTF (1U << 8)
+#define LPSPI_CR_RRF (1U << 9)
 
-#define LPSPI_SR_TDF        (1U << 0)
-#define LPSPI_SR_RDF        (1U << 1)
-#define LPSPI_SR_TCF        (1U << 10)
-#define LPSPI_SR_MBF        (1U << 24)
+#define LPSPI_SR_TDF (1U << 0)
+#define LPSPI_SR_RDF (1U << 1)
+#define LPSPI_SR_TCF (1U << 10)
+#define LPSPI_SR_MBF (1U << 24)
 
-#define LPSPI_CFGR1_MASTER  (1U << 0)
-#define LPSPI_CFGR1_PINCFG_LOOPBACK (1U << 24)  // Loopback mode for testing
+#define LPSPI_CFGR1_MASTER (1U << 0)
+#define LPSPI_CFGR1_PINCFG_LOOPBACK (1U << 24) // Loopback mode for testing
 
-#define LPSPI_TCR_FRAMESZ(n) ((n-1) << 0)  // Frame size (n-1), so for 8-bit use n=8
-#define LPSPI_TCR_PCS(n)     ((n) << 24)    // Chip select
-#define LPSPI_TCR_CPOL       (1U << 31)     // Clock polarity
-#define LPSPI_TCR_CPHA       (1U << 30)     // Clock phase
+#define LPSPI_TCR_FRAMESZ(n) ((n - 1) << 0) // Frame size (n-1), so for 8-bit use n=8
+#define LPSPI_TCR_PCS(n) ((n) << 24)        // Chip select
+#define LPSPI_TCR_CPOL (1U << 31)           // Clock polarity
+#define LPSPI_TCR_CPHA (1U << 30)           // Clock phase
 
 /* Register access macros */
-#define REG32(addr) (*(volatile uint32_t*)(addr))
+#define REG32(addr) (*(volatile uint32_t *)(addr))
 #define LPSPI0_REG(offset) REG32(LPSPI0_BASE_ADDR + offset)
 
 /* Messaggi di debug */
@@ -85,30 +85,31 @@ volatile uint32_t g_transfer_count = 0;
  */
 void configure_lpspi_direct(void)
 {
-    char msg_buffer[100];
-    
     // Reset LPSPI
     LPSPI0_REG(LPSPI_CR_OFFSET) = LPSPI_CR_RST;
-    vTaskDelay(pdMS_TO_TICKS(10));
-    
+
+    // Simple delay loop instead of vTaskDelay (FreeRTOS not started yet)
+    for (volatile int i = 0; i < 10000; i++)
+    { /* wait */
+    }
+
     // Clear reset
     LPSPI0_REG(LPSPI_CR_OFFSET) = 0;
-    
+
     // Configure as master with loopback for testing
     LPSPI0_REG(LPSPI_CFGR1_OFFSET) = LPSPI_CFGR1_MASTER | LPSPI_CFGR1_PINCFG_LOOPBACK;
-    
+
     // Configure clock divider (simple setup)
     LPSPI0_REG(LPSPI_CCR_OFFSET) = 0x04040404; // Set clock dividers
-    
+
     // Configure FIFO watermarks
     LPSPI0_REG(LPSPI_FCR_OFFSET) = 0x00000000; // TX watermark=0, RX watermark=0
-    
+
     // Enable module
     LPSPI0_REG(LPSPI_CR_OFFSET) = LPSPI_CR_MEN;
-    
-    sprintf(msg_buffer, "LPSPI configurato: CR=0x%08lx, CFGR1=0x%08lx\n", 
-            LPSPI0_REG(LPSPI_CR_OFFSET), LPSPI0_REG(LPSPI_CFGR1_OFFSET));
-    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+
+    // Skip complex sprintf/UART calls that might cause issues
+    // The debug info will come from QEMU logs instead
 }
 
 /**
@@ -116,51 +117,49 @@ void configure_lpspi_direct(void)
  */
 int direct_spi_transfer(uint8_t *tx_data, uint8_t *rx_data, size_t len)
 {
-    char msg_buffer[100];
-    
     for (size_t i = 0; i < len; i++)
     {
         // Configure TCR for 8-bit frame
         uint32_t tcr_val = LPSPI_TCR_FRAMESZ(8) | LPSPI_TCR_PCS(0);
         LPSPI0_REG(LPSPI_TCR_OFFSET) = tcr_val;
-        
-        sprintf(msg_buffer, "TCR configurato: 0x%08lx (frame_size=8)\n", tcr_val);
-        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
-        
-        // Wait for TDF (TX FIFO ready)
-        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TDF))
-        {
-            vTaskDelay(pdMS_TO_TICKS(1));
+
+        // Wait for TDF (TX FIFO ready) - with timeout
+        int timeout = 10000; // Increase timeout
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TDF) && timeout-- > 0)
+        { /* wait */
         }
-        
+        if (timeout <= 0)
+            return -1; // Timeout on TDF
+
         // Send data
         LPSPI0_REG(LPSPI_TDR_OFFSET) = tx_data[i];
-        
-        sprintf(msg_buffer, "Inviato: 0x%02x\n", tx_data[i]);
-        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
-        
-        // Wait for TCF (Transfer Complete)
-        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TCF))
-        {
-            vTaskDelay(pdMS_TO_TICKS(1));
+
+        // Wait for TCF (Transfer Complete) - with timeout
+        timeout = 10000; // Increase timeout
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_TCF) && timeout-- > 0)
+        { /* wait */
         }
-        
+        if (timeout <= 0)
+            return -2; // Timeout on TCF
+
         // Clear TCF flag
         LPSPI0_REG(LPSPI_SR_OFFSET) = LPSPI_SR_TCF;
-        
-        // Wait for RDF (RX data available)
-        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_RDF))
-        {
-            vTaskDelay(pdMS_TO_TICKS(1));
+
+        // Wait for RDF (RX data available) - with timeout
+        timeout = 10000; // Increase timeout
+        while (!(LPSPI0_REG(LPSPI_SR_OFFSET) & LPSPI_SR_RDF) && timeout-- > 0)
+        { /* wait */
         }
-        
+        if (timeout <= 0)
+            return -3; // Timeout on RDF
+
         // Read received data
         rx_data[i] = LPSPI0_REG(LPSPI_RDR_OFFSET) & 0xFF;
-        
-        sprintf(msg_buffer, "Ricevuto: 0x%02x\n", rx_data[i]);
-        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+
+        // Clear RDF flag to prepare for next transfer
+        LPSPI0_REG(LPSPI_SR_OFFSET) = LPSPI_SR_RDF;
     }
-    
+
     return 0; // Success
 }
 
@@ -184,18 +183,27 @@ void SendTask(void *pvParameters)
         // Pulisci il buffer di ricezione
         memset(rxBuffer, 0, SPI_BUFFER_SIZE);
 
-        // Invia messaggio di debug
-        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)SEND_MSG, strlen(SEND_MSG), 100);
-
         // Esegui trasferimento SPI diretto
         int result = direct_spi_transfer(txBuffer, rxBuffer, SPI_BUFFER_SIZE);
-        
+
         if (result == 0)
         {
-            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)SEND_SUCCESS_MSG, strlen(SEND_SUCCESS_MSG), 100);
+            // Transfer successful - print some debug info
+            char debug_msg[200];
+            sprintf(debug_msg, "SendTask: Transfer complete. TX[0]=0x%02x, RX[0]=0x%02x, TX[11]=0x%02x, RX[11]=0x%02x\n",
+                    txBuffer[0], rxBuffer[0], txBuffer[11], rxBuffer[11]);
+            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)debug_msg, strlen(debug_msg), 200);
             xSemaphoreGive(transfer_complete_sem);
         }
-        
+        else
+        {
+            // Transfer failed - print error code
+            char error_msg[100];
+            sprintf(error_msg, "SendTask: Transfer FAILED with error code %d\n", result);
+            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)error_msg, strlen(error_msg), 200);
+            xSemaphoreGive(transfer_complete_sem);
+        }
+
         vTaskDelay(pdMS_TO_TICKS(2000)); // Wait 2 seconds between transfers
     }
 }
@@ -213,31 +221,31 @@ void ReceiveTask(void *pvParameters)
         // Attendi che il trasferimento sia completo
         xSemaphoreTake(transfer_complete_sem, portMAX_DELAY);
 
-        g_transfer_count++;
-        
-        sprintf(msg_buffer, "Transfer #%lu completato\n", g_transfer_count);
-        Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
-
-        // Verifica i dati ricevuti (in loopback dovrebbero essere uguali)
+        g_transfer_count++; // Verifica i dati ricevuti (in loopback dovrebbero essere uguali)
         bool success = true;
+        int first_error = -1;
+
         for (int i = 0; i < SPI_BUFFER_SIZE; i++)
         {
-            sprintf(msg_buffer, "TX[%d]=0x%02x, RX[%d]=0x%02x\n", i, txBuffer[i], i, rxBuffer[i]);
-            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
-            
             if (txBuffer[i] != rxBuffer[i])
             {
                 success = false;
+                if (first_error == -1)
+                    first_error = i;
+                break; // Exit early if mismatch found
             }
         }
-        
+
         if (success)
         {
-            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)RECV_SUCCESS_MSG, strlen(RECV_SUCCESS_MSG), 100);
+            sprintf(msg_buffer, "Transfer #%lu: SUCCESS! All %d bytes match.\n", g_transfer_count, SPI_BUFFER_SIZE);
+            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
         }
         else
         {
-            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)RECV_FAILURE_MSG, strlen(RECV_FAILURE_MSG), 100);
+            sprintf(msg_buffer, "Transfer #%lu: FAILED at byte %d: TX=0x%02x, RX=0x%02x\n",
+                    g_transfer_count, first_error, txBuffer[first_error], rxBuffer[first_error]);
+            Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
         }
 
         // Dai il via libera al produttore per iniziare un nuovo ciclo
@@ -257,19 +265,21 @@ int main(void)
     /* Inizializzazione del controllore degli interrupt */
     IntCtrl_Ip_Init(&IntCtrlConfig_0);
     Lpuart_Uart_Ip_Init(UART_LPUART_INTERNAL_CHANNEL, &Lpuart_Uart_Ip_xHwConfigPB_3);
-    
-    char msg_buffer[100];
-    sprintf(msg_buffer, "Sistema inizializzato. Configurazione LPSPI diretta...\n");
-    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)msg_buffer, strlen(msg_buffer), 200);
+
+    /* Simple message without sprintf to avoid issues */
+    const char *init_msg = "System initialized. Configuring LPSPI...\n";
+    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)init_msg, strlen(init_msg), 200);
 
     /* Configurazione diretta LPSPI */
     configure_lpspi_direct();
 
+    /* Simple success message */
+    const char *config_msg = "LPSPI configured. Starting FreeRTOS...\n";
+    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (uint8_t *)config_msg, strlen(config_msg), 200);
+
     /* Crea i semafori binari */
     producer_go = xSemaphoreCreateBinary();
     transfer_complete_sem = xSemaphoreCreateBinary();
-
-    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, (const uint8 *)START_MSG, strlen(START_MSG), 100);
 
     /* Crea i due task */
     xTaskCreate(SendTask, "SendTask", configMINIMAL_STACK_SIZE + 500, NULL, main_TASK_PRIORITY, NULL);

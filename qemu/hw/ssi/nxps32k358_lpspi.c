@@ -76,8 +76,14 @@
  */
 static void lpspi_update_status(NXPS32K358LPSPIState *s)
 {
-    uint8_t tx_word_count = fifo8_num_used(&s->tx_fifo) / 4;
-    uint8_t rx_word_count = fifo8_num_used(&s->rx_fifo) / 4;
+    // Calculate frame size for proper word counting
+    uint16_t frame_size = ((s->lpspi_tcr & TCR_FRAMESZ_MASK) >> TCR_FRAMESZ_SHIFT) + 1;
+    uint8_t bytes_per_frame = (frame_size + 7) / 8;
+    if (bytes_per_frame > 4)
+        bytes_per_frame = 4; // Limit to 32-bit words
+
+    uint8_t tx_word_count = fifo8_num_used(&s->tx_fifo) / bytes_per_frame;
+    uint8_t rx_word_count = fifo8_num_used(&s->rx_fifo) / bytes_per_frame;
 
     s->lpspi_fsr = (rx_word_count << 16) | (tx_word_count << 0);
 
@@ -447,7 +453,7 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
         // Update frame size for next transfers
         s->frame_size = ((value & TCR_FRAMESZ_MASK) >> TCR_FRAMESZ_SHIFT) + 1;
         s->continuous_mode = !!(value & (TCR_CONT | TCR_CONTC));
-        
+
         DB_PRINT("TCR write: 0x%08x, calculated frame_size: %d\n", value, s->frame_size);
 
         if (s->lpspi_cr & LPSPI_CR_MEN)
@@ -470,8 +476,8 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
             {
                 bytes_per_frame = 4; // Limit to 32-bit words
             }
-            
-            DB_PRINT("TDR write: TCR=0x%08x, frame_size=%d, bytes_per_frame=%d\n", 
+
+            DB_PRINT("TDR write: TCR=0x%08x, frame_size=%d, bytes_per_frame=%d\n",
                      s->lpspi_tcr, frame_size, bytes_per_frame);
 
             if (fifo8_num_free(&s->tx_fifo) < bytes_per_frame)
@@ -521,6 +527,10 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
         break;
     case S32K_LPSPI_CFGR1:
         s->lpspi_cfgr1 = value;
+        DB_PRINT("CFGR1 write: 0x%08x - PINCFG=%d, MASTER=%d\n",
+                 value,
+                 (value >> LPSPI_CFGR1_PINCFG_SHIFT) & 0x3,
+                 value & 1);
         break;
     case S32K_LPSPI_CCR:
         s->lpspi_ccr = value;
