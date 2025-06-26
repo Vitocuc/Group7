@@ -385,6 +385,7 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
     qdev_connect_clock_in(armv7m, "refclk", s->refclk);
     object_property_set_link(OBJECT(&s->armv7m), "memory",
                              OBJECT(get_system_memory()), &error_abort);
+
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->armv7m), errp))
     {
         return;
