@@ -169,13 +169,6 @@ if __name__ == "__main__":
         print(f"\n🏆 RISULTATO: SUCCESS")
         print("Il modulo LPSPI è completamente funzionante!")
 
-        # Opzione per test interattivo
-        if sys.stdin.isatty():  # Solo se eseguito in terminale interattivo
-            response = input("\nVuoi avviare la modalità test interattiva? (y/N): ")
-            if response.lower() in ["y", "yes", "s", "si"]:
-                test_interactive_mode()
-        else:
-            print("\n💡 Per test interattivi, esegui il comando da terminale")
     else:
         print(f"\n💥 RISULTATO: FAILED")
         print("Ci sono problemi nel modulo LPSPI che richiedono attenzione")
