@@ -126,7 +126,7 @@ extern "C"
 static Lpspi_Ip_DeviceParamsType Lpspi_Ip_DeviceParamsCfg[2U] =
 {
     {
-        (uint8)1U, /* Frame size */
+        (uint8)8U, /* Frame size */
         (boolean)TRUE, /*Lsb */
         (uint32)0U  /* Default Data */
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)        
@@ -134,7 +134,7 @@ static Lpspi_Ip_DeviceParamsType Lpspi_Ip_DeviceParamsCfg[2U] =
 #endif        
     },
     {
-        (uint8)1U, /* Frame size */
+        (uint8)8U, /* Frame size */
         (boolean)TRUE, /*Lsb */
         (uint32)0U  /* Default Data */
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)        
@@ -161,7 +161,7 @@ const Lpspi_Ip_ExternalDeviceType Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_
 {
     2U,  /* Instance */
         (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)), /* ccr */
-        (uint32)(LPSPI_TCR_WIDTH(0U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
+        (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
 
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)
@@ -177,7 +177,7 @@ const Lpspi_Ip_ExternalDeviceType Lpspi_Ip_DeviceAttributes_SpiExternalDevice_1_
 {
     2U,  /* Instance */
         (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)), /* ccr */
-        (uint32)(LPSPI_TCR_WIDTH(0U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
+        (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
 
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)

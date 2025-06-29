@@ -12,7 +12,7 @@
 #include "string.h" // Per memset e memcmp
 #include "stdio.h"	// Per i messaggi di debug
 
-/* Priorità dei Task */
+/* Prioritï¿½ dei Task */
 #define MASTER_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 #define SLAVE_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 
@@ -52,7 +52,7 @@ static uint8_t masterRxBuffer[SPI_BUFFER_SIZE];
 static uint8_t slaveTxBuffer[SPI_BUFFER_SIZE];
 static uint8_t slaveRxBuffer[SPI_BUFFER_SIZE];
 
-/* Contatore per vedere l'attività */
+/* Contatore per vedere l'attivitï¿½ */
 static volatile uint32_t g_transfer_count = 0;
 
 /* Flag di stato sistema */
@@ -87,7 +87,7 @@ static void SendDebugMessage(const char *message)
 }
 
 /**
- * @brief Callback chiamata dall'interrupt di LPSPI quando il trasferimento asincrono dello slave è terminato
+ * @brief Callback chiamata dall'interrupt di LPSPI quando il trasferimento asincrono dello slave ï¿½ terminato
  */
 void SpiSlave_Callback(void)
 {
@@ -99,14 +99,14 @@ void SpiSlave_Callback(void)
 		xSemaphoreGiveFromISR(xSlaveAsyncDoneSem, &xHigherPriorityTaskWoken);
 	}
 
-	// Notifica anche il task slave che il trasferimento è completato
+	// Notifica anche il task slave che il trasferimento ï¿½ completato
 	if (xSlaveTaskHandle != NULL)
 	{
 		xTaskNotifyFromISR(xSlaveTaskHandle, NOTIFY_TRANSFER_DONE,
 						   eSetBits, &xHigherPriorityTaskWoken);
 	}
 
-	// Se un task con priorità più alta è stato sbloccato, forza un cambio di contesto
+	// Se un task con prioritï¿½ piï¿½ alta ï¿½ stato sbloccato, forza un cambio di contesto
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -148,12 +148,16 @@ static void MasterTask(void *pvParameters)
 			continue;
 		}
 
-		// 3. Prepara i dati per questo trasferimento
+		// 3. Prepara i dati per questo trasferimento (pattern simile alla versione manuale)
 		for (uint16_t i = 0; i < SPI_BUFFER_SIZE; i++)
 		{
-			masterTxBuffer[i] = (uint8_t)(0xA0 + i + g_transfer_count);
+			masterTxBuffer[i] = (uint8_t)(0x10 + i + (g_transfer_count % 12));
 		}
 		memset(masterRxBuffer, 0, SPI_BUFFER_SIZE);
+
+		sprintf(msg_buffer, "Master Task: Starting transfer #%lu, TX data: %02x %02x %02x...\n", 
+				g_transfer_count, masterTxBuffer[0], masterTxBuffer[1], masterTxBuffer[2]);
+		SendDebugMessage(msg_buffer);
 
 		// 4. Esegui il trasferimento bloccante del Master
 		master_spi_status = Lpspi_Ip_SyncTransmit(
@@ -175,6 +179,11 @@ static void MasterTask(void *pvParameters)
 			continue;
 		}
 
+		// 6a. Debug: mostra i dati ricevuti
+		sprintf(msg_buffer, "Master Task: Transfer OK, RX data: %02x %02x %02x...\n", 
+				masterRxBuffer[0], masterRxBuffer[1], masterRxBuffer[2]);
+		SendDebugMessage(msg_buffer);
+
 		// 7. Attendi che lo slave confermi di aver finito
 		if (xSemaphoreTake(xSlaveAsyncDoneSem, pdMS_TO_TICKS(2000)) != pdTRUE)
 		{
@@ -182,7 +191,7 @@ static void MasterTask(void *pvParameters)
 			continue;
 		}
 
-		// 8. Notifica al slave task che può verificare i dati
+		// 8. Notifica al slave task che puï¿½ verificare i dati
 		xTaskNotify(xSlaveTaskHandle, NOTIFY_DATA_VERIFIED, eSetBits);
 
 		sprintf(msg_buffer, "Master Task: Transfer #%lu completed\n", g_transfer_count);
@@ -233,7 +242,7 @@ static void SlaveTask(void *pvParameters)
 		// 5. Rilascia il mutex SPI
 		xSemaphoreGive(xSpiMutex);
 
-		// 6. Notifica al Master che lo slave è pronto
+		// 6. Notifica al Master che lo slave ï¿½ pronto
 		xTaskNotify(xMasterTaskHandle, NOTIFY_SLAVE_READY, eSetBits);
 
 		// 7. Attendi che il trasferimento sia completato e che possiamo verificare i dati
@@ -244,7 +253,7 @@ static void SlaveTask(void *pvParameters)
 			continue;
 		}
 
-		// 8. Verifica i dati solo se non è il primo trasferimento
+		// 8. Verifica i dati solo se non ï¿½ il primo trasferimento
 		if (g_transfer_count > 1)
 		{
 			result.master_received_ok = (0 == memcmp(masterRxBuffer, slaveTxBuffer, SPI_BUFFER_SIZE));
@@ -267,7 +276,7 @@ static void SlaveTask(void *pvParameters)
 			}
 		}
 
-		// 9. Pausa per leggibilità dell'output
+		// 9. Pausa per leggibilitï¿½ dell'output
 		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
 }
@@ -409,7 +418,7 @@ int main(void)
 	// 4. Avvia lo scheduler di FreeRTOS
 	vTaskStartScheduler();
 
-	// Non dovrebbe mai arrivare qui se lo scheduler è stato avviato correttamente
+	// Non dovrebbe mai arrivare qui se lo scheduler ï¿½ stato avviato correttamente
 	SendDebugMessage("ERROR: FreeRTOS scheduler failed to start\n");
 	for (;;)
 	{
