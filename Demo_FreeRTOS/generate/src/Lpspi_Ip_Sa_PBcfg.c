@@ -157,7 +157,7 @@ extern "C"
         {
             2U,                                                                                                                                       /* Instance */
             (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)),                                     /* ccr */
-            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
+            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)) /* TCR - Simple config like manual version */
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)
             /*HalfDuplexCfgr1*/
@@ -172,7 +172,7 @@ extern "C"
         {
             2U,                                                                                                                                       /* Instance */
             (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)),                                     /* ccr */
-            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)) /* TCR */
+            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)) /* TCR - Simple config like manual version */
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)
             /*HalfDuplexCfgr1*/
