@@ -1013,7 +1013,7 @@
                                     <setting name="Name" value="PlatformIsrConfig_2"/>
                                     <setting name="IsrName" value="LPSPI1_IRQn"/>
                                     <setting name="IsrEnabled" value="true"/>
-                                    <setting name="IsrPriority" value="0"/>
+                                    <setting name="IsrPriority" value="1"/>
                                     <setting name="IsrHandler" value="Lpspi_Ip_LPSPI_1_IRQHandler"/>
                                  </struct>
                               </array>

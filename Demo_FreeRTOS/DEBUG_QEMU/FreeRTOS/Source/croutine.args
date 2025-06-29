@@ -9,8 +9,8 @@
 -DS32K358
 -DCPU_S32K358
 -DCPU_CORTEX_M7
--I../RTD/include
 -I../FreeRTOS/Source/include
+-I../RTD/include
 -I../FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1
 -I../custom_drivers/include
 -IC:/Users/vitoc/Desktop/workspace_group7/Demo_FreeRTOS/generate/include

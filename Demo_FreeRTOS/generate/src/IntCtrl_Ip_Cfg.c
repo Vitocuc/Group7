@@ -72,7 +72,7 @@ extern "C" {
 static const IntCtrl_Ip_IrqConfigType aIrqConfiguration1[] = {
     {LPUART3_IRQn, (boolean)TRUE, 1U, LPUART_UART_IP_3_IRQHandler},
     {LPSPI2_IRQn, (boolean)TRUE, 1U, Lpspi_Ip_LPSPI_2_IRQHandler},
-    {LPSPI1_IRQn, (boolean)TRUE, 0U, Lpspi_Ip_LPSPI_1_IRQHandler},
+    {LPSPI1_IRQn, (boolean)TRUE, 1U, Lpspi_Ip_LPSPI_1_IRQHandler},
 };
 const IntCtrl_Ip_CtrlConfigType IntCtrlConfig_0 = {
     3U,

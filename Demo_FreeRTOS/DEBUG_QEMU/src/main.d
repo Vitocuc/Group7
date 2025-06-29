@@ -35,8 +35,8 @@ src/main.o: ../src/main.c ../RTD/include/Clock_Ip.h \
  ../FreeRTOS/Source/include/mpu_wrappers.h \
  ../FreeRTOS/Source/include/task.h ../FreeRTOS/Source/include/list.h \
  ../FreeRTOS/Source/include/semphr.h ../FreeRTOS/Source/include/queue.h \
- ../FreeRTOS/Source/include/task.h ../RTD/include/Lpspi_Ip.h \
- ../RTD/include/Lpspi_Ip_Types.h \
+ ../FreeRTOS/Source/include/task.h ../FreeRTOS/Source/include/queue.h \
+ ../RTD/include/Lpspi_Ip.h ../RTD/include/Lpspi_Ip_Types.h \
  C\:/Users/vitoc/Desktop/workspace_group7/Demo_FreeRTOS/generate/include/Lpspi_Ip_Cfg.h \
  C\:/NXP/S32DS.3.5/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M30I0R0/include/Mcal.h \
  C\:/NXP/S32DS.3.5/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M30I0R0/include/StandardTypes.h \
@@ -121,6 +121,7 @@ C\:/Users/vitoc/Desktop/workspace_group7/Demo_FreeRTOS/generate/include/FreeRTOS
 ../FreeRTOS/Source/include/semphr.h:
 ../FreeRTOS/Source/include/queue.h:
 ../FreeRTOS/Source/include/task.h:
+../FreeRTOS/Source/include/queue.h:
 ../RTD/include/Lpspi_Ip.h:
 ../RTD/include/Lpspi_Ip_Types.h:
 C\:/Users/vitoc/Desktop/workspace_group7/Demo_FreeRTOS/generate/include/Lpspi_Ip_Cfg.h:
