@@ -12,7 +12,7 @@
 #include "string.h" // Per memset e memcmp
 #include "stdio.h"  // Per i messaggi di debug
 
-/* Priorit� dei Task */
+/* Priorit dei Task */
 #define MASTER_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 #define SLAVE_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
 
