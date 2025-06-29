@@ -139,11 +139,10 @@ static void create_unimplemented_devices(void)
     // create_unimplemented_device("siul_virtwrapper_pdac5_m7_3_alt", 0x4034C000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
     create_unimplemented_device("lpi2c_0", 0x40350000, 0x4000);
     create_unimplemented_device("lpi2c_1", 0x40354000, 0x4000);
-    // LPSPI devices are implemented as actual peripherals, not unimplemented
-    // create_unimplemented_device("lpspi_0", 0x40358000, 0x4000);
-    // create_unimplemented_device("lpspi_1", 0x4035C000, 0x4000);
-    // create_unimplemented_device("lpspi_2", 0x40360000, 0x4000);
-    // create_unimplemented_device("lpspi_3", 0x40364000, 0x4000);
+    create_unimplemented_device("lpspi_0", 0x40358000, 0x4000);
+    create_unimplemented_device("lpspi_1", 0x4035C000, 0x4000);
+    create_unimplemented_device("lpspi_2", 0x40360000, 0x4000);
+    create_unimplemented_device("lpspi_3", 0x40364000, 0x4000);
     create_unimplemented_device("sai0", 0x4036C000, 0x4000);
     create_unimplemented_device("lpcmp_0", 0x40370000, 0x4000);
     create_unimplemented_device("lpcmp_1", 0x40374000, 0x4000);
@@ -203,9 +202,8 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("lpuart_13", 0x404A0000, 0x4000);
     create_unimplemented_device("lpuart_14", 0x404A4000, 0x4000);
     create_unimplemented_device("lpuart_15", 0x404A8000, 0x4000);
-    // LPSPI devices are implemented as actual peripherals, not unimplemented
-    // create_unimplemented_device("lpspi_4", 0x404BC000, 0x4000);
-    // create_unimplemented_device("lpspi_5", 0x404C0000, 0x4000);
+    create_unimplemented_device("lpspi_4", 0x404BC000, 0x4000);
+    create_unimplemented_device("lpspi_5", 0x404C0000, 0x4000);
     create_unimplemented_device("quadspi", 0x404CC000, 0x4000);
     create_unimplemented_device("sai1", 0x404DC000, 0x4000);
     create_unimplemented_device("usdhc", 0x404E4000, 0x4000);
@@ -280,14 +278,7 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
      * intended as an externally exposed clock.
      */
 
-    if (!clock_has_source(s->sysclk))
-    {
-        error_setg(errp, "sysclk clock must be wired up by the board code");
-        return;
-    }
-
-    // Create separate fixed clocks for AIPS - not derived from sysclk for now
-    // We need 80MHz for AIPS_PLAT and 40MHz for AIPS_SLOW
+    // Add fixed clock sources for AIPS clocks
     Clock *aips_plat_fixed = clock_new(OBJECT(s), "aips_plat_fixed");
     clock_set_hz(aips_plat_fixed, 80000000);
     clock_set_source(s->aips_plat_clk, aips_plat_fixed);
@@ -299,6 +290,12 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
     if (clock_has_source(s->refclk))
     {
         error_setg(errp, "refclk clock must not be wired up by the board code");
+        return;
+    }
+
+    if (!clock_has_source(s->sysclk))
+    {
+        error_setg(errp, "sysclk clock must be wired up by the board code");
         return;
     }
 
@@ -388,6 +385,7 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
     qdev_connect_clock_in(armv7m, "refclk", s->refclk);
     object_property_set_link(OBJECT(&s->armv7m), "memory",
                              OBJECT(get_system_memory()), &error_abort);
+
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->armv7m), errp))
     {
         return;

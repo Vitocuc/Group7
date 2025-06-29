@@ -10,7 +10,7 @@
 #define TYPE_NXPS32K358_LPSPI "nxps32k358-lpspi"
 OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 
-// Register definitions
+// Register offsets for the LPSPI (Low Power Serial Peripheral Interface)
 #define S32K_LPSPI_VERID 0x00
 #define S32K_LPSPI_PARAM 0x04
 #define S32K_LPSPI_CR 0x10
@@ -28,96 +28,63 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 #define S32K_LPSPI_RDR 0x74
 #define S32K_LPSPI_REG_MAX_OFFSET 0x78
 
-// Bitmask definitions
-
-// Control Register (CR) bits
+// Bitmask definitions for the LPSPI registers
 #define LPSPI_CR_MEN (1U << 0)
 #define LPSPI_CR_RST (1U << 1)
-#define LPSPI_CR_DOZEN (1U << 2)
-#define LPSPI_CR_DBGEN (1U << 3)
-#define LPSPI_CR_RTF (1U << 8)
-#define LPSPI_CR_RRF (1U << 9)
-#define LPSPI_CR_RSTF (1U << 8) // Fixed bit position
+#define LPSPI_CR_RSTF (1U << 9)
 
-// Status Register (SR) bits
+// Status Register (SR) bitmasks
 #define LPSPI_SR_TDF (1U << 0)
 #define LPSPI_SR_RDF (1U << 1)
-#define LPSPI_SR_WCF (1U << 8)
-#define LPSPI_SR_FCF (1U << 9)
-#define LPSPI_SR_TCF (1U << 10)
-#define LPSPI_SR_TEF (1U << 11)
-#define LPSPI_SR_REF (1U << 12)
-#define LPSPI_SR_DMF (1U << 13)
 #define LPSPI_SR_MBF (1U << 24)
 
-// Receive Status Register (RSR) bits
-#define LPSPI_RSR_SOF (1U << 0)
+// Receive Status Register (RSR) bitmasks
 #define LPSPI_RSR_RXEMPTY (1U << 1)
 
-// Configuration Register 1 (CFGR1) bits
-#define LPSPI_CFGR1_MASTER (1U << 0)
-#define LPSPI_CFGR1_SAMPLE (1U << 1)
-#define LPSPI_CFGR1_AUTOPCS (1U << 2)
-#define LPSPI_CFGR1_NOSTALL (1U << 3)
-#define LPSPI_CFGR1_PCSPOL_SHIFT 8
-#define LPSPI_CFGR1_PCSPOL_MASK (0xF << LPSPI_CFGR1_PCSPOL_SHIFT)
-#define LPSPI_CFGR1_MATCFG_SHIFT 16
-#define LPSPI_CFGR1_MATCFG_MASK (0x7 << LPSPI_CFGR1_MATCFG_SHIFT)
-#define LPSPI_CFGR1_PINCFG_SHIFT 24
-#define LPSPI_CFGR1_PINCFG_MASK (0x3 << LPSPI_CFGR1_PINCFG_SHIFT)
-
-// FIFO Control Register (FCR) bits
-#define LPSPI_FCR_TXWATER_SHIFT 0
-#define LPSPI_FCR_TXWATER_MASK (0x3 << LPSPI_FCR_TXWATER_SHIFT)
-#define LPSPI_FCR_RXWATER_SHIFT 16
-#define LPSPI_FCR_RXWATER_MASK (0x3 << LPSPI_FCR_RXWATER_SHIFT)
-
-// Transmit Command Register (TCR) bits
-#define TCR_FRAMESZ_SHIFT 0
-#define TCR_FRAMESZ_MASK (0xFFF << TCR_FRAMESZ_SHIFT)
-#define TCR_WIDTH_SHIFT 16
-#define TCR_WIDTH_MASK (0x3 << TCR_WIDTH_SHIFT)
-#define TCR_TXMSK (1U << 18)
-#define TCR_RXMSK (1U << 19)
-#define TCR_CONTC (1U << 20)
-#define TCR_CONT (1U << 21)
-#define TCR_BYSW (1U << 22)
-#define TCR_LSBF (1U << 23)
+// Transmit Command Register (TCR) bits and masks
 #define TCR_PCS_SHIFT 24
 #define TCR_PCS_MASK (0x3 << TCR_PCS_SHIFT)
-#define TCR_PRESCALE_SHIFT 27
-#define TCR_PRESCALE_MASK (0x7 << TCR_PRESCALE_SHIFT)
-#define TCR_CPHA (1U << 30)
-#define TCR_CPOL (1U << 31)
 
+// FIFO depth and capacity definitions
 #define LPSPI_FIFO_WORD_DEPTH 4
-#define LPSPI_FIFO_BYTE_CAPACITY (LPSPI_FIFO_WORD_DEPTH * 4) // 16 bytes total - CORRECT for S32K358
+#define LPSPI_FIFO_BYTE_CAPACITY (LPSPI_FIFO_WORD_DEPTH * 4)
+
+// Indirizzi dei registri
+#define S32K_LPSPI_CCR1 0x44
+
+// Maschere e shift per i campi dei registri
+#define FSR_RXCOUNT_SHIFT 16
+#define FSR_TXCOUNT_SHIFT 0
+
+#define TCR_CPOL              (1U << 31)
+#define TCR_CPHA              (1U << 30)
+#define TCR_PRESCALE_MASK     (0x7 << 27)
+#define TCR_PRESCALE_SHIFT    27
+
+#define CCR1_SCKSET_MASK      (0xFF << 0)
+#define CCR1_SCKSET_SHIFT     0
+#define CCR1_SCKHLD_MASK      (0xFF << 8)
+#define CCR1_SCKHLD_SHIFT     8
+
+#define CFGR1_PCSPOL_SHIFT 8
+// --- FINE DEFINIZIONI REGISTRI ---
 
 struct NXPS32K358LPSPIState
 {
     SysBusDevice parent_obj;
+    Clock *clk;
 
     MemoryRegion mmio;
-
-    Clock *clk;
-    uint64_t input_clk;
-
-    qemu_irq irq;
     SSIBus *ssi;
+    qemu_irq irq;
 
-    qemu_irq *cs_lines;
     uint8_t num_cs_lines;
+    qemu_irq *cs_lines;
 
-    bool busy;
-    uint8_t tx_watermark;
-    uint8_t rx_watermark;
-    uint16_t frame_size;  // Current frame size in bits
-    bool continuous_mode; // Continuous transfer mode
-
+    // FIFO software
     Fifo8 tx_fifo;
     Fifo8 rx_fifo;
 
-    // LPSPI registers
     uint32_t lpspi_verid;
     uint32_t lpspi_param;
     uint32_t lpspi_cr;
@@ -127,6 +94,8 @@ struct NXPS32K358LPSPIState
     uint32_t lpspi_cfgr0;
     uint32_t lpspi_cfgr1;
     uint32_t lpspi_ccr;
+    uint32_t lpspi_ccr1;
+
     uint32_t lpspi_fcr;
     uint32_t lpspi_fsr;
     uint32_t lpspi_tcr;
