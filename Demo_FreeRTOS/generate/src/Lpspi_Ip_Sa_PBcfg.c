@@ -155,9 +155,9 @@ extern "C"
     /* Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0 Device Attribute Configuration of Spi*/
     const Lpspi_Ip_ExternalDeviceType Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2 =
         {
-            2U,                                                                                                                                       /* Instance */
-            (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)),                                     /* ccr */
-            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)) /* TCR - Simple config like manual version */
+            2U,                                                                                                   /* Instance */
+            (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)), /* ccr */
+            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U))                                                     /* TCR - Simple config like manual version */
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)
             /*HalfDuplexCfgr1*/
@@ -170,9 +170,9 @@ extern "C"
     /* Lpspi_Ip_DeviceAttributes_SpiExternalDevice_1 Device Attribute Configuration of Spi*/
     const Lpspi_Ip_ExternalDeviceType Lpspi_Ip_DeviceAttributes_SpiExternalDevice_1_Instance_2 =
         {
-            2U,                                                                                                                                       /* Instance */
-            (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)),                                     /* ccr */
-            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)) /* TCR - Simple config like manual version */
+            2U,                                                                                                   /* Instance */
+            (uint32)(LPSPI_CCR_SCKPCS(39U) | LPSPI_CCR_PCSSCK(39U) | LPSPI_CCR_SCKDIV(38U) | LPSPI_CCR_DBT(38U)), /* ccr */
+            (uint32)(LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U))                                                     /* TCR - Simple config like manual version */
 
 #if (STD_ON == LPSPI_IP_HALF_DUPLEX_MODE_SUPPORT)
             /*HalfDuplexCfgr1*/
@@ -186,7 +186,7 @@ extern "C"
     const Lpspi_Ip_ConfigType Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2 =
         {
             2U, /* Instance */
-                /* CR */
+            /* CR */
             (uint32)0,
             /* CFGR1 */
             (uint32)(LPSPI_CFGR1_PINCFG(0U) | LPSPI_CFGR1_PCSPOL(0U) | LPSPI_CFGR1_MASTER(1U) | LPSPI_CFGR1_SAMPLE(0U)),
@@ -220,7 +220,7 @@ extern "C"
     const Lpspi_Ip_ConfigType Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_1_Instance_1 =
         {
             1U, /* Instance */
-                /* CR */
+            /* CR */
             (uint32)0,
             /* CFGR1 */
             (uint32)(LPSPI_CFGR1_PINCFG(0U) | LPSPI_CFGR1_PCSPOL(0U) | LPSPI_CFGR1_MASTER(0U) | LPSPI_CFGR1_SAMPLE(0U)),
