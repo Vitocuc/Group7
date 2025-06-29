@@ -15,6 +15,7 @@ This document summarizes the complete refactoring process that resolved runtime 
 -   **Impact**: This was the **root cause** of "Transfer FAILED" errors
 
 **Files Modified**:
+
 -   `generate/src/Lpspi_Ip_Sa_PBcfg.c` - Fixed device configuration
 -   `src/main.c` - Updated data patterns to match working version
 
