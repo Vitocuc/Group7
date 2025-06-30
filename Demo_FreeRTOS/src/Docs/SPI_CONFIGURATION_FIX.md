@@ -44,21 +44,24 @@ The SPI configuration files were generated with incorrect parameters:
 ## Multi-Phase Fix Applied
 
 ### Phase 1: Frame Size Correction (Initial Fix)
-- Fixed `LPSPI_TCR_WIDTH(0U)` → `LPSPI_TCR_WIDTH(7U)`
-- Fixed `(uint8)1U` → `(uint8)8U`
-- **Result**: 8-bit transfers enabled, but no loopback
+
+-   Fixed `LPSPI_TCR_WIDTH(0U)` → `LPSPI_TCR_WIDTH(7U)`
+-   Fixed `(uint8)1U` → `(uint8)8U`
+-   **Result**: 8-bit transfers enabled, but no loopback
 
 ### Phase 2: TCR Simplification (Loopback Enable)
-- Simplified complex TCR configuration to match manual version
-- **Before**: `LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)`
-- **After**: `LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)`
-- **Result**: Simple TCR = 0x00000007, enables loopback with PINCFG(1u)
+
+-   Simplified complex TCR configuration to match manual version
+-   **Before**: `LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_CPOL(1U) | LPSPI_TCR_CPHA(1U) | LPSPI_TCR_PRESCALE(0U) | LPSPI_TCR_PCS(0U) | LPSPI_TCR_CONT(1U)`
+-   **After**: `LPSPI_TCR_WIDTH(7U) | LPSPI_TCR_PCS(0U)`
+-   **Result**: Simple TCR = 0x00000007, enables loopback with PINCFG(1u)
 
 ### Phase 3: Configuration File Update (Final Version)
-- Updated to latest configuration file provided by user
-- Maintains all previous fixes with improved overall configuration
-- **File**: `Lpspi_Ip_Sa_PBcfg.c` (latest version)
-- **Result**: Production-ready configuration with loopback functionality
+
+-   Updated to latest configuration file provided by user
+-   Maintains all previous fixes with improved overall configuration
+-   **File**: `Lpspi_Ip_Sa_PBcfg.c` (latest version)
+-   **Result**: Production-ready configuration with loopback functionality
 
 ## Files Modified
 
@@ -153,12 +156,14 @@ SendDebugMessage(msg_buffer);
 ## Expected Results After Complete Fix
 
 ### Phase 1 Results (8-bit transfers, no loopback):
+
 ```
 nxps32k358_lpspi_write: TCR write: 0xc0a30007, calculated frame_size: 8
 lpspi_flush_txfifo: SPI transfer: tx=0x00000011 -> rx=0x00000000
 ```
 
 ### Phase 2 Results (8-bit transfers + loopback):
+
 ```
 nxps32k358_lpspi_write: TCR write: 0x00000007, calculated frame_size: 8
 lpspi_flush_txfifo: SPI transfer (loopback): tx=0x00000010 -> rx=0x00000010
@@ -168,15 +173,16 @@ lpspi_flush_txfifo: SPI transfer (loopback): tx=0x00000012 -> rx=0x00000012
 
 ### Key Success Indicators:
 
-- ✅ **Frame Size**: `calculated frame_size: 8` (not 1)
-- ✅ **TCR Value**: `0x00000007` (not 0xc0a30007)
-- ✅ **Loopback**: `tx=0x10 -> rx=0x10` (not rx=0x00000000)
-- ✅ **Data Pattern**: 0x10, 0x11, 0x12... sequence
-- ✅ **Continuous Operation**: Stable repeating transfers
+-   ✅ **Frame Size**: `calculated frame_size: 8` (not 1)
+-   ✅ **TCR Value**: `0x00000007` (not 0xc0a30007)
+-   ✅ **Loopback**: `tx=0x10 -> rx=0x10` (not rx=0x00000000)
+-   ✅ **Data Pattern**: 0x10, 0x11, 0x12... sequence
+-   ✅ **Continuous Operation**: Stable repeating transfers
 
 ## Validation Steps
 
 ### Current Status
+
 1. **✅ Phase 1 & 2 Applied**: 8-bit frame size and simplified TCR configuration implemented
 2. **✅ Phase 3 Complete**: Latest configuration file from user applied
 3. **⏳ Pending**: Rebuild ELF with latest config and validate in QEMU
@@ -189,9 +195,9 @@ lpspi_flush_txfifo: SPI transfer (loopback): tx=0x00000012 -> rx=0x00000012
     ./qemu-system-arm -M nxps32k358evb -nographic -kernel Demo_FreeRTOS.elf
     ```
 3. **Verify QEMU output** matches the expected pattern:
-   - Frame size should be 8 bits
-   - TCR should be 0x00000007
-   - Loopback should work (rx = tx)
+    - Frame size should be 8 bits
+    - TCR should be 0x00000007
+    - Loopback should work (rx = tx)
 4. **Check for application success messages** in UART output
 5. **Confirm continuous operation** without errors or hangs
 
@@ -234,13 +240,15 @@ This explains why we saw stable task execution but always received `rx=0x0000000
 **Branch**: `Iaco's-changes`
 
 **All Commits Applied**:
-- "Fix SPI configuration: Change from 1-bit to 8-bit frame size" 
-- "Simplify TCR configuration for loopback functionality"
-- "Update SPI config with latest configuration file"
+
+-   "Fix SPI configuration: Change from 1-bit to 8-bit frame size"
+-   "Simplify TCR configuration for loopback functionality"
+-   "Update SPI config with latest configuration file"
 
 **Files Modified**:
-- `Demo_FreeRTOS/generate/src/Lpspi_Ip_Sa_PBcfg.c` (SPI configuration)
-- `Demo_FreeRTOS/src/main.c` (FreeRTOS application improvements)
-- Documentation files in `Demo_FreeRTOS/src/Docs/`
+
+-   `Demo_FreeRTOS/generate/src/Lpspi_Ip_Sa_PBcfg.c` (SPI configuration)
+-   `Demo_FreeRTOS/src/main.c` (FreeRTOS application improvements)
+-   Documentation files in `Demo_FreeRTOS/src/Docs/`
 
 The fix maintains all FreeRTOS functionality while correcting the fundamental SPI hardware configuration that was preventing proper data exchange. All phases are now complete and ready for final validation after rebuilding the ELF.
