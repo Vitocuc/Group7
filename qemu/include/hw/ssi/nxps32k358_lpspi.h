@@ -88,6 +88,25 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 //==============================================================================
 // STRUTTURA DI STATO COMPLETA
 //==============================================================================
+// Indirizzi dei registri
+#define S32K_LPSPI_CCR1 0x44
+
+// Maschere e shift per i campi dei registri
+#define FSR_RXCOUNT_SHIFT 16
+#define FSR_TXCOUNT_SHIFT 0
+
+#define TCR_CPOL              (1U << 31)
+#define TCR_CPHA              (1U << 30)
+#define TCR_PRESCALE_MASK     (0x7 << 27)
+#define TCR_PRESCALE_SHIFT    27
+
+#define CCR1_SCKSET_MASK      (0xFF << 0)
+#define CCR1_SCKSET_SHIFT     0
+#define CCR1_SCKHLD_MASK      (0xFF << 8)
+#define CCR1_SCKHLD_SHIFT     8
+
+#define CFGR1_PCSPOL_SHIFT 8
+// --- FINE DEFINIZIONI REGISTRI ---
 
 struct NXPS32K358LPSPIState
 {
