@@ -1,3 +1,4 @@
+Main che manda avanti e indietro
 #include <stdint.h>
 #include "FreeRTOS.h"
 #include "task.h"
@@ -6,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+
 
 // Include per Periferiche Standard
 #include "Lpuart_Uart_Ip.h"
@@ -18,13 +20,14 @@
 #include "IntCtrl_Ip.h"
 
 // === DEFINES ===
-// Questo valore (0xAA) Ã¨ confermato essere corretto dal file motor_speed.h
-#define CMD_GET_SPEED 0xAA
+#define CMD_GET_SPEED 0xA1
 #define HIGH_SPEED_THRESHOLD 200
-#define UART_LPUART_INTERNAL_CHANNEL 3
+#define UART_LPUART_INTERNAL_CHANNEL 3 // Assumiamo che il canale sia lo 0, modifica se necessario
 
 // === GLOBAL VARIABLES ===
-#define MASTER_EXTERNAL_DEVICE (Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2)
+
+#define MASTER_EXTERNAL_DEVICE      (Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2)
+
 volatile uint8_t g_last_speed = 0;
 
 // === FREERTOS GLOBAL VARIABLE ===
@@ -35,6 +38,7 @@ SemaphoreHandle_t xMutex;
 TimerHandle_t xTimers;
 BaseType_t xReturned;
 BaseType_t yReturned;
+
 
 
 
@@ -51,6 +55,7 @@ void uint8_to_str(uint8_t value, char *buffer) {
  * @brief Invia un byte via UART.
  */
 void UART_send_byte(uint8_t byte){
+    // Usa la costante del canale per coerenza
     Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, &byte , 1, 100);
 }
 
@@ -68,17 +73,16 @@ void print(char* str){
 
 /**
  * @brief Invia un comando via SPI al sensore motore e riceve un byte di risposta.
- * Basato sul codice sorgente del sensore, Ã¨ sufficiente una sola transazione.
  */
 void Motor_Sensor_ReadValue(uint8_t cmd, uint8_t* rx_buff){
-    // La funzione di trasferimento del sensore restituisce il nuovo valore immediatamente.
+    // L'istanza 0 di LPSPI è probabilmente corretta, non è legata alla UART.
     Lpspi_Ip_SyncTransmit(&MASTER_EXTERNAL_DEVICE, &cmd, rx_buff, 1, 1000);
 }
 
 // === FREERTOS TASKS FUNCTIONS ===
 
 /**
- * @brief Task A: Legge la velocitÃ  del motore via SPI e la stampa.
+ * @brief Task A: Legge la velocità del motore via SPI e la stampa.
  */
 void ReadSpeedTask(void * pvParameters){
     (void)pvParameters;
@@ -88,20 +92,24 @@ void ReadSpeedTask(void * pvParameters){
     TickType_t last_wake = xTaskGetTickCount();
     while(1){
         vTaskDelayUntil(&last_wake, period);
+
         xSemaphoreTake(xSemaphore, portMAX_DELAY);
         print("=== Task A: Reading Speed ===\r\n");
+
         Motor_Sensor_ReadValue(CMD_GET_SPEED, &received_value);
         g_last_speed = received_value;
+
         print("Motor Speed: ");
         uint8_to_str(g_last_speed, buf);
         print(buf);
-        print(" RPM\r\n\r\n"); // Aggiunto un a capo per leggibilitÃ 
+        print(" RPM\r\n");
+
         xSemaphoreGive(ySemaphore);
     }
 }
 
 /**
- * @brief Task B: Controlla la velocitÃ  letta dal Task A e stampa uno stato.
+ * @brief Task B: Controlla la velocità letta dal Task A e stampa uno stato.
  */
 void CheckSpeedTask(void * pvParameters){
     (void)pvParameters;
@@ -109,13 +117,16 @@ void CheckSpeedTask(void * pvParameters){
     TickType_t last_wake = xTaskGetTickCount();
     while(1){
         vTaskDelayUntil(&last_wake, period);
+
         xSemaphoreTake(ySemaphore, portMAX_DELAY);
         print("=== Task B: Checking Speed ===\r\n");
+
         if (g_last_speed > HIGH_SPEED_THRESHOLD) {
             print("Status: ATTENZIONE, alta velocita'!\r\n\r\n");
         } else {
             print("Status: Velocita' normale.\r\n\r\n");
         }
+
         xSemaphoreGive(xSemaphore);
     }
 }
@@ -137,6 +148,7 @@ void vTimerCallback( TimerHandle_t xTimer ){
 // === MAIN ===
 int main(void)
 {
+    // === INIZIALIZZAZIONE DEL SISTEMA E DELLA UART (CODICE FORNITO) ===
     /* Inizializzazione di base del sistema */
     Clock_Ip_Init(&Clock_Ip_aClockConfig[0]);
     Siul2_Port_Ip_Init(NUM_OF_CONFIGURED_PINS0, g_pin_mux_InitConfigArr0);
@@ -149,35 +161,35 @@ int main(void)
     Lpspi_Ip_Init(&Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2);
 
     // FREERTOS SEMAPHORES & MUTEX INIT
-    xMutex = xSemaphoreCreateMutex();
-    if(xMutex == NULL) print("Mutex init failed\r\n");
+    // FREERTOS SEMAPHORES & MUTEX INIT
+      xMutex = xSemaphoreCreateMutex();
+      if(xMutex == NULL) print("Mutex init failed\r\n");
 
-    xSemaphore = xSemaphoreCreateCounting(1, 1);
-    if(xSemaphore == NULL) print("xSemaphore init failed\r\n");
+      xSemaphore = xSemaphoreCreateCounting(1, 1);
+      if(xSemaphore == NULL) print("xSemaphore init failed\r\n");
 
-    ySemaphore = xSemaphoreCreateCounting(1, 0);
-    if(ySemaphore == NULL) print("ySemaphore init failed\r\n");
+      ySemaphore = xSemaphoreCreateCounting(1, 0);
+      if(ySemaphore == NULL) print("ySemaphore init failed\r\n");
 
-    zSemaphore = xSemaphoreCreateCounting(1, 0);
-    if(zSemaphore == NULL) print("zSemaphore init failed\r\n");
+      zSemaphore = xSemaphoreCreateCounting(1, 0);
+      if(zSemaphore == NULL) print("zSemaphore init failed\r\n");
 
-    // FREERTOS TASK CREATION
-    // Aumentiamo la stack size per evitare overflow
-    xReturned = xTaskCreate(ReadSpeedTask, "ReadSpeedTask", configMINIMAL_STACK_SIZE * 4, NULL, configMAX_PRIORITIES-2, NULL);
-    if(xReturned != pdPASS) print("Task A init failed\r\n");
+      // FREERTOS TASK CREATION
+      xReturned = xTaskCreate(ReadSpeedTask, "ReadSpeedTask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-2, NULL);
+      if(xReturned != pdPASS) print("Task A init failed\r\n");
 
-    yReturned = xTaskCreate(CheckSpeedTask, "CheckSpeedTask", configMINIMAL_STACK_SIZE * 4, NULL, configMAX_PRIORITIES-2, NULL);
-    if(yReturned != pdPASS) print("Task B init failed\r\n");
+      yReturned = xTaskCreate(CheckSpeedTask, "CheckSpeedTask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-2, NULL);
+      if(yReturned != pdPASS) print("Task B init failed\r\n");
 
-    yReturned = xTaskCreate(TaskCodeC, "StartupC", configMINIMAL_STACK_SIZE * 2, NULL, configMAX_PRIORITIES-1, NULL);
-    if(yReturned != pdPASS) print("Task C init failed\r\n");
+      yReturned = xTaskCreate(TaskCodeC, "StartupC", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-1, NULL);
+      if(yReturned != pdPASS) print("Task C init failed\r\n");
 
-    // FREERTOS TIMER CREATION
-    xTimers = xTimerCreate("Timer", pdMS_TO_TICKS(10000), pdTRUE, ( void * ) 0, vTimerCallback);
-    xTimerStart(xTimers, 0);
+      // FREERTOS TIMER CREATION
+      xTimers = xTimerCreate("Timer", pdMS_TO_TICKS(10000), pdTRUE, ( void * ) 0, vTimerCallback);
+      xTimerStart(xTimers, 0);
 
-    // START SCHEDULER
-    vTaskStartScheduler();
+      // START SCHEDULER
+      vTaskStartScheduler();
 
-    while(1);
-}
+      while(1);
+  }

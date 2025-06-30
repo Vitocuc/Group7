@@ -6,10 +6,14 @@
 #include "qom/object.h"
 
 #define TYPE_MOTOR_SPEED_SENSOR "motor-speed-sensor"
-DECLARE_OBJECT_TYPE(MotorSpeedSensor, motor_speed_sensor, MOTOR_SPEED_SENSOR)
+
+/*
+ * CORREZIONE: Ho usato il nome corretto della macro: OBJECT_DECLARE_TYPE
+ */
+OBJECT_DECLARE_TYPE(MotorSpeedSensor, motor_speed_sensor, MOTOR_SPEED_SENSOR);
 
 /* Comando per richiedere la velocità del motore */
-#define CMD_GET_SPEED 0x01
+#define CMD_GET_SPEED 0xAA
 
 /**
  * @brief Struttura dello stato del sensore di velocità.

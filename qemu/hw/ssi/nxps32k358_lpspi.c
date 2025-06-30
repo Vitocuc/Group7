@@ -55,13 +55,13 @@
 // Macro for conditional debug logging based on the debug level.
 // Logs messages to QEMU's log system if the specified debug level
 // is less than or equal to the current debug level (NXP_LPSPI_ERR_DEBUG).
-#define DB_PRINT_L(lvl, fmt, args...)               \
-    do                                              \
-    {                                               \
-        if (NXP_LPSPI_ERR_DEBUG >= lvl)             \
-        {                                           \
+#define DB_PRINT_L(lvl, fmt, args...)                                   \
+    do                                                                  \
+    {                                                                   \
+        if (NXP_LPSPI_ERR_DEBUG >= lvl)                                 \
+        {                                                               \
             qemu_log("%s: " fmt, __func__, ##args); \
-        }                                           \
+        }                                                               \
     } while (0)
 
 #define DB_PRINT(fmt, args...) DB_PRINT_L(1, fmt, ##args)
@@ -223,28 +223,18 @@ static void lpspi_flush_txfifo(NXPS32K358LPSPIState *s)
         }
     }
 
-    // Perform SPI transfer
-    if (!txmsk)
-    {
-        // Check if loopback mode is enabled (PINCFG bits in CFGR1)
-        uint8_t pincfg = (s->lpspi_cfgr1 & LPSPI_CFGR1_PINCFG_MASK) >> LPSPI_CFGR1_PINCFG_SHIFT;
-        if (pincfg == 0x1) // Loopback mode (SOUT internally connected to SIN)
-        {
-            rx_data = tx_data; // Perfect loopback for testing
-            DB_PRINT("SPI transfer (loopback): tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
-        }
-        else
-        {
-            rx_data = ssi_transfer(s->ssi, tx_data);
-            DB_PRINT("SPI transfer: tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
-        }
+    // ===================== BUG FIX STARTS HERE =====================
+    // The TXMSK bit should not prevent the data from being sent to the slave model.
+    // It's a physical pin configuration. We always transfer the intended data.
+    rx_data = ssi_transfer(s->ssi, tx_data);
+
+    if (!txmsk) {
+        DB_PRINT("SPI transfer: tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
+    } else {
+        // Log that the transfer was masked, but the data was still sent to the model.
+        DB_PRINT("SPI transfer (TX masked): tx=0x%08x -> rx=0x%08x\n", tx_data, rx_data);
     }
-    else
-    {
-        // TX masked - just generate dummy data for RX
-        rx_data = ssi_transfer(s->ssi, 0);
-        DB_PRINT("SPI transfer (TX masked): tx=0x00000000 -> rx=0x%08x\n", rx_data);
-    }
+    // ===================== BUG FIX ENDS HERE =====================
 
     // Store received data in RX FIFO
     if (!rxmsk)

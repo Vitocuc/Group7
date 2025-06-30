@@ -908,14 +908,14 @@
                                  <setting name="SpiDataShiftEdge" value="LEADING"/>
                                  <setting name="SpiHwUnit" value="CSIB0"/>
                                  <setting name="SpiShiftClockIdleLevel" value="HIGH"/>
-                                 <setting name="SpiDataWidth" value="1"/>
+                                 <setting name="SpiDataWidth" value="8"/>
                                  <setting name="SpiDefaultData" value="0"/>
                                  <setting name="SpiTransferStart" value="LSB"/>
                                  <setting name="SpiTimeClk2Cs" value="0.000001"/>
                                  <setting name="SpiTimeCs2Clk" value="0.000001"/>
                                  <setting name="SpiTimeCs2Cs" value="0.000001"/>
                                  <setting name="SpiDeviceHalfDuplexSupport" value="true"/>
-                                 <setting name="SpiTransferWidth" value="TRANSFER_1_BIT"/>
+                                 <setting name="SpiTransferWidth" value="TRANSFER_8_BIT"/>
                                  <setting name="SpiHalfDuplexPinSelect" value="HALF_DUPLEX_SIN"/>
                                  <setting name="SpiCsBehavior" value="CS_KEEP_ASSERTED"/>
                               </struct>

@@ -14,7 +14,7 @@
 #include "hw/misc/unimp.h"
 #include "system/system.h"
 
-#include "hw/ssi/motor.h"
+#include "hw/ssi/motor_speed.h"
 
 /* stm32f100_soc implementation is derived from stm32f205_soc */
 
