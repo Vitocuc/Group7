@@ -681,6 +681,8 @@
     select NXPS32K358_LPUART
     select NXPS32K358_LPSPI
     select NXPS32K358_SYSCFG
+    select NXPS32K358_MOTORSPEED
+
 
     config NXPS32K358_EVB
     bool

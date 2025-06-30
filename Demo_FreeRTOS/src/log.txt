@@ -1,0 +1,195 @@
+Main che manda avanti e indietro
+#include <stdint.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "timers.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+
+// Include per Periferiche Standard
+#include "Lpuart_Uart_Ip.h"
+#include "Lpspi_Ip.h"
+#include "Lpspi_Ip_Sa_PBcfg.h"
+
+// === NUOVI INCLUDE PER L'INIZIALIZZAZIONE DELLA PIATTAFORMA ===
+#include "Clock_Ip.h"
+#include "Siul2_Port_Ip.h"
+#include "IntCtrl_Ip.h"
+
+// === DEFINES ===
+#define CMD_GET_SPEED 0xA1
+#define HIGH_SPEED_THRESHOLD 200
+#define UART_LPUART_INTERNAL_CHANNEL 3 // Assumiamo che il canale sia lo 0, modifica se necessario
+
+// === GLOBAL VARIABLES ===
+
+#define MASTER_EXTERNAL_DEVICE      (Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2)
+
+volatile uint8_t g_last_speed = 0;
+
+// === FREERTOS GLOBAL VARIABLE ===
+SemaphoreHandle_t xSemaphore;
+SemaphoreHandle_t ySemaphore;
+SemaphoreHandle_t zSemaphore;
+SemaphoreHandle_t xMutex;
+TimerHandle_t xTimers;
+BaseType_t xReturned;
+BaseType_t yReturned;
+
+
+
+
+// === FUNCTIONS ===
+
+/**
+ * @brief Converte un valore uint8_t in una stringa di caratteri.
+ */
+void uint8_to_str(uint8_t value, char *buffer) {
+    sprintf(buffer, "%u", value);
+}
+
+/**
+ * @brief Invia un byte via UART.
+ */
+void UART_send_byte(uint8_t byte){
+    // Usa la costante del canale per coerenza
+    Lpuart_Uart_Ip_SyncSend(UART_LPUART_INTERNAL_CHANNEL, &byte , 1, 100);
+}
+
+/**
+ * @brief Stampa una stringa su UART usando un mutex per l'accesso esclusivo.
+ */
+void print(char* str){
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    while(*str!='\0'){
+        UART_send_byte((uint8_t)*str);
+        str++;
+    }
+    xSemaphoreGive(xMutex);
+}
+
+/**
+ * @brief Invia un comando via SPI al sensore motore e riceve un byte di risposta.
+ */
+void Motor_Sensor_ReadValue(uint8_t cmd, uint8_t* rx_buff){
+    // L'istanza 0 di LPSPI è probabilmente corretta, non è legata alla UART.
+    Lpspi_Ip_SyncTransmit(&MASTER_EXTERNAL_DEVICE, &cmd, rx_buff, 1, 1000);
+}
+
+// === FREERTOS TASKS FUNCTIONS ===
+
+/**
+ * @brief Task A: Legge la velocità del motore via SPI e la stampa.
+ */
+void ReadSpeedTask(void * pvParameters){
+    (void)pvParameters;
+    const TickType_t period = 1000 / portTICK_PERIOD_MS;
+    uint8_t received_value;
+    char buf[4];
+    TickType_t last_wake = xTaskGetTickCount();
+    while(1){
+        vTaskDelayUntil(&last_wake, period);
+
+        xSemaphoreTake(xSemaphore, portMAX_DELAY);
+        print("=== Task A: Reading Speed ===\r\n");
+
+        Motor_Sensor_ReadValue(CMD_GET_SPEED, &received_value);
+        g_last_speed = received_value;
+
+        print("Motor Speed: ");
+        uint8_to_str(g_last_speed, buf);
+        print(buf);
+        print(" RPM\r\n");
+
+        xSemaphoreGive(ySemaphore);
+    }
+}
+
+/**
+ * @brief Task B: Controlla la velocità letta dal Task A e stampa uno stato.
+ */
+void CheckSpeedTask(void * pvParameters){
+    (void)pvParameters;
+    const TickType_t period = 1000 / portTICK_PERIOD_MS;
+    TickType_t last_wake = xTaskGetTickCount();
+    while(1){
+        vTaskDelayUntil(&last_wake, period);
+
+        xSemaphoreTake(ySemaphore, portMAX_DELAY);
+        print("=== Task B: Checking Speed ===\r\n");
+
+        if (g_last_speed > HIGH_SPEED_THRESHOLD) {
+            print("Status: ATTENZIONE, alta velocita'!\r\n\r\n");
+        } else {
+            print("Status: Velocita' normale.\r\n\r\n");
+        }
+
+        xSemaphoreGive(xSemaphore);
+    }
+}
+
+void TaskCodeC(void * pvParameters){
+    (void)pvParameters;
+    while(1){
+        xSemaphoreTake(zSemaphore, portMAX_DELAY);
+        print("=== Task C woke via Timer ===\r\n");
+    }
+}
+
+// === FREERTOS TIMER HANDLERS ===
+void vTimerCallback( TimerHandle_t xTimer ){
+    (void)xTimer;
+    xSemaphoreGive(zSemaphore);
+}
+
+// === MAIN ===
+int main(void)
+{
+    // === INIZIALIZZAZIONE DEL SISTEMA E DELLA UART (CODICE FORNITO) ===
+    /* Inizializzazione di base del sistema */
+    Clock_Ip_Init(&Clock_Ip_aClockConfig[0]);
+    Siul2_Port_Ip_Init(NUM_OF_CONFIGURED_PINS0, g_pin_mux_InitConfigArr0);
+    IntCtrl_Ip_Init(&IntCtrlConfig_0);
+
+    /* Inizializza LPUART per i messaggi di debug */
+    Lpuart_Uart_Ip_Init(UART_LPUART_INTERNAL_CHANNEL, &Lpuart_Uart_Ip_xHwConfigPB_3);
+
+    // SPI INITIALIZATION
+    Lpspi_Ip_Init(&Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2);
+
+    // FREERTOS SEMAPHORES & MUTEX INIT
+    // FREERTOS SEMAPHORES & MUTEX INIT
+      xMutex = xSemaphoreCreateMutex();
+      if(xMutex == NULL) print("Mutex init failed\r\n");
+
+      xSemaphore = xSemaphoreCreateCounting(1, 1);
+      if(xSemaphore == NULL) print("xSemaphore init failed\r\n");
+
+      ySemaphore = xSemaphoreCreateCounting(1, 0);
+      if(ySemaphore == NULL) print("ySemaphore init failed\r\n");
+
+      zSemaphore = xSemaphoreCreateCounting(1, 0);
+      if(zSemaphore == NULL) print("zSemaphore init failed\r\n");
+
+      // FREERTOS TASK CREATION
+      xReturned = xTaskCreate(ReadSpeedTask, "ReadSpeedTask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-2, NULL);
+      if(xReturned != pdPASS) print("Task A init failed\r\n");
+
+      yReturned = xTaskCreate(CheckSpeedTask, "CheckSpeedTask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-2, NULL);
+      if(yReturned != pdPASS) print("Task B init failed\r\n");
+
+      yReturned = xTaskCreate(TaskCodeC, "StartupC", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES-1, NULL);
+      if(yReturned != pdPASS) print("Task C init failed\r\n");
+
+      // FREERTOS TIMER CREATION
+      xTimers = xTimerCreate("Timer", pdMS_TO_TICKS(10000), pdTRUE, ( void * ) 0, vTimerCallback);
+      xTimerStart(xTimers, 0);
+
+      // START SCHEDULER
+      vTaskStartScheduler();
+
+      while(1);
+  }
