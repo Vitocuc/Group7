@@ -11,7 +11,7 @@
 OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 
 //==============================================================================
-// DEFINIZIONI DEI REGISTRI (Le tue definizioni originali)
+// DEFINIZIONI DEI REGISTRI
 //==============================================================================
 #define S32K_LPSPI_VERID 0x00
 #define S32K_LPSPI_PARAM 0x04
@@ -31,40 +31,39 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 #define S32K_LPSPI_RDR 0x74
 
 //==============================================================================
-// DEFINIZIONI DELLE MASCHERE DI BIT (Combinazione di esistenti e mancanti)
+// DEFINIZIONI DELLE MASCHERE DI BIT
 //==============================================================================
 
 /* Control Register (CR) */
-#define LPSPI_CR_MEN  (1U << 0)
-#define LPSPI_CR_RST  (1U << 1)
-#define LPSPI_CR_RTF  (1U << 8)
-#define LPSPI_CR_RRF  (1U << 9)
-// NOTA: Il tuo file aveva LPSPI_CR_RSTF, ma il .c usa RTF e RRF. Ho usato questi.
+#define LPSPI_CR_MEN (1U << 0)
+#define LPSPI_CR_RST (1U << 1)
+#define LPSPI_CR_RTF (1U << 8)
+#define LPSPI_CR_RRF (1U << 9)
 
 /* Status Register (SR) */
-#define LPSPI_SR_TDF  (1U << 0)
-#define LPSPI_SR_RDF  (1U << 1)
-#define LPSPI_SR_WCF  (1U << 8)
-#define LPSPI_SR_FCF  (1U << 9)
-#define LPSPI_SR_TCF  (1U << 10)
-#define LPSPI_SR_TEF  (1U << 11)
-#define LPSPI_SR_REF  (1U << 12)
-#define LPSPI_SR_DMF  (1U << 13)
-#define LPSPI_SR_MBF  (1U << 24)
+#define LPSPI_SR_TDF (1U << 0)
+#define LPSPI_SR_RDF (1U << 1)
+#define LPSPI_SR_WCF (1U << 8)
+#define LPSPI_SR_FCF (1U << 9)
+#define LPSPI_SR_TCF (1U << 10)
+#define LPSPI_SR_TEF (1U << 11)
+#define LPSPI_SR_REF (1U << 12)
+#define LPSPI_SR_DMF (1U << 13)
+#define LPSPI_SR_MBF (1U << 24)
 
 /* Receive Status Register (RSR) */
 #define LPSPI_RSR_RXEMPTY (1U << 1)
 
 /* Transmit Command Register (TCR) */
 #define TCR_FRAMESZ_SHIFT 0
-#define TCR_FRAMESZ_MASK  (0xFFF << TCR_FRAMESZ_SHIFT)
-#define TCR_PCS_SHIFT     24
-#define TCR_PCS_MASK      (0x3 << TCR_PCS_SHIFT)
-#define TCR_TXMSK         (1U << 23)
-#define TCR_RXMSK         (1U << 22)
-#define TCR_LSBF          (1U << 28)
-#define TCR_CONT          (1U << 30)
-#define TCR_CONTC         (1U << 31)
+#define TCR_FRAMESZ_MASK (0xFFF << TCR_FRAMESZ_SHIFT)
+#define TCR_PCS_SHIFT 24
+#define TCR_PCS_MASK (0x3 << TCR_PCS_SHIFT)
+#define TCR_TXMSK (1U << 23)
+#define TCR_RXMSK (1U << 22)
+#define TCR_LSBF (1U << 28)
+#define TCR_CONT (1U << 30)
+#define TCR_CONTC (1U << 31)
 
 /* FIFO Status Register (FSR) */
 #define FSR_TXCOUNT_SHIFT 0
@@ -72,13 +71,13 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 
 /* FIFO Control Register (FCR) */
 #define LPSPI_FCR_TXWATER_SHIFT 0
-#define LPSPI_FCR_TXWATER_MASK  (0x3 << LPSPI_FCR_TXWATER_SHIFT)
+#define LPSPI_FCR_TXWATER_MASK (0x3 << LPSPI_FCR_TXWATER_SHIFT)
 #define LPSPI_FCR_RXWATER_SHIFT 16
-#define LPSPI_FCR_RXWATER_MASK  (0x3 << LPSPI_FCR_RXWATER_SHIFT)
+#define LPSPI_FCR_RXWATER_MASK (0x3 << LPSPI_FCR_RXWATER_SHIFT)
 
 /* Config Register 1 (CFGR1) */
 #define LPSPI_CFGR1_PINCFG_SHIFT 8
-#define LPSPI_CFGR1_PINCFG_MASK  (0x3 << LPSPI_CFGR1_PINCFG_SHIFT)
+#define LPSPI_CFGR1_PINCFG_MASK (0x3 << LPSPI_CFGR1_PINCFG_SHIFT)
 #define LPSPI_CFGR1_PCSPOL_SHIFT 24 // Unificato il nome con prefisso LPSPI_
 
 // FIFO depth and capacity definitions
@@ -95,15 +94,15 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 #define FSR_RXCOUNT_SHIFT 16
 #define FSR_TXCOUNT_SHIFT 0
 
-#define TCR_CPOL              (1U << 31)
-#define TCR_CPHA              (1U << 30)
-#define TCR_PRESCALE_MASK     (0x7 << 27)
-#define TCR_PRESCALE_SHIFT    27
+#define TCR_CPOL (1U << 31)
+#define TCR_CPHA (1U << 30)
+#define TCR_PRESCALE_MASK (0x7 << 27)
+#define TCR_PRESCALE_SHIFT 27
 
-#define CCR1_SCKSET_MASK      (0xFF << 0)
-#define CCR1_SCKSET_SHIFT     0
-#define CCR1_SCKHLD_MASK      (0xFF << 8)
-#define CCR1_SCKHLD_SHIFT     8
+#define CCR1_SCKSET_MASK (0xFF << 0)
+#define CCR1_SCKSET_SHIFT 0
+#define CCR1_SCKHLD_MASK (0xFF << 8)
+#define CCR1_SCKHLD_SHIFT 8
 
 #define CFGR1_PCSPOL_SHIFT 8
 // --- FINE DEFINIZIONI REGISTRI ---

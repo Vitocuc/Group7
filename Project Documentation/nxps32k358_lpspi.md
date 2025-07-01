@@ -2,7 +2,7 @@
 
 ## Overview
 
-The NXP S32K358 LPSPI (Low Power Serial Peripheral Interface) is a QEMU device model that emulates the SPI peripheral of the S32K358 microcontroller. It supports full-duplex SPI communication, programmable FIFO buffers, multiple chip select lines, and interrupt-driven operation.
+The NXP S32K358 LPSPI (Low Power Serial Peripheral Interface) is a QEMU device model that emulates the SPI peripheral of the S32K358 microcontroller. It supports full-duplex SPI communication with 4-word deep TX/RX FIFOs, 1-4096 bit frame size support (limited to 32-bit words), full interrupt support, configurable watermarks, and proper clock configuration with FreeRTOS compatibility.
 
 ---
 
@@ -19,46 +19,55 @@ The NXP S32K358 LPSPI (Low Power Serial Peripheral Interface) is a QEMU device m
 -   **Control Register (CR) Bits**:
     -   `LPSPI_CR_MEN`: Module Enable.
     -   `LPSPI_CR_RST`: Software Reset.
-    -   `LPSPI_CR_RSTF`: FIFO Reset.
+    -   `LPSPI_CR_RTF`: Reset Transmit FIFO.
+    -   `LPSPI_CR_RRF`: Reset Receive FIFO.
 -   **Status Register (SR) Bits**:
     -   `LPSPI_SR_TDF`: Transmit Data Flag.
     -   `LPSPI_SR_RDF`: Receive Data Flag.
-    -   `LPSPI_SR_MBF`: Message Buffer Flag.
+    -   `LPSPI_SR_WCF`: Word Complete Flag.
+    -   `LPSPI_SR_FCF`: Frame Complete Flag.
+    -   `LPSPI_SR_TCF`: Transfer Complete Flag.
+    -   `LPSPI_SR_TEF`: Transmit Error Flag.
+    -   `LPSPI_SR_REF`: Receive Error Flag.
+    -   `LPSPI_SR_DMF`: Data Match Flag.
+    -   `LPSPI_SR_MBF`: Module Busy Flag.
 -   **Receive Status Register (RSR) Bits**:
     -   `LPSPI_RSR_RXEMPTY`: RX FIFO Empty Flag.
 -   **Transmit Command Register (TCR) Bits**:
-    -   `TCR_PCS_SHIFT`: Position of the PCS field.
-    -   `TCR_PCS_MASK`: Mask for the PCS field.
+    -   `TCR_FRAMESZ_MASK`: Frame Size field (12 bits, 1-4096 bit frames).
+    -   `TCR_PCS_MASK`: Peripheral Chip Select field.
+    -   `TCR_TXMSK`: Transmit Data Mask.
+    -   `TCR_RXMSK`: Receive Data Mask.
+    -   `TCR_LSBF`: LSB First transfer mode.
+    -   `TCR_CONT`: Continuous transfer mode.
+    -   `TCR_CONTC`: Continuing Command.
+    -   `TCR_PRESCALE_MASK`: Clock prescaler field.
+    -   `TCR_CPOL`: Clock Polarity (used for clock config).
+    -   `TCR_CPHA`: Clock Phase (used for clock config).
 -   **FIFO Configuration**:
-    -   `LPSPI_FIFO_WORD_DEPTH`: Depth of the FIFO in words.
-    -   `LPSPI_FIFO_BYTE_CAPACITY`: Total FIFO capacity in bytes.
+    -   `LPSPI_FIFO_WORD_DEPTH`: 4 words deep.
+    -   `LPSPI_FIFO_BYTE_CAPACITY`: 16 bytes total capacity.
+-   **Clock Configuration (CCR1) Bits**:
+    -   `CCR1_SCKSET_MASK`: SCK setup time.
+    -   `CCR1_SCKHLD_MASK`: SCK hold time.
 
 ### Key Structures
 
 -   **`NXPS32K358LPSPIState`**: Represents the state of the LPSPI device, including:
     -   **Parent Object**: `SysBusDevice parent_obj`.
+    -   **Clock Input**: `Clock *clk` for clock frequency management.
     -   **Memory Region**: `MemoryRegion mmio`.
     -   **SSIBus**: `SSIBus *ssi`.
     -   **IRQ Line**: `qemu_irq irq`.
     -   **Chip Select Lines**: `uint8_t num_cs_lines` and `qemu_irq *cs_lines`.
     -   **FIFO Buffers**: `Fifo8 tx_fifo` and `Fifo8 rx_fifo`.
-    -   **Registers**:
-        -   `uint32_t lpspi_verid`: Version ID Register.
-        -   `uint32_t lpspi_param`: Parameter Register.
-        -   `uint32_t lpspi_cr`: Control Register.
-        -   `uint32_t lpspi_sr`: Status Register.
-        -   `uint32_t lpspi_ier`: Interrupt Enable Register.
-        -   `uint32_t lpspi_der`: DMA Enable Register.
-        -   `uint32_t lpspi_cfgr0`: Configuration Register 0.
-        -   `uint32_t lpspi_cfgr1`: Configuration Register 1.
-        -   `uint32_t lpspi_ccr`: Clock Configuration Register.
-        -   `uint32_t lpspi_ccr1`: Reserved for future use.
-        -   `uint32_t lpspi_fcr`: FIFO Control Register.
-        -   `uint32_t lpspi_fsr`: FIFO Status Register.
-        -   `uint32_t lpspi_tcr`: Transmit Command Register.
-        -   `uint32_t lpspi_tdr`: Transmit Data Register.
-        -   `uint32_t lpspi_rsr`: Receive Status Register.
-        -   `uint32_t lpspi_rdr`: Receive Data Register.
+    -   **Registers**: All 16 LPSPI registers (VERID, PARAM, CR, SR, etc.).
+    -   **State Variables**:
+        -   `bool busy`: Transfer busy state.
+        -   `uint8_t tx_watermark, rx_watermark`: FIFO watermark levels.
+        -   `uint16_t frame_size`: Current frame size in bits.
+        -   `bool continuous_mode`: Continuous transfer mode.
+        -   `uint64_t input_clk`: Input clock frequency.
 
 ---
 
@@ -70,117 +79,58 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
 
 ### Key Functions
 
+### Key Functions
+
+#### `lpspi_update_clock_config()`
+
+-   **Purpose**: Updates the SPI clock configuration based on the current TCR and CCR1 register values, calculating the actual SCK frequency and logging the clock parameters for debugging.
+
+-   **Functionality**:
+    -   Reads the input clock frequency from the clock source.
+    -   Calculates prescaler division from TCR register.
+    -   Extracts SCK setup and hold times from CCR1 register.
+    -   Computes final SCK frequency: `input_clk / (prescaler * (setup + hold + 2))`.
+    -   Extracts CPOL and CPHA settings from TCR register.
+    -   Logs complete clock configuration for verification.
+
 #### `lpspi_update_status()`
 
--   **Purpose**: Updates the internal status and FIFO status registers (`SR`, `FSR`, and `RSR`) of the LPSPI peripheral to reflect the current state of the transmit (TX) and receive (RX) FIFOs.
+-   **Purpose**: Updates FIFO status flags and word counts based on current frame size and FIFO contents, ensuring proper TDF/RDF flag management with watermark support.
 
 -   **Functionality**:
-
-    -   **FIFO Word Count Calculation**:
-
-        -   Calculates the number of 32-bit words currently stored in each FIFO:
-
-            -   **TX Word Count**: Computed by dividing the number of bytes used in the TX FIFO by 4.
-            -   **RX Word Count**: Computed by dividing the number of bytes used in the RX FIFO by 4.
-
-    -   **FIFO Status Register (`FSR`) Update**:
-
-        -   Encodes the word counts into the `FSR` register:
-
-            -   Lower 16 bits: TX Word Count.
-            -   Upper 16 bits: RX Word Count.
-
-    -   **Status Register (`SR`) Update**:
-
-        -   Evaluates FIFO thresholds to set or clear relevant flags:
-
-            -   Sets the `TDF` (Transmit Data Flag) if there are at least 4 bytes of free space in the TX FIFO.
-            -   Clears the `TDF` flag if less than 4 bytes are free.
-            -   Sets the `RDF` (Receive Data Flag) if the RX FIFO contains at least 4 bytes of data.
-            -   Clears the `RDF` flag if less than 4 bytes are present.
-
-    -   **Receive Status Register (`RSR`) Update**:
-
-        -   Reflects the empty state of the RX FIFO:
-
-            -   Sets the `RXEMPTY` flag if the RX Word Count is zero.
-            -   Clears the `RXEMPTY` flag if data is available in the RX FIFO.
-
-#### `lpspi_update_irq()`
-
--   **Purpose**: Manages the state of the IRQ (Interrupt Request) line by evaluating the current status flags in relation to the interrupt enable register (`IER`), ensuring the CPU is notified of relevant events such as FIFO space or data availability.
-
--   **Functionality**:
-
-    -   **Status Synchronization**:
-
-        -   Calls `lpspi_update_status()` to update the status (`SR`) and FIFO status (`FSR`) registers, ensuring they accurately represent the current FIFO state.
-
-    -   **Interrupt Condition Evaluation**:
-
-        -   Performs a bitwise AND between the `SR` (Status Register) and `IER` (Interrupt Enable Register) to identify active and enabled interrupt conditions.
-        -   Specifically checks:
-
-            -   `LPSPI_SR_TDF` (Transmit Data Flag): Set if there is space in the TX FIFO.
-            -   `LPSPI_SR_RDF` (Receive Data Flag): Set if data is available in the RX FIFO.
-
-    -   **IRQ Line Control**:
-
-        -   Asserts the IRQ line (`qemu_set_irq(s->irq, 1)`) if any enabled interrupt conditions are active.
-        -   Deasserts the IRQ line (`qemu_set_irq(s->irq, 0)`) if no enabled conditions are present.
+    -   Calculates frame size in bytes from TCR register (1-4096 bits, limited to 32-bit words).
+    -   Computes TX and RX word counts based on frame size.
+    -   Updates FSR register with word counts.
+    -   Sets TDF flag when TX FIFO words ≤ watermark and has space.
+    -   Sets RDF flag when RX FIFO words > watermark and has data.
+    -   Updates RSR register with RX FIFO empty status.
 
 #### `lpspi_flush_txfifo()`
 
--   **Purpose**: This function handles SPI transfers by flushing the TX FIFO (Transmit FIFO) and transferring data to the RX FIFO (Receive FIFO) via the SPI bus. It ensures proper chip select handling and updates the device state accordingly.
+-   **Purpose**: Handles SPI data transfers by moving data from TX FIFO to RX FIFO via the SPI bus, with proper chip select management and frame size validation.
 
 -   **Functionality**:
-
-    -   **Transfer Conditions**:
-        -   The function checks if a transfer is possible by ensuring:
-            -   The TX FIFO contains at least 4 bytes of data.
-            -   The RX FIFO has at least 4 bytes of free space.
-        -   If these conditions are not met, the function logs the state of the FIFOs, updates the IRQ line, and exits without performing a transfer.
-    -   **Chip Select Validation**:
-        -   Extracts the chip select (CS) value from the Transmit Command Register (`TCR`).
-        -   Validates the CS value against the number of available chip select lines.
-        -   If the CS value is invalid, logs an error and exits.
-    -   **Chip Select Assertion**:
-        -   Asserts the appropriate chip select line to initiate the SPI transfer.
-    -   **Data Transfer**:
-        -   While the TX FIFO has at least 4 bytes of data and the RX FIFO has at least 4 bytes of free space:
-            -   Pops 4 bytes from the TX FIFO to form a 32-bit word (`tx_word`).
-            -   Transfers the `tx_word` via the SPI bus using the `ssi_transfer()` function.
-            -   Pushes the received 32-bit word (`rx_word`) into the RX FIFO as 4 individual bytes.
-    -   **Chip Select Deassertion**:
-        -   Deasserts the chip select line after completing the transfer burst.
-    -   **Status Updates**:
-        -   Clears the `MBF` (Message Buffer Flag) in the Status Register (`SR`) if the TX FIFO is empty.
-        -   Updates the IRQ line to reflect the current state of the device.
-
--   **Debug Logging**:
-    -   Logs the state of the FIFOs if a transfer is blocked.
-    -   Logs chip select assertion and deassertion events.
-    -   Logs when the TX FIFO becomes empty and the `MBF` flag is cleared.
+    -   Validates frame size (1-4096 bits) and calculates bytes per frame.
+    -   Checks if sufficient data exists in TX FIFO and space in RX FIFO.
+    -   Extracts and validates chip select value from TCR register.
+    -   Asserts appropriate chip select line.
+    -   Transfers data in frame-sized chunks via `ssi_transfer()`.
+    -   Handles MSB/LSB first mode and continuous transfer mode.
+    -   Deasserts chip select and updates status flags.
+    -   Clears MBF flag when TX FIFO becomes empty.
 
 #### `nxps32k358_lpspi_do_reset()`
 
--   **Purpose**:  
-    This function resets the NXPS32K358 LPSPI device to its default state. It is typically called during system initialization or when a reset condition is triggered.
--   **Functionality**:
+-   **Purpose**: Resets the LPSPI device to proper S32K358 default values as specified in the reference manual.
 
-    -   Sets the `VERID` register to `0x02000004`, indicating the version of the LPSPI module.
-    -   Sets the `PARAM` register to `0x00080202`, defining the module's parameters.
-    -   Resets the control register (`CR`) to `0x0`, disabling the module.
-    -   Clears the status register (`SR`) and sets the transmit data flag (`TDF`).
-    -   Disables all interrupts by resetting the interrupt enable register (`IER`) and DMA enable register (`DER`) to `0x0`.
-    -   Resets configuration registers (`CFGR0`, `CFGR1`) and clock configuration register (`CCR`) to `0x0`.
-    -   Clears FIFO control and status registers (`FCR`, `FSR`).
-    -   Initializes transmit command register (`TCR`) to `0xFFFFFFFF`.
-    -   Clears transmit data register (`TDR`) and receive data register (`RDR`).
-    -   Marks the receive FIFO as empty in the receive status register (`RSR`).
-    -   Resets both TX and RX FIFOs using `fifo8_reset()`.
-    -   Deasserts all chip select lines by setting them to inactive state.
-    -   Updates the interrupt state by calling `lpspi_update_irq()`.
+-   **Functionality**:
+    -   Sets VERID to `0x04040007` (S32K358 specific version).
+    -   Sets PARAM to `0x00040404` (4-word FIFOs, 4 PCS lines).
+    -   Sets TCR to `0x0000001F` (32-bit default frame size).
+    -   Initializes status flags: TDF=1, TCF=1 (ready for transmission).
+    -   Sets RSR to RXEMPTY (receive FIFO empty).
+    -   Resets both TX and RX FIFOs and deasserts all CS lines.
+    -   Updates clock configuration and interrupt status.
 
 #### `nxps32k358_lpspi_realize()`
 
@@ -259,7 +209,7 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
 
 -   **Registers Handled**:
 
-    -   `VERID`, `PARAM`, `CR`, `SR`, `IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `FCR`, `FSR`, `TCR`, `RSR`, `RDR`.
+    -   `VERID`, `PARAM`, `CR`, `SR`, `IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `CCR1`, `FCR`, `FSR`, `TCR`, `RSR`, `RDR`.
 
 -   **Error Handling**:
 
@@ -281,7 +231,7 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
     -   Handles special cases:
         -   Logs an error if attempting to write to a read-only register.
         -   Resets the device if the `RST` bit in the `CR` register is set.
-        -   Resets the FIFOs if the `RSTF` bit in the `CR` register is set.
+        -   Resets the FIFOs if the `RTF` or `RRF` bits in the `CR` register are set.
         -   Handles FIFO operations for the `TDR` (Transmit Data Register).
         -   Updates the IRQ line after each write.
 
@@ -302,7 +252,7 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
     6. For the `TDR` (Transmit Data Register):
         - Writes data to the TX FIFO if the module is enabled.
         - Logs an error if the TX FIFO is full or the module is not enabled.
-    7. For other writable registers (`IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `FCR`):
+    7. For other writable registers (`IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `CCR1`, `FCR`):
         - Updates the corresponding register value.
     8. Logs an error for invalid `addr` values.
     9. Calls `lpspi_update_irq()` to update the IRQ line.
@@ -310,7 +260,7 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
 -   **Registers Handled**:
 
     -   **Read-Only**: `VERID`, `PARAM`, `FSR`, `RSR`, `RDR`.
-    -   **Writable**: `CR`, `SR`, `TCR`, `TDR`, `IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `FCR`.
+    -   **Writable**: `CR`, `SR`, `TCR`, `TDR`, `IER`, `DER`, `CFGR0`, `CFGR1`, `CCR`, `CCR1`, `FCR`.
 
 -   **Error Handling**:
 
@@ -378,6 +328,7 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
     -   lpspi_cfgr0: Configuration register 0.
     -   lpspi_cfgr1: Configuration register 1.
     -   lpspi_ccr: Clock configuration register.
+    -   lpspi_ccr1: Clock configuration register 1.
     -   lpspi_fcr: FIFO control register.
     -   lpspi_fsr: FIFO status register.
     -   lpspi_tcr: Transmit command register.
@@ -394,47 +345,72 @@ The driver uses a macro `DB_PRINT_L` to conditionally emit debug logs. This macr
 
 ## Register Map
 
-| Register | Offset | Description                  |
-| -------- | ------ | ---------------------------- |
-| VERID    | 0x00   | Version ID                   |
-| PARAM    | 0x04   | Parameter information        |
-| CR       | 0x10   | Control Register             |
-| SR       | 0x14   | Status Register              |
-| IER      | 0x18   | Interrupt Enable Register    |
-| DER      | 0x1C   | DMA Enable Register          |
-| CFGR0    | 0x20   | Configuration Register 0     |
-| CFGR1    | 0x24   | Configuration Register 1     |
-| CCR      | 0x40   | Clock Configuration Register |
-| FCR      | 0x58   | FIFO Control Register        |
-| FSR      | 0x5C   | FIFO Status Register         |
-| TCR      | 0x60   | Transmit Command Register    |
-| TDR      | 0x64   | Transmit Data Register       |
-| RSR      | 0x70   | Receive Status Register      |
-| RDR      | 0x74   | Receive Data Register        |
+| Register | Offset | Description                    |
+| -------- | ------ | ------------------------------ |
+| VERID    | 0x00   | Version ID                     |
+| PARAM    | 0x04   | Parameter information          |
+| CR       | 0x10   | Control Register               |
+| SR       | 0x14   | Status Register                |
+| IER      | 0x18   | Interrupt Enable Register      |
+| DER      | 0x1C   | DMA Enable Register            |
+| CFGR0    | 0x20   | Configuration Register 0       |
+| CFGR1    | 0x24   | Configuration Register 1       |
+| CCR      | 0x40   | Clock Configuration Register   |
+| CCR1     | 0x44   | Clock Configuration Register 1 |
+| FCR      | 0x58   | FIFO Control Register          |
+| FSR      | 0x5C   | FIFO Status Register           |
+| TCR      | 0x60   | Transmit Command Register      |
+| TDR      | 0x64   | Transmit Data Register         |
+| RSR      | 0x70   | Receive Status Register        |
+| RDR      | 0x74   | Receive Data Register          |
 
 ---
 
 ## Key Features
 
-### FIFO Management
+### Advanced FIFO Management
 
 -   4-word deep TX and RX FIFOs (16 bytes each).
--   Automatic flushing when:
-    -   TX FIFO has at least 1 word.
-    -   RX FIFO has space for 1 word.
-    -   Module is enabled (`MEN` bit set).
+-   Frame-size aware word counting (1-4096 bit frames, limited to 32-bit words).
+-   Watermark-based TDF/RDF flag generation.
+-   Automatic flushing when sufficient data is available and module is enabled.
+-   Proper FIFO reset via RTF/RRF control bits.
 
-### Interrupt Handling
+### Comprehensive Interrupt Handling
 
--   Interrupts are triggered when:
-    -   TX FIFO has space available (`TDF`).
-    -   RX FIFO has data available (`RDF`).
--   Enabled through the Interrupt Enable Register (`IER`).
+-   Full status flag support: TDF, RDF, WCF, FCF, TCF, TEF, REF, DMF, MBF.
+-   Watermark-based interrupt generation.
+-   Configurable interrupt enables via IER register.
+-   Proper IRQ assertion/deassertion based on enabled conditions.
 
-### Chip Select Handling
+### Advanced Clock Configuration
 
--   Supports multiple chip select lines.
--   Automatically asserts/deasserts CS during transfers.
--   Configurable via the Transmit Command Register (`TCR`).
+-   Input clock frequency management via Clock object.
+-   Configurable prescaler division (TCR register).
+-   SCK setup and hold time configuration (CCR1 register).
+-   Real-time SCK frequency calculation and logging.
+-   CPOL/CPHA clock polarity and phase support.
+
+### Frame Size and Transfer Modes
+
+-   Support for 1-4096 bit frame sizes (configurable via TCR).
+-   MSB/LSB first transfer modes (LSBF bit).
+-   Continuous transfer mode support (CONT/CONTC bits).
+-   Transmit/Receive data masking (TXMSK/RXMSK bits).
+-   Proper frame-size validation and byte-per-frame calculation.
+
+### Chip Select Management
+
+-   Multiple chip select lines support (configurable num_cs_lines).
+-   PCS field validation against available CS lines.
+-   Automatic CS assertion/deassertion during transfers.
+-   Configurable CS polarity (future extension ready).
+
+### S32K358-Specific Features
+
+-   Correct VERID (0x04040007) and PARAM (0x00040404) values.
+-   Default 32-bit frame size (TCR = 0x0000001F).
+-   Proper reset state initialization per S32K358 reference manual.
+-   FreeRTOS compatibility with 80MHz clock validation.
 
 ---
