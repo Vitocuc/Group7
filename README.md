@@ -220,8 +220,8 @@ This is the command that permits to check that the MPU is working, because in Fr
 
 Think of two levels that must work together:
 
-  * **S32 DS Compiler Flag (`__MPU_ENABLE`)**: 💡 This is the **hardware level**. Enabling it activates code in the NXP startup files that performs the very first MPU initialization at boot, setting up basic memory regions to allow the code to run before FreeRTOS starts. Without this, the MPU would remain off.
-  * **FreeRTOS Flag (`configENABLE_MPU`)**: 🔗 This is the **operating system level**. Enabling it tells FreeRTOS to use the MPU APIs to manage task memory protection, save/restore their regions during context switches, and create "restricted" tasks.
+  * **S32 DS Compiler Flag (`__MPU_ENABLE`)**:This is the **hardware level**. Enabling it activates code in the NXP startup files that performs the very first MPU initialization at boot, setting up basic memory regions to allow the code to run before FreeRTOS starts. Without this, the MPU would remain off.
+  * **FreeRTOS Flag (`configENABLE_MPU`)**:This is the **operating system level**. Enabling it tells FreeRTOS to use the MPU APIs to manage task memory protection, save/restore their regions during context switches, and create "restricted" tasks.
 
 In conclusion, you must enable both for correct operation.
 
