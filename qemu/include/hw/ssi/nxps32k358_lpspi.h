@@ -11,7 +11,7 @@
 OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 
 //==============================================================================
-// DEFINIZIONI DEI REGISTRI
+// REGISTER DEFINITIONS
 //==============================================================================
 #define S32K_LPSPI_VERID 0x00
 #define S32K_LPSPI_PARAM 0x04
@@ -30,9 +30,7 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 #define S32K_LPSPI_RSR 0x70
 #define S32K_LPSPI_RDR 0x74
 
-//==============================================================================
-// DEFINIZIONI DELLE MASCHERE DI BIT
-//==============================================================================
+// BIT MASK DEFINITIONS
 
 /* Control Register (CR) */
 #define LPSPI_CR_MEN (1U << 0)
@@ -78,19 +76,16 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 /* Config Register 1 (CFGR1) */
 #define LPSPI_CFGR1_PINCFG_SHIFT 8
 #define LPSPI_CFGR1_PINCFG_MASK (0x3 << LPSPI_CFGR1_PINCFG_SHIFT)
-#define LPSPI_CFGR1_PCSPOL_SHIFT 24 // Unificato il nome con prefisso LPSPI_
+#define LPSPI_CFGR1_PCSPOL_SHIFT 24 // Unified name with LPSPI_ prefix
 
 // FIFO depth and capacity definitions
 #define LPSPI_FIFO_WORD_DEPTH 4
 #define LPSPI_FIFO_BYTE_CAPACITY (LPSPI_FIFO_WORD_DEPTH * 4)
 
-//==============================================================================
-// STRUTTURA DI STATO COMPLETA
-//==============================================================================
-// Indirizzi dei registri
+// Register addresses
 #define S32K_LPSPI_CCR1 0x44
 
-// Maschere e shift per i campi dei registri
+// Masks and shift values for register fields
 #define FSR_RXCOUNT_SHIFT 16
 #define FSR_TXCOUNT_SHIFT 0
 
@@ -105,7 +100,7 @@ OBJECT_DECLARE_SIMPLE_TYPE(NXPS32K358LPSPIState, NXPS32K358_LPSPI)
 #define CCR1_SCKHLD_SHIFT 8
 
 #define CFGR1_PCSPOL_SHIFT 8
-// --- FINE DEFINIZIONI REGISTRI ---
+// --- END REGISTER DEFINITIONS ---
 
 struct NXPS32K358LPSPIState
 {
@@ -117,11 +112,11 @@ struct NXPS32K358LPSPIState
     qemu_irq irq;
     qemu_irq *cs_lines;
 
-    // FIFO software
+    // Software FIFO
     Fifo8 tx_fifo;
     Fifo8 rx_fifo;
 
-    // Registri
+    // Registers
     uint32_t lpspi_verid;
     uint32_t lpspi_param;
     uint32_t lpspi_cr;

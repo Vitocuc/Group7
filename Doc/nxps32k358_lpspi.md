@@ -10,10 +10,8 @@ The NXP S32K358 LPSPI (Low Power Serial Peripheral Interface) is a QEMU device m
 
 ### Key Definitions
 
--   **Type Definition**: `TYPE_NXPS32K358_LPSPI` - QEMU object type string for the device.
--   **Register Offsets**: Defines the memory-mapped offsets for the LPSPI registers (`S32K_LPSPI_*`).
+-   **Register Offsets**: Defines the memory-mapped offsets for the LPSPI registers.
 -   **Bit Masks**: Provides bit-level definitions for control and status registers.
--   **Shift Macros**: Provides bit position shift values for multi-bit fields.
 -   **FIFO Depth**: Defines the FIFO depth and capacity.
 
 ### Key Constants
@@ -52,57 +50,6 @@ The NXP S32K358 LPSPI (Low Power Serial Peripheral Interface) is a QEMU device m
 -   **Clock Configuration (CCR1) Bits**:
     -   `CCR1_SCKSET_MASK`: SCK setup time.
     -   `CCR1_SCKHLD_MASK`: SCK hold time.
-
-### Complete Macro Reference
-
-#### Register Offset Macros
-
--   `S32K_LPSPI_VERID` (0x00): Version ID register offset
--   `S32K_LPSPI_PARAM` (0x04): Parameter register offset
--   `S32K_LPSPI_CR` (0x10): Control register offset
--   `S32K_LPSPI_SR` (0x14): Status register offset
--   `S32K_LPSPI_IER` (0x18): Interrupt enable register offset
--   `S32K_LPSPI_DER` (0x1C): DMA enable register offset
--   `S32K_LPSPI_CFGR0` (0x20): Configuration register 0 offset
--   `S32K_LPSPI_CFGR1` (0x24): Configuration register 1 offset
--   `S32K_LPSPI_CCR` (0x40): Clock configuration register offset
--   `S32K_LPSPI_CCR1` (0x44): Clock configuration register 1 offset
--   `S32K_LPSPI_FCR` (0x58): FIFO control register offset
--   `S32K_LPSPI_FSR` (0x5C): FIFO status register offset
--   `S32K_LPSPI_TCR` (0x60): Transmit command register offset
--   `S32K_LPSPI_TDR` (0x64): Transmit data register offset
--   `S32K_LPSPI_RSR` (0x70): Receive status register offset
--   `S32K_LPSPI_RDR` (0x74): Receive data register offset
-
-#### TCR Register Field Shift Macros
-
--   `TCR_FRAMESZ_SHIFT` (0): Frame size field bit position
--   `TCR_PCS_SHIFT` (24): Peripheral chip select field bit position
--   `TCR_PRESCALE_SHIFT` (27): Clock prescaler field bit position
-
-#### FSR Register Field Shift Macros
-
--   `FSR_TXCOUNT_SHIFT` (0): TX FIFO count field bit position
--   `FSR_RXCOUNT_SHIFT` (16): RX FIFO count field bit position
-
-#### FCR Register Field Macros
-
--   `LPSPI_FCR_TXWATER_SHIFT` (0): TX watermark field bit position
--   `LPSPI_FCR_TXWATER_MASK`: TX watermark field mask
--   `LPSPI_FCR_RXWATER_SHIFT` (16): RX watermark field bit position
--   `LPSPI_FCR_RXWATER_MASK`: RX watermark field mask
-
-#### CFGR1 Register Field Macros
-
--   `LPSPI_CFGR1_PINCFG_SHIFT` (8): Pin configuration field bit position
--   `LPSPI_CFGR1_PINCFG_MASK`: Pin configuration field mask
--   `LPSPI_CFGR1_PCSPOL_SHIFT` (24): PCS polarity field bit position
--   `CFGR1_PCSPOL_SHIFT` (8): Alternate PCS polarity field bit position
-
-#### CCR1 Register Field Shift Macros
-
--   `CCR1_SCKSET_SHIFT` (0): SCK setup time field bit position
--   `CCR1_SCKHLD_SHIFT` (8): SCK hold time field bit position
 
 ### Key Structures
 

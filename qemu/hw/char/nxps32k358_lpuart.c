@@ -15,8 +15,10 @@
 #endif
 
 #define DB_PRINT_L(lvl, fmt, args...)               \
-    do {                                            \
-        if (NXP_LPUART_DEBUG >= lvl) {              \
+    do                                              \
+    {                                               \
+        if (NXP_LPUART_DEBUG >= lvl)                \
+        {                                           \
             qemu_log("%s: " fmt, __func__, ##args); \
         }                                           \
     } while (0)
@@ -24,30 +26,32 @@
 #define DB_PRINT(fmt, args...) DB_PRINT_L(1, fmt, ##args)
 #define DB_PRINT_READ(fmt, args...) DB_PRINT_L(2, fmt, ##args)
 
-// SECONDA REVISIONE 20 MAY
-static uint32_t nxps32k358_lpuart_calculate_baud_rate(NXPS32K358LPUARTState *s) {
+static uint32_t nxps32k358_lpuart_calculate_baud_rate(NXPS32K358LPUARTState *s)
+{
     uint32_t sbr;
-    uint32_t osr_val_in_reg; // Valore del campo OSR letto dal registro
+    uint32_t osr_val_in_reg; // Value of OSR field read from register
     uint64_t lpuart_module_clk_freq;
 
-    // 1. Estrai SBR (Baud Rate Modulo Divisor)
+    // 1. Extract SBR (Baud Rate Modulo Divisor)
     sbr = (s->baud_rate_config & LPUART_BAUD_SBR_MASK) >> LPUART_BAUD_SBR_SHIFT;
 
-    // 2. Estrai OSR (Over Sampling Ratio)
+    // 2. Extract OSR (Over Sampling Ratio)
     osr_val_in_reg = (s->baud_rate_config & LPUART_BAUD_OSR_MASK) >> LPUART_BAUD_OSR_SHIFT;
-   
+
     lpuart_module_clk_freq = clock_get_hz(s->clk);
 
-    // 3. Calcola e restituisci il baud rate usando la formula diretta (osr + 1)
-    // ATTENZIONE: Questo non considera che se osr_val_in_reg < 3, l'oversampling effettivo è 16x.
+    // 3. Calculate and return baud rate using direct formula (osr + 1)
+    // WARNING: This does not consider that if osr_val_in_reg < 3, effective oversampling is 16x.
     uint64_t divisor = (uint64_t)(osr_val_in_reg + 1) * sbr;
-    if (divisor == 0) {
+    if (divisor == 0)
+    {
         return 0;
     }
 
     return lpuart_module_clk_freq / divisor;
 }
-static void nxps32k358_lpuart_update_params(NXPS32K358LPUARTState *s) {
+static void nxps32k358_lpuart_update_params(NXPS32K358LPUARTState *s)
+{
     QEMUSerialSetParams ssp;
     ssp.speed = nxps32k358_lpuart_calculate_baud_rate(s);
     DB_PRINT("Baud rate: %d\n", ssp.speed);
@@ -60,25 +64,29 @@ static void nxps32k358_lpuart_update_irq(NXPS32K358LPUARTState *s)
     uint32_t mask = s->lpuart_sr & s->lpuart_cr;
 
     if (mask &
-        (LPUART_CTRL_TIE | LPUART_CTRL_TCIE | LPUART_CTRL_RIE)) {
+        (LPUART_CTRL_TIE | LPUART_CTRL_TCIE | LPUART_CTRL_RIE))
+    {
         qemu_set_irq(s->irq, 1);
-    } else {
+    }
+    else
+    {
         qemu_set_irq(s->irq, 0);
     }
 }
 
-// Funzione chiamata quando QEMU può inviare un carattere al guest
+// Function called when QEMU can send a character to the guest
 static int nxps32k358_lpuart_can_receive(void *opaque)
 {
     NXPS32K358LPUARTState *s = NXPS32K358_LPUART(opaque);
 
-    if (s->lpuart_sr & LPUART_STAT_RDRF) {
-        return 0; // Non può ricevere
+    if (s->lpuart_sr & LPUART_STAT_RDRF)
+    {
+        return 0; // Cannot receive
     }
-    return 1; // Può ricevere
+    return 1; // Can receive
 }
 
-// Funzione chiamata quando QEMU ha un carattere da inviare al guest
+// Function called when QEMU has a character to send to the guest
 static void nxps32k358_lpuart_receive(void *opaque, const uint8_t *buf, int size)
 {
     NXPS32K358LPUARTState *s = NXPS32K358_LPUART(opaque);
@@ -96,25 +104,24 @@ static void nxps32k358_lpuart_receive(void *opaque, const uint8_t *buf, int size
     // at the end need to be done to send the Interrupt :)
     nxps32k358_lpuart_update_irq(s);
     DB_PRINT("Receiving: %c\n", s->lpuart_dr);
-
 }
 
 static void nxps32k358_lpuart_reset(DeviceState *dev)
 {
     NXPS32K358LPUARTState *s = NXPS32K358_LPUART(dev);
 
-    s->lpuart_cr = LPUART_CONTROL_RESET;        // Valore di reset dal manuale
-    s->lpuart_sr = LPUART_STAT_RESET;        // TDRE è solitamente 1 al reset, TBD
+    s->lpuart_cr = LPUART_CONTROL_RESET; // Reset value from manual
+    s->lpuart_sr = LPUART_STAT_RESET;    // TDRE is usually 1 at reset, TBD
     s->lpuart_dr = LPUART_DATA_RESET;
     s->lpuart_gb = LPUART_GLOBAL_RESET;
 
-    s->baud_rate_config = LPUART_BAUD_RESET; // Valore di reset dal manuale (esempio)
+    s->baud_rate_config = LPUART_BAUD_RESET; // Reset value from manual (example)
 
     nxps32k358_lpuart_update_irq(s);
 }
 
-// hwaddr is called offset because it the offset to access to a given register. In this case is possible because MemoryRegionOps è
-// l'offset relativo a quella memor region definita. Sarà opaque a definire la lpuart
+// hwaddr is called offset because it the offset to access to a given register. In this case is possible because MemoryRegionOps is
+// the offset relative to that memory region defined. Opaque will define the lpuart
 
 static uint64_t nxps32k358_lpuart_read(void *opaque, hwaddr offset, unsigned size)
 {
@@ -133,14 +140,14 @@ static uint64_t nxps32k358_lpuart_read(void *opaque, hwaddr offset, unsigned siz
         return s->lpuart_sr;
     case LPUART_CTRL:
         return s->lpuart_cr;
-        
+
     case LPUART_DATA:
         DB_PRINT_READ("Value: 0x%" PRIx32 ", %c\n", s->lpuart_dr,
-                          (char)s->lpuart_dr);
+                      (char)s->lpuart_dr);
 
         s->lpuart_sr &= ~LPUART_STAT_RDRF;
         qemu_chr_fe_accept_input(&s->chr);
-        // La lettura di DATA spesso cancella RDRF e l'interrupt associato
+        // Reading DATA often clears RDRF and associated interrupt
         nxps32k358_lpuart_update_irq(s);
         return s->lpuart_dr;
     default:
@@ -161,11 +168,12 @@ static void nxps32k358_lpuart_write(void *opaque, hwaddr offset, uint64_t val64,
     switch (offset)
     {
     case LPUART_GLOBAL:
-            s->lpuart_gb = value;
-            if (value & LPUART_GLOBAL_RST_MASK) {
-                nxps32k358_lpuart_reset(DEVICE(s));
-            }
-            return;
+        s->lpuart_gb = value;
+        if (value & LPUART_GLOBAL_RST_MASK)
+        {
+            nxps32k358_lpuart_reset(DEVICE(s));
+        }
+        return;
     case LPUART_BAUD:
         s->baud_rate_config = value;
         nxps32k358_lpuart_update_params(s);
@@ -177,7 +185,8 @@ static void nxps32k358_lpuart_write(void *opaque, hwaddr offset, uint64_t val64,
             only be set by hardware, so keep it set here. */
             s->lpuart_sr = value | LPUART_STAT_TDRE;
         }
-        else s->lpuart_sr &= value;
+        else
+            s->lpuart_sr &= value;
         return;
     case LPUART_CTRL:
         s->lpuart_cr = value;
@@ -202,17 +211,16 @@ static void nxps32k358_lpuart_write(void *opaque, hwaddr offset, uint64_t val64,
         }
         return;
     default:
-        qemu_log_mask(LOG_GUEST_ERROR,"%s: NXP S32K3 LPUART: Unimplemented write to offset 0x%" HWADDR_PRIx " with value 0x%" PRIx32 "\n",
-                      __func__, offset, value);        
+        qemu_log_mask(LOG_GUEST_ERROR, "%s: NXP S32K3 LPUART: Unimplemented write to offset 0x%" HWADDR_PRIx " with value 0x%" PRIx32 "\n",
+                      __func__, offset, value);
     }
 }
-
 
 // FINAL FUNCTION FOR EACH VIRTUALIZED DEVICE
 static const MemoryRegionOps nxps32k358_lpuart_ops = {
     .read = nxps32k358_lpuart_read,
     .write = nxps32k358_lpuart_write,
-    .endianness = DEVICE_NATIVE_ENDIAN, // Verifica l'endianness delle periferiche S32K3
+    .endianness = DEVICE_NATIVE_ENDIAN, // Verify S32K3 peripherals endianness
 };
 
 static const Property nxps32k358_lpuart_properties[] = {
@@ -223,39 +231,37 @@ static void nxps32k358_lpuart_init(Object *obj)
 {
     NXPS32K358LPUARTState *s = NXPS32K358_LPUART(obj);
 
-        // Inizializza la linea IRQ
+    // Initialize the IRQ line
     sysbus_init_irq(SYS_BUS_DEVICE(obj), &s->irq);
 
-    // Inizializza la MemoryRegion per i registri della LPUART
-    // La dimensione (es. 0x1000 o 4KB) deve coprire tutti i registri LPUART
+    // Initialize the MemoryRegion for LPUART registers
+    // The size (e.g. 0x1000 or 4KB) must cover all LPUART registers
     memory_region_init_io(&s->iomem, obj, &nxps32k358_lpuart_ops, s,
-                          "nxps32k358-lpuart", 0x4000); // Dimensione esempio
-
+                          "nxps32k358-lpuart", 0x4000); // Example size
 
     sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->iomem);
     s->clk = qdev_init_clock_in(DEVICE(s), "clk", NULL, s, 0);
 
-
-
-    // Inizializza il backend per i caratteri
-    //qdev_prop_set_chr(DEVICE(obj), "chardev", qemu_chr_fe_get_driver(&s->chr)); // Permette di specificare -serial ...
-                                                                                // o un altro chardev
+    // Initialize the character backend
+    // qdev_prop_set_chr(DEVICE(obj), "chardev", qemu_chr_fe_get_driver(&s->chr)); // Allows specifying -serial ...
+    // or another chardev
 }
 
 static void nxps32k358_lpuart_realize(DeviceState *dev, Error **errp)
 {
     NXPS32K358LPUARTState *s = NXPS32K358_LPUART(dev);
-    if (!clock_has_source(s->clk)) {
+    if (!clock_has_source(s->clk))
+    {
         error_setg(errp, "LPUART clock must be wired up by SoC code");
         return;
     }
-    // Connetti le funzioni di callback per la ricezione dei caratteri
-    // dall'host QEMU al dispositivo emulato.
+    // Connect callback functions for receiving characters
+    // from QEMU host to emulated device.
     qemu_chr_fe_set_handlers(&s->chr, nxps32k358_lpuart_can_receive,
                              nxps32k358_lpuart_receive, NULL, NULL, s, NULL, true);
 
-    // Qui non serve connettere clock perché il clock viene passato dal SoC
-    // al momento della connessione in nxps32k358_soc_realize
+    // Here no need to connect clock because clock is passed from SoC
+    // at connection time in nxps32k358_soc_realize
     // qdev_connect_clock_in(dev, "clk", some_clock_source);
 }
 

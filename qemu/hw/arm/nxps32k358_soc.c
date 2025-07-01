@@ -27,11 +27,6 @@ static const int lpspi_irq[NXP_NUM_LPSPIS] = {165, 166, 167, 168, 169, 170};
 
 // -------------------------------------
 
-/* We don't care if we actually implement the devices later on
- * since unimplemented devices have the lowest priority in QEMU
- * We setup all the devices as unimplemented and after we can implement only the needed devices
- */
-
 static void create_unimplemented_devices(void)
 {
 
@@ -52,11 +47,11 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("adc_2", 0x400A8000, 0x4000);
     create_unimplemented_device("pit0", 0x400B0000, 0x4000);
     create_unimplemented_device("pit1", 0x400B4000, 0x4000);
-    create_unimplemented_device("mu_2_mua", 0x400B8000, 0x4000); // Nota: CSV aveva due righe per MU_2, distinte come MUA/MUB nella descrizione
-    create_unimplemented_device("mu_2_mub", 0x400BC000, 0x4000); // Ho usato _mua/_mub per distinguerle nel nome
-    create_unimplemented_device("mu_3_mua", 0x400C4000, 0x4000); // Come sopra per MU_3
+    create_unimplemented_device("mu_2_mua", 0x400B8000, 0x4000); // Note: CSV had two lines for MU_2, distinguished as MUA/MUB in description
+    create_unimplemented_device("mu_2_mub", 0x400BC000, 0x4000); // Used _mua/_mub to distinguish them in name
+    create_unimplemented_device("mu_3_mua", 0x400C4000, 0x4000); // Same as above for MU_3
     create_unimplemented_device("mu_3_mub", 0x400C8000, 0x4000);
-    create_unimplemented_device("mu_4_mua", 0x400CC000, 0x4000); // Come sopra per MU_4
+    create_unimplemented_device("mu_4_mua", 0x400CC000, 0x4000); // Same as above for MU_4
     create_unimplemented_device("mu_4_mub", 0x400D0000, 0x4000);
     create_unimplemented_device("axbs", 0x40200000, 0x4000);
     create_unimplemented_device("system_xbic", 0x40204000, 0x4000);
@@ -94,12 +89,12 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("dmamux_1", 0x40284000, 0x4000);
     create_unimplemented_device("rtc", 0x40288000, 0x4000);
     create_unimplemented_device("mc_rgm", 0x4028C000, 0x4000);
-    create_unimplemented_device("siul_virtwrapper_pdac0_hse", 0x40290000, 0x4000); // Nome lungo, potrebbe essere abbreviato se preferisci
-    // create_unimplemented_device("siul_virtwrapper_pdac0_hse_alt", 0x40294000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
+    create_unimplemented_device("siul_virtwrapper_pdac0_hse", 0x40290000, 0x4000); // Long name, could be abbreviated if preferred
+    // create_unimplemented_device("siul_virtwrapper_pdac0_hse_alt", 0x40294000, 0x4000); // Duplicate address in name, using _alt
     create_unimplemented_device("siul_virtwrapper_pdac1_m7_0", 0x40298000, 0x4000);
-    // create_unimplemented_device("siul_virtwrapper_pdac1_m7_0_alt", 0x4029C000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
+    // create_unimplemented_device("siul_virtwrapper_pdac1_m7_0_alt", 0x4029C000, 0x4000); // Duplicate address in name, using _alt
     create_unimplemented_device("siul_virtwrapper_pdac2_m7_1", 0x402A0000, 0x4000);
-    // create_unimplemented_device("siul_virtwrapper_pdac2_m7_1_alt", 0x402A4000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
+    // create_unimplemented_device("siul_virtwrapper_pdac2_m7_1_alt", 0x402A4000, 0x4000); // Duplicate address in name, using _alt
     create_unimplemented_device("siul_virtwrapper_pdac3", 0x402A8000, 0x4000);
     create_unimplemented_device("dcm", 0x402AC000, 0x4000);
     create_unimplemented_device("wkpu", 0x402B4000, 0x4000);
@@ -110,14 +105,14 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("firc", 0x402D0000, 0x4000);
     create_unimplemented_device("fxosc", 0x402D4000, 0x4000);
     create_unimplemented_device("mc_cgm", 0x402D8000, 0x4000);
-    create_unimplemented_device("mc_me", 0x402DC000, 0x4000); // Già gestito separatamente nel codice SoC, ma presente nella lista
+    create_unimplemented_device("mc_me", 0x402DC000, 0x4000); // Already handled separately in SoC code, but present in list
     create_unimplemented_device("pll", 0x402E0000, 0x4000);
     create_unimplemented_device("pll2", 0x402E4000, 0x4000);
     create_unimplemented_device("pmc", 0x402E8000, 0x4000);
     create_unimplemented_device("fmu", 0x402EC000, 0x4000);
     create_unimplemented_device("fmu_alt", 0x402F0000, 0x4000);
     create_unimplemented_device("siul_virtwrapper_pdac4_m7_2", 0x402F4000, 0x4000);
-    // create_unimplemented_device("siul_virtwrapper_pdac4_m7_2_alt", 0x402F8000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
+    // create_unimplemented_device("siul_virtwrapper_pdac4_m7_2_alt", 0x402F8000, 0x4000); // Duplicate address in name, using _alt
     create_unimplemented_device("pit2", 0x402FC000, 0x4000);
     create_unimplemented_device("pit3", 0x40300000, 0x4000);
     create_unimplemented_device("flexcan_0", 0x40304000, 0x4000);
@@ -138,7 +133,7 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("lpuart_6", 0x40340000, 0x4000);
     create_unimplemented_device("lpuart_7", 0x40344000, 0x4000);
     create_unimplemented_device("siul_virtwrapper_pdac5_m7_3", 0x40348000, 0x4000);
-    // create_unimplemented_device("siul_virtwrapper_pdac5_m7_3_alt", 0x4034C000, 0x4000); // Indirizzo duplicato nel nome, uso _alt
+    // create_unimplemented_device("siul_virtwrapper_pdac5_m7_3_alt", 0x4034C000, 0x4000); // Duplicate address in name, using _alt
     create_unimplemented_device("lpi2c_0", 0x40350000, 0x4000);
     create_unimplemented_device("lpi2c_1", 0x40354000, 0x4000);
     create_unimplemented_device("lpspi_0", 0x40358000, 0x4000);
@@ -150,17 +145,17 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("lpcmp_1", 0x40374000, 0x4000);
     create_unimplemented_device("tmu", 0x4037C000, 0x4000);
     create_unimplemented_device("crc", 0x40380000, 0x4000);
-    create_unimplemented_device("fccu_", 0x40384000, 0x4000);    // Nota: il nome finisce con underscore nel CSV
-    create_unimplemented_device("mu_0_mub", 0x4038C000, 0x4000); // MU_0 esiste solo come MUB
-    create_unimplemented_device("mu_1_mub", 0x40390000, 0x4000); // MU_1 esiste solo come MUB
+    create_unimplemented_device("fccu_", 0x40384000, 0x4000);    // Note: name ends with underscore in CSV
+    create_unimplemented_device("mu_0_mub", 0x4038C000, 0x4000); // MU_0 exists only as MUB
+    create_unimplemented_device("mu_1_mub", 0x40390000, 0x4000); // MU_1 exists only as MUB
     create_unimplemented_device("jdc", 0x40394000, 0x4000);
     create_unimplemented_device("configuration_gpr", 0x4039C000, 0x4000);
     create_unimplemented_device("stcu", 0x403A0000, 0x4000);
     create_unimplemented_device("selftest_gpr", 0x403B0000, 0x4000);
-    create_unimplemented_device("aes_accel", 0x403C0000, 0x10000); // Dimensione 64KB
-    create_unimplemented_device("aes_app0", 0x403D0000, 0x10000);  // Dimensione 64KB
-    create_unimplemented_device("aes_app1", 0x403E0000, 0x10000);  // Dimensione 64KB
-    create_unimplemented_device("aes_app2", 0x403F0000, 0x10000);  // Dimensione 64KB
+    create_unimplemented_device("aes_accel", 0x403C0000, 0x10000); // Size 64KB
+    create_unimplemented_device("aes_app0", 0x403D0000, 0x10000);  // Size 64KB
+    create_unimplemented_device("aes_app1", 0x403E0000, 0x10000);  // Size 64KB
+    create_unimplemented_device("aes_app2", 0x403F0000, 0x10000);  // Size 64KB
     create_unimplemented_device("tcm_xbic", 0x40400000, 0x4000);
     create_unimplemented_device("edma_xbic", 0x40404000, 0x4000);
     create_unimplemented_device("pram2_tcm_xbic", 0x40408000, 0x4000);
@@ -210,16 +205,16 @@ static void create_unimplemented_devices(void)
     create_unimplemented_device("sai1", 0x404DC000, 0x4000);
     create_unimplemented_device("usdhc", 0x404E4000, 0x4000);
     create_unimplemented_device("lpcmp_2", 0x404E8000, 0x4000);
-    // create_unimplemented_device("mu_1_mub_dup", 0x404EC000, 0x4000); // MU_1_MUB è duplicato qui, lo commento
-    create_unimplemented_device("eim0_dup", 0x4050C000, 0x4000); // Anche EIM0 è duplicato, aggiungo _dup
+    // create_unimplemented_device("mu_1_mub_dup", 0x404EC000, 0x4000); // MU_1_MUB is duplicated here, commenting it
+    create_unimplemented_device("eim0_dup", 0x4050C000, 0x4000); // Also EIM0 is duplicated, adding _dup
     create_unimplemented_device("eim1", 0x40510000, 0x4000);
     create_unimplemented_device("eim2", 0x40514000, 0x4000);
     create_unimplemented_device("eim3", 0x40518000, 0x4000);
-    create_unimplemented_device("aes_app3", 0x40520000, 0x10000); // Dimensione 64KB
-    create_unimplemented_device("aes_app4", 0x40530000, 0x10000); // Dimensione 64KB
-    create_unimplemented_device("aes_app5", 0x40540000, 0x10000); // Dimensione 64KB
-    create_unimplemented_device("aes_app6", 0x40550000, 0x10000); // Dimensione 64KB
-    create_unimplemented_device("aes_app7", 0x40560000, 0x10000); // Dimensione 64KB
+    create_unimplemented_device("aes_app3", 0x40520000, 0x10000); // Size 64KB
+    create_unimplemented_device("aes_app4", 0x40530000, 0x10000); // Size 64KB
+    create_unimplemented_device("aes_app5", 0x40540000, 0x10000); // Size 64KB
+    create_unimplemented_device("aes_app6", 0x40550000, 0x10000); // Size 64KB
+    create_unimplemented_device("aes_app7", 0x40560000, 0x10000); // Size 64KB
     create_unimplemented_device("flexcan_8", 0x40570000, 0x4000);
     create_unimplemented_device("flexcan_9", 0x40574000, 0x4000);
     create_unimplemented_device("flexcan_10", 0x40578000, 0x4000);
@@ -263,7 +258,6 @@ static void nxps32k358_soc_initfn(Object *obj)
     }
 }
 
-// SOC REALIZE DA CONTROLLARE
 static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
 {
 
@@ -375,7 +369,7 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
 
     // Set up the CPU -> CONNECTING TO PINS
     armv7m = DEVICE(&s->armv7m);
-    qdev_prop_set_uint32(armv7m, "num-irq", 240); // definisce i numeri delle IRQ
+    qdev_prop_set_uint32(armv7m, "num-irq", 240); // defines the IRQ numbers
     qdev_prop_set_uint8(armv7m, "num-prio-bits", 4);
     qdev_prop_set_string(armv7m, "cpu-type", ARM_CPU_TYPE_NAME("cortex-m7"));
     qdev_prop_set_bit(armv7m, "enable-bitband", true);
@@ -445,10 +439,10 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
         sysbus_connect_irq(busdev, 0, qdev_get_gpio_in(armv7m, lpspi_irq[i]));
     }
 
-    for (i = 0; i < NXP_NUM_LPSPIS; i++){
+    for (i = 0; i < NXP_NUM_LPSPIS; i++)
+    {
         ssi_create_peripheral(s->lpspis[i].ssi, TYPE_MOTOR_SPEED_SENSOR);
     }
-
 
     create_unimplemented_devices();
 }
