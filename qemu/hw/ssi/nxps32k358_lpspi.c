@@ -54,13 +54,6 @@
 // Macro for conditional debug logging based on the debug level.
 // Logs messages to QEMU's log system if the specified debug level
 // is less than or equal to the current debug level (NXP_LPSPI_ERR_DEBUG).
-#define DB_PRINT_L(lvl, fmt, args...)                                   \
-    do                                                                  \
-    {                                                                   \
-        if (NXP_LPSPI_ERR_DEBUG >= lvl)                                 \
-        {                                                               \
-            qemu_log("%s: " fmt, __func__, ##args); \
-=======
 // Macro per il logging di debug condizionale.
 #define DB_PRINT_L(lvl, fmt, args...)                                   \
     do {                                                                \
@@ -140,18 +133,6 @@ static void lpspi_update_status(NXPS32K358LPSPIState *s)
  * condition is met, it asserts the IRQ. Otherwise, it deasserts the IRQ.
  *
  */
-static void lpspi_update_irq(NXPS32K358LPSPIState *s)
-{
-    lpspi_update_status(s);
-
-    // Check all possible interrupt sources
-    uint32_t irq_mask = (LPSPI_SR_TDF | LPSPI_SR_RDF | LPSPI_SR_WCF |
-                         LPSPI_SR_FCF | LPSPI_SR_TCF | LPSPI_SR_TEF |
-                         LPSPI_SR_REF | LPSPI_SR_DMF);
-
-    if ((s->lpspi_sr & s->lpspi_ier) & irq_mask)
-    {
-
 static void lpspi_update_irq(NXPS32K358LPSPIState *s)
 {
     lpspi_update_status(s);
@@ -594,6 +575,7 @@ static void nxps32k358_lpspi_write(void *opaque, hwaddr addr, uint64_t val64, un
             qemu_log_mask(LOG_GUEST_ERROR, "LPSPI is not enabled, cannot write to TDR\n");
 
         }
+        
         return;
 
     case S32K_LPSPI_IER:    s->lpspi_ier = value; break;
