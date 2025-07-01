@@ -14,6 +14,8 @@
 #include "hw/misc/unimp.h"
 #include "system/system.h"
 
+#include "hw/ssi/motor_speed.h"
+
 /* stm32f100_soc implementation is derived from stm32f205_soc */
 
 // // The variables represent addresses on our nxp_s32k and need to be changed(is also present the number of pins that we have for usart and spi)
@@ -442,6 +444,12 @@ static void nxps32k358_soc_realize(DeviceState *dev_soc, Error **errp)
         sysbus_mmio_map(busdev, 0, lpspi_addr[i]);
         sysbus_connect_irq(busdev, 0, qdev_get_gpio_in(armv7m, lpspi_irq[i]));
     }
+
+    for (i = 0; i < NXP_NUM_LPSPIS; i++){
+        ssi_create_peripheral(s->lpspis[i].ssi, TYPE_MOTOR_SPEED_SENSOR);
+    }
+
+
     create_unimplemented_devices();
 }
 

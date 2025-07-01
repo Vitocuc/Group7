@@ -25,6 +25,10 @@ config NXPS32K358_LPSPI
     bool
     select SSI
 
+config NXPS32K358_MOTORSPEED
+    bool
+    select SSI
+    
 config BCM2835_SPI
     bool
     select SSI

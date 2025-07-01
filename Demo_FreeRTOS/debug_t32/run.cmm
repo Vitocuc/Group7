@@ -1,0 +1,22 @@
+;
+;  Copyright 2022-2023 NXP
+;
+
+LOCAL &load_to
+LOCAL &elf_file
+LOCAL &core_no
+;LOCAL &load_params
+;LOCAL &multicore
+;LOCAL &core_list
+;LOCAL &hse_available
+
+&load_to="flash"                                                                                ;target memory: flash or ram
+&elf_file="../Debug_FLASH/FreeRTOS_Toggle_Led_Example_S32K358.elf"        						;path to elf file
+&core_no="0"                                                        	                        ;select core(0,2)
+
+DO s32k358.cmm &load_to &elf_file &core_no &load_params &multicore &core_list
+
+data.list
+register.set pc Reset_Handler
+go main
+TASK.CONFIG ~~/demo/arm/kernel/freertos/freertos.t32

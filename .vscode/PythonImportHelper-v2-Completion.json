@@ -1,84 +1,11 @@
 [
     {
-        "label": "os",
+        "label": "pexpect",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "access",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "R_OK",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "path",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "path",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "path",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "path",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "path",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "urandom",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "os.path",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os.path",
-        "description": "os.path",
-        "detail": "os.path",
+        "importPath": "pexpect",
+        "description": "pexpect",
+        "detail": "pexpect",
         "documentation": {}
     },
     {
@@ -144,6 +71,47 @@
         "description": "sys",
         "isExtraImport": true,
         "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
         "documentation": {}
     },
     {
@@ -356,6 +324,105 @@
         "documentation": {}
     },
     {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "search",
+        "importPath": "re",
+        "description": "re",
+        "isExtraImport": true,
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "access",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "R_OK",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "urandom",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "os.path",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os.path",
+        "description": "os.path",
+        "detail": "os.path",
+        "documentation": {}
+    },
+    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -493,47 +560,6 @@
         "importPath": "threading",
         "description": "threading",
         "detail": "threading",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "sleep",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "sleep",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "sleep",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "sleep",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -5373,23 +5399,6 @@
         "importPath": "ast",
         "description": "ast",
         "detail": "ast",
-        "documentation": {}
-    },
-    {
-        "label": "re",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "re",
-        "description": "re",
-        "detail": "re",
-        "documentation": {}
-    },
-    {
-        "label": "search",
-        "importPath": "re",
-        "description": "re",
-        "isExtraImport": true,
-        "detail": "re",
         "documentation": {}
     },
     {
@@ -12946,6 +12955,51 @@
         "importPath": "basevm",
         "description": "basevm",
         "detail": "basevm",
+        "documentation": {}
+    },
+    {
+        "label": "debug_lpspi",
+        "kind": 2,
+        "importPath": "LPSPI_Testing.scripts.debug_lpspi",
+        "description": "LPSPI_Testing.scripts.debug_lpspi",
+        "peekOfCode": "def debug_lpspi():\n    \"\"\"Debug the LPSPI step by step\"\"\"\n    print(\"=== LPSPI Debug Test ===\")\n    print(\"Avvio QEMU...\")\n    cmd = \"cd /home/iaco/Polito/CAOS/Group7/qemu/build && ./qemu-system-arm -M nxps32k358evb -nographic -kernel ../../Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors\"\n    try:\n        child = pexpect.spawn(\"bash\", [\"-c\", cmd])\n        child.timeout = 10\n        time.sleep(3)\n        # Enter monitor mode",
+        "detail": "LPSPI_Testing.scripts.debug_lpspi",
+        "documentation": {}
+    },
+    {
+        "label": "test_lpspi_functionality",
+        "kind": 2,
+        "importPath": "LPSPI_Testing.scripts.test_lpspi_final",
+        "description": "LPSPI_Testing.scripts.test_lpspi_final",
+        "peekOfCode": "def test_lpspi_functionality():\n    \"\"\"Test completo del funzionamento LPSPI\"\"\"\n    print(\"=== Test Funzionalità LPSPI Completa ===\")\n    # Test 1: Verifica che QEMU si avvii correttamente\n    print(\"\\n🔧 Test 1: Avvio QEMU e controllo basic functionality...\")\n    try:\n        # Esegui QEMU per 10 secondi per catturare i log\n        result = subprocess.run(\n            [\n                \"./qemu/build/qemu-system-arm\",",
+        "detail": "LPSPI_Testing.scripts.test_lpspi_final",
+        "documentation": {}
+    },
+    {
+        "label": "test_interactive_mode",
+        "kind": 2,
+        "importPath": "LPSPI_Testing.scripts.test_lpspi_final",
+        "description": "LPSPI_Testing.scripts.test_lpspi_final",
+        "peekOfCode": "def test_interactive_mode():\n    \"\"\"Test modalità interattiva per debugging avanzato\"\"\"\n    print(\"\\n=== Modalità Test Interattiva ===\")\n    print(\n        \"Questa modalità permette di testare registri LPSPI specifici senza ricompilare\"\n    )\n    # Avvia QEMU in background\n    qemu_proc = subprocess.Popen(\n        [\n            \"./qemu/build/qemu-system-arm\",",
+        "detail": "LPSPI_Testing.scripts.test_lpspi_final",
+        "documentation": {}
+    },
+    {
+        "label": "test_lpspi_loopback",
+        "kind": 2,
+        "importPath": "LPSPI_Testing.scripts.test_lpspi_python",
+        "description": "LPSPI_Testing.scripts.test_lpspi_python",
+        "peekOfCode": "def test_lpspi_loopback():\n    \"\"\"Test the LPSPI loopback functionality\"\"\"\n    print(\"=== LPSPI Loopback Test ===\")\n    print(\"Avvio QEMU...\")\n    # Start QEMU\n    cmd = \"cd /home/iaco/Polito/CAOS/Group7/qemu/build && ./qemu-system-arm -M nxps32k358evb -nographic -kernel ../../Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors\"\n    try:\n        child = pexpect.spawn(\"bash\", [\"-c\", cmd])\n        child.timeout = 10\n        # Wait for QEMU to start",
+        "detail": "LPSPI_Testing.scripts.test_lpspi_python",
+        "documentation": {}
+    },
+    {
+        "label": "test_qemu_commands",
+        "kind": 2,
+        "importPath": "LPSPI_Testing.scripts.test_qemu_syntax",
+        "description": "LPSPI_Testing.scripts.test_qemu_syntax",
+        "peekOfCode": "def test_qemu_commands():\n    \"\"\"Test QEMU monitor commands with correct syntax\"\"\"\n    print(\"=== Test Comandi Monitor QEMU ===\")\n    print(\"Avvio QEMU...\")\n    cmd = \"cd /home/iaco/Polito/CAOS/Group7/qemu/build && ./qemu-system-arm -M nxps32k358evb -nographic -kernel ../../Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors\"\n    try:\n        child = pexpect.spawn(\"bash\", [\"-c\", cmd])\n        child.timeout = 10\n        time.sleep(3)\n        # Enter monitor mode",
+        "detail": "LPSPI_Testing.scripts.test_qemu_syntax",
         "documentation": {}
     },
     {
