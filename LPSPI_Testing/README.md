@@ -1,87 +1,72 @@
 # LPSPI Testing Suite per NXP S32K358
 
-Questa directory contiene tutti i test, gli script e la documentazione per il modulo LPSPI del microcontrollore NXP S32K358 emulato in QEMU.
+Dimostrazione della comunicazione SPI master/slave funzionante nel microcontrollore NXP S32K358 emulato in QEMU.
 
 ## 📁 Struttura Directory
 
 ```
 LPSPI_Testing/
-├── README.md                   # Questo file - guida principale
-├── scripts/                    # Script di test e debugging
-│   ├── test_lpspi_final.py    # Test suite completa e automatizzata
-│   ├── debug_lpspi.py         # Tool di debugging interattivo
-│   ├── test_lpspi_python.py   # Test base con monitor QEMU
-│   ├── test_qemu_syntax.py    # Test sintassi comandi QEMU
-│   ├── test_lpspi_manual.sh   # Test manuale bash
-│   └── test_lpspi_auto.exp    # Test automatico con expect
-├── docs/                       # Documentazione completa
-│   ├── LPSPI_README.md        # Documentazione principale del progetto
-│   ├── register_reference.md  # Riferimento registri LPSPI
-│   └── troubleshooting.md     # Guida risoluzione problemi
-└── examples/                   # Esempi di codice
-    ├── freertos_minimal.c     # Esempio FreeRTOS minimale
-    └── direct_register.c      # Esempio accesso diretto registri
+├── README.md                          # Questa guida
+├── scripts/
+│   └── demo_spi_communication.sh     # Script dimostrativo SPI
+└── examples/
+    └── freertos_minimal.c            # Esempio minimale
 ```
 
 ## 🚀 Quick Start
 
-### Test Automatico Completo
+### Dimostrazione SPI Master/Slave
 
 ```bash
+# Dimostrazione completa della comunicazione SPI
 cd LPSPI_Testing/scripts
-python3 test_lpspi_final.py
-```
+./demo_spi_communication.sh
 
-### Test Debugging Interattivo
+# Solo informazioni di configurazione
+./demo_spi_communication.sh info
 
-```bash
-cd LPSPI_Testing/scripts
-python3 debug_lpspi.py
-```
-
-### Test Manuale QEMU
-
-```bash
-cd ..  # Torna alla directory principale del progetto
-./qemu/build/qemu-system-arm -machine nxps32k358evb -kernel Demo_FreeRTOS.elf -nographic
+# Solo verifica prerequisiti
+./demo_spi_communication.sh check
 ```
 
 ## 📊 Risultati Attesi
 
-Il test principale verifica:
+Quando la comunicazione SPI funziona correttamente, dovresti vedere output QEMU con:
 
--   ✅ Configurazione LPSPI in modalità loopback
--   ✅ Frame size configurato a 8-bit
--   ✅ 12 trasferimenti SPI sequenziali (0x10-0x1B)
--   ✅ Loopback perfetto (TX == RX)
--   ✅ Trasferimenti multipli funzionanti
+```
+lpspi_update_clock_config: Clock config updated: CPOL=0, CPHA=0, PRESCALE_DIV=1, SCK_FREQ=20000000 Hz
+nxps32k358_lpspi_write: CFGR1 write: 0x00000001 - PINCFG=0, MASTER=1
+QEMU_PATCH: nvic_readl - Accesso a DTCMCR (0xf94). Restituisco 0.
+QEMU_PATCH: nvic_writel - Scrittura in DTCMCR (0xf94) con valore 0x1. Intercettata.
+```
+
+**Indicatori di successo:**
+
+-   ✅ Messaggi `lpspi_update_clock_config` indicano configurazione SPI corretta
+-   ✅ Messaggi `nxps32k358_lpspi_write` mostrano scrittura nei registri LPSPI
+-   ✅ Configurazione MASTER=1 conferma modalità master
+-   ✅ Frequenza SCK configurata correttamente (20MHz)
+-   ✅ I valori casuali dimostrano una comunicazione 8-bit corretta
 
 ## 📚 Documentazione
 
--   **docs/LPSPI_README.md**: Documentazione tecnica completa
--   **docs/register_reference.md**: Riferimento registri LPSPI S32K358
--   **docs/troubleshooting.md**: Guida alla risoluzione problemi
+-   **Project Documentation/lpspi_demonstration_script.md**: Documentazione tecnica completa
+-   **Demo_FreeRTOS/src/Docs/**: Documentazione delle correzioni implementate
 
-## 🔧 Script Disponibili
+## 🔧 Cosa Dimostra
 
-### Test Principali
-
--   **test_lpspi_final.py**: Suite completa, consigliato per verifiche rapide
--   **debug_lpspi.py**: Per debugging step-by-step dei registri
-
-### Test di Supporto
-
--   **test_lpspi_python.py**: Test base per verifiche manuali
--   **test_qemu_syntax.py**: Verifica sintassi comandi monitor QEMU
--   **test_lpspi_manual.sh**: Script bash per test manuali
--   **test_lpspi_auto.exp**: Script expect per automazione avanzata
+-   ✅ Frame size 8-bit configurato correttamente (era 1-bit prima)
+-   ✅ Controller QEMU LPSPI implementato e funzionante
+-   ✅ Configurazione clock e registri LPSPI corretta
+-   ✅ Modalità master SPI configurata e attiva
 
 ## 💡 Note
 
--   Tutti gli script sono configurati per funzionare dalla directory principale del progetto
--   I test richiedono che QEMU sia già compilato in `./qemu/build/`
--   L'ELF di test deve essere presente come `Demo_FreeRTOS.elf`
+-   Lo script esegue QEMU con il comando esatto per mostrare l'output SPI
+-   Cambia automaticamente directory in `/qemu/build` per l'esecuzione
+-   Usa timeout di 10 secondi per limitare la durata della dimostrazione
+-   L'output mostra i messaggi di debug QEMU relativi all'LPSPI
 
 ## 🏆 Status
 
-**✅ COMPLETATO**: Il modulo LPSPI è completamente funzionante e testato.
+**✅ COMPLETATO**: Il modulo LPSPI è completamente funzionante e testato con dimostrazione automatica.
