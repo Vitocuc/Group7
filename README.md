@@ -1,22 +1,121 @@
-Group7 Project - QEMU for NXP S32K3This document describes the steps to configure, compile, run, and debug the modified QEMU project to support the NXP S32K3 board.1. RequirementsBefore starting, make sure you have the following dependencies installed. Run this command from your terminal:sudo apt update
+My apologies for the misunderstanding. I understand now. You need the raw text, with all the Markdown characters like `##`, `*`, and \`\`\`, that you can copy and paste directly into a `.md` file.
+
+Here is the raw text for your `README.md` file:
+
+# Group7 Project - QEMU for NXP S32K3
+
+This document describes the steps to configure, compile, run, and debug the modified QEMU project to support the NXP S32K3 board.
+
+## 1\. Requirements
+
+Before starting, make sure you have the following dependencies installed. Run this command from your terminal:
+
+```bash
+sudo apt update
 sudo apt upgrade
 sudo apt install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build
-Note: If you encounter issues with ninja-build, ensure your system is fully updated by first running sudo apt update and sudo apt upgrade.2. Project BuildFollow these steps to correctly download the source code and compile it.2.1. Code DownloadClone the repository and initialize the necessary submodules:git clone <YOUR_REPOSITORY_URL>
-2.2. Configuration and CompilationThe ./configure command prepares the build environment. You can customize it with specific flags to enable debug logs for certain modules.Generic configuration with debug enabled:./configure --target-list=arm-softmmu --enable-debug
-Configuration with debug for LPUART:CFLAGS="-g -O0 -DNXP_LPUART_DEBUG=2" CXXFLAGS="-g -O0 -DNXP_LPUART_DEBUG=2" ./configure --target-list=arm-softmmu --enable-debug
-Configuration with debug for LPSPI:CFLAGS="-g -O0 -DNXP_LPSPI_ERR_DEBUG=2" CXXFLAGS="-g -O0 -DNXP_LPSPI_ERR_DEBUG=2" ./configure --target-list=arm-softmmu --enable-debug
-After configuration, start the compilation using all available CPU cores:make -j$(nproc)
-To check the machines (boards) supported by your QEMU build, run:./build/qemu-system-arm -M help
-3. Execution and TestingBelow are several examples for testing the emulator with different firmwares.3.1. Running FreeRTOS on QEMUTo run our FreeRTOS demo which uses LPUART3:./build/qemu-system-arm -M nxps32k358evb -nographic -kernel /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors
-Explanation of the -serial flags:The emulated board has 16 LPUART interfaces. Since our DEMO project uses LPUART3 (the fourth interface, starting from 0), we disable the first three (-serial none) and connect the fourth to the terminal's standard input/output (-serial mon:stdio).4. Debugging with GDBFor interactive debugging of the firmware running on QEMU, use GDB in combination with the -S -s flags.4.1. Starting the Debug SessionOpen two terminals.Terminal 1: Start QEMURun QEMU. The emulator will start and wait for a GDB connection../build/qemu-system-arm \
+```
+
+> **Note:** If you encounter issues with `ninja-build`, ensure your system is fully updated by first running `sudo apt update` and `sudo apt upgrade`.
+
+## 2\. Project Build
+
+Follow these steps to correctly download the source code and compile it.
+
+### 2.1. Code Download
+
+Clone the repository and initialize the necessary submodules:
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+```
+
+### 2.2. Configuration and Compilation
+
+The `./configure` command prepares the build environment. You can customize it with specific flags to enable debug logs for certain modules.
+
+**Generic configuration with debug enabled:**
+
+```bash
+./configure --target-list=arm-softmmu --enable-debug
+```
+
+**Configuration with debug for LPUART:**
+
+```bash
+CFLAGS="-g -O0 -DNXP_LPUART_DEBUG=2" CXXFLAGS="-g -O0 -DNXP_LPUART_DEBUG=2" ./configure --target-list=arm-softmmu --enable-debug
+```
+
+**Configuration with debug for LPSPI:**
+
+```bash
+CFLAGS="-g -O0 -DNXP_LPSPI_ERR_DEBUG=2" CXXFLAGS="-g -O0 -DNXP_LPSPI_ERR_DEBUG=2" ./configure --target-list=arm-softmmu --enable-debug
+```
+
+After configuration, start the compilation using all available CPU cores:
+
+```bash
+make -j$(nproc)
+```
+
+To check the machines (boards) supported by your QEMU build, run:
+
+```bash
+./build/qemu-system-arm -M help
+```
+
+## 3\. Execution and Testing
+
+Below are several examples for testing the emulator with different firmwares.
+
+### 3.1. Running FreeRTOS on QEMU
+
+To run our FreeRTOS demo which uses **LPUART3**:
+
+```bash
+./build/qemu-system-arm -M nxps32k358evb -nographic -kernel /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors
+```
+
+> **Explanation of the `-serial` flags:**
+> The emulated board has 16 LPUART interfaces. Since our DEMO project uses LPUART3 (the fourth interface, starting from 0), we disable the first three (`-serial none`) and connect the fourth to the terminal's standard input/output (`-serial mon:stdio`).
+
+## 4\. Debugging with GDB
+
+For interactive debugging of the firmware running on QEMU, use GDB in combination with the `-S -s` flags.
+
+### 4.1. Starting the Debug Session
+
+Open two terminals.
+
+**Terminal 1: Start QEMU**
+Run QEMU. The emulator will start and wait for a GDB connection.
+
+```bash
+./build/qemu-system-arm \
     -M nxps32k358evb \
     -nographic \
     -kernel /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf \
     -serial none -serial none -serial none -serial mon:stdio \
     -d guest_errors \
     -S -s
--S: Freezes the CPU at startup.-s: Opens a GDB server on localhost:1234.Terminal 2: Start GDBLaunch gdb-multiarch to connect to QEMU.gdb-multiarch /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf
-4.2. Useful GDB CommandsOnce GDB has started, run these commands:# Connect to QEMU listening on port 1234
+```
+
+  * `-S`: Freezes the CPU at startup.
+  * `-s`: Opens a GDB server on `localhost:1234`.
+
+**Terminal 2: Start GDB**
+Launch `gdb-multiarch` to connect to QEMU.
+
+```bash
+gdb-multiarch /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf
+```
+
+### 4.2. Useful GDB Commands
+
+Once GDB has started, run these commands:
+
+```gdb
+# Connect to QEMU listening on port 1234
 target remote localhost:1234
 
 # Set the source file paths to allow GDB to find them
@@ -29,14 +128,93 @@ set substitute-path ../ /mnt/c/Users/vitoc/Desktop/workspace_group7/Demo_FreeRTO
 # c               (continue execution)
 # n               (next, execute the next line)
 # p my_variable   (print the value of a variable)
-4.3. Executable AnalysisTo view memory addresses and the disassembly of the ELF file, you can use objdump. This is useful for verifying the correct compilation and for low-level debugging.arm-none-eabi-objdump -d /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf > disassembly.txt
-This command will save the entire code disassembly into a disassembly.txt file for easy reference.5. Troubleshooting and Firmware ConfigurationDuring development, some issues were identified when running code generated by S32 Design Studio on QEMU. The solutions are described below.5.1. Issue: Infinite Loop on MC_MESymptom: The program gets stuck in a WaitForClock loop during the initialization of the MC_ME module.Cause: The startup code generated by NXP contains a wait loop for clock stability that cannot be satisfied in the QEMU simulation environment. This block of code is protected by the preprocessor directive #ifndef SIM_TYPE_VDK.Solution: You need to create a specific build configuration for QEMU that defines the SIM_TYPE_VDK symbol, thus excluding the problematic code from compilation.Procedure in S32 Design StudioCreate a New Build Configuration:Go to Project -> Build Configurations -> Manage....Select your "Debug" configuration and click New....Name it Debug_QEMU and click OK.Activate the new configuration: Project -> Build Configurations -> Set Active -> Debug_QEMU.Add the Preprocessor Symbol:Right-click on your project and go to Properties.Navigate to C/C++ Build -> Settings -> Tool Settings.Under Standard S32DS C Compiler -> Preprocessor, click the "Add" icon (+) in the "Defined symbols (-D)" section.Enter SIM_TYPE_VDK.Important: Repeat the same step under S32 Assembler -> Preprocessor.Rebuild the Project:Clean and rebuild the project (Project -> Clean... then Project -> Build Project). The output will be generated in the new Debug_QEMU folder.5.2. Issue: TCM/ICM InitializationThe Problem: The standard firmware for NXP S32K3xx attempts to enable the Instruction Tightly Coupled Memory (ITCM) and Data Tightly Coupled Memory (DTCM) by writing to the ITCMCR (offset 0xF90) and DTCMCR (offset 0xF94) control registers. The default QEMU model for the ARMv7-M NVIC did not implement handlers for these addresses, causing an "unimplemented memory access" error and boot failure.The Solution: A two-part solution was implemented:NVIC Patch: The qemu/hw/intc/armv7m_nvic.c file was modified to intercept and handle accesses to these registers, preventing the error and allowing the firmware to proceed.Memory Region Emulation: In the SoC model (hw/arm/nxps32k358_soc.c), the memory regions for ITCM (at address 0x00000000) and DTCM (at address 0x20000000) were declared, initialized, and mapped into the system memory map.Implementation Status: It is important to note that the NVIC patch is a "dummy" implementation. It acknowledges the register writes but does not use the value to dynamically enable or disable the memory regions. As a result, ITCM and DTCM are always enabled in the current state of the emulation.5.3. Issue: Enabling the Memory Protection Unit (MPU) in FreeRTOSEnabling the MPU allows for task memory isolation, increasing system robustness and security. The configuration requires a two-level approach, both of which are mandatory.Step 1: SDK-Level Enablement (S32 Design Studio)This setting activates the hardware initialization of the MPU before the FreeRTOS scheduler starts.Where: In the project properties in S32 Design Studio:Properties -> C/C++ Build -> Settings -> Standard S32 Compiler -> PreprocessorWhat to do: Ensure that the MPU enable option is checked.Purpose: This option adds a compiler directive (e.g., -D__MPU_ENABLE=1) that is used by the NXP startup code to configure basic memory regions (Flash, SRAM) at microcontroller startup.Step 2: Operating System-Level Enablement (FreeRTOS)This setting tells FreeRTOS to use MPU features for task management.Where: In the FreeRTOSConfig.h configuration file.What to do: Add or verify the presence of the following macros:/* Enable MPU support in FreeRTOS */
-#define configENABLE_MPU                1
+```
 
-/* Enable modern MPU wrappers, simplifying task management */
-#define portUSING_MPU_WRAPPERS          1
+### 4.3. Executable Analysis
 
-/* Static allocation is strongly recommended when using the MPU */
-#define configSUPPORT_STATIC_ALLOCATION   1
-#define configSUPPORT_DYNAMIC_ALLOCATION  1
-Why are both flags necessary?Think of two levels that must work together:S32 DS Compiler Flag (__MPU_ENABLE): This is the hardware level. Enabling it activates code in the NXP startup files that performs the very first MPU initialization at boot, setting up basic memory regions to allow the code to run before FreeRTOS starts. Without this, the MPU would remain off.FreeRTOS Flag (configENABLE_MPU):  This is the operating system level. Enabling it tells FreeRTOS to use the MPU APIs to manage task memory protection, save/restore their regions during context switches, and create "restricted" tasks.In conclusion, you must enable both for correct operation.
+To view memory addresses and the disassembly of the ELF file, you can use `objdump`. This is useful for verifying the correct compilation and for low-level debugging.
+
+```bash
+arm-none-eabi-objdump -d /path/to/your/project/DEBUG_QEMU/Demo_FreeRTOS.elf > disassembly.txt
+```
+
+This command will save the entire code disassembly into a `disassembly.txt` file for easy reference.
+
+## 5\. Troubleshooting and Firmware Configuration
+
+During development, some issues were identified when running code generated by **S32 Design Studio** on QEMU. The solutions are described below.
+
+### 5.1. Issue: Infinite Loop on `MC_ME`
+
+  * **Symptom:** The program gets stuck in a `WaitForClock` loop during the initialization of the `MC_ME` module.
+  * **Cause:** The startup code generated by NXP contains a wait loop for clock stability that cannot be satisfied in the QEMU simulation environment. This block of code is protected by the preprocessor directive `#ifndef SIM_TYPE_VDK`.
+  * **Solution:** You need to create a specific build configuration for QEMU that defines the `SIM_TYPE_VDK` symbol, thus excluding the problematic code from compilation.
+
+#### Procedure in S32 Design Studio
+
+1.  **Create a New Build Configuration:**
+
+      * Go to `Project -> Build Configurations -> Manage...`.
+      * Select your "Debug" configuration and click `New...`.
+      * Name it **`Debug_QEMU`** and click OK.
+      * Activate the new configuration: `Project -> Build Configurations -> Set Active -> Debug_QEMU`.
+
+2.  **Add the Preprocessor Symbol:**
+
+      * Right-click on your project and go to `Properties`.
+      * Navigate to `C/C++ Build -> Settings -> Tool Settings`.
+      * Under `Standard S32DS C Compiler -> Preprocessor`, click the "Add" icon (+) in the "Defined symbols (-D)" section.
+      * Enter `SIM_TYPE_VDK`.
+      * **Important:** Repeat the same step under `S32 Assembler -> Preprocessor`.
+
+3.  **Rebuild the Project:**
+
+      * Clean and rebuild the project (`Project -> Clean...` then `Project -> Build Project`). The output will be generated in the new `Debug_QEMU` folder.
+
+### 5.2. Issue: TCM/ICM Initialization
+
+  * **The Problem:** The standard firmware for NXP S32K3xx attempts to enable the Instruction Tightly Coupled Memory (ITCM) and Data Tightly Coupled Memory (DTCM) by writing to the `ITCMCR` (offset `0xF90`) and `DTCMCR` (offset `0xF94`) control registers. The default QEMU model for the ARMv7-M NVIC did not implement handlers for these addresses, causing an "unimplemented memory access" error and boot failure.
+  * **The Solution:** A two-part solution was implemented:
+    1.  **NVIC Patch:** The `qemu/hw/intc/armv7m_nvic.c` file was modified to intercept and handle accesses to these registers, preventing the error and allowing the firmware to proceed.
+    2.  **Memory Region Emulation:** In the SoC model (`hw/arm/nxps32k358_soc.c`), the memory regions for ITCM (at address `0x00000000`) and DTCM (at address `0x20000000`) were declared, initialized, and mapped into the system memory map.
+  * **Implementation Status:** It is important to note that the NVIC patch is a "dummy" implementation. It acknowledges the register writes but does not use the value to dynamically enable or disable the memory regions. As a result, **ITCM and DTCM are always enabled** in the current state of the emulation.
+
+### 5.3. Issue: Enabling the Memory Protection Unit (MPU) in FreeRTOS
+
+Enabling the MPU allows for task memory isolation, increasing system robustness and security. The configuration requires a two-level approach, both of which are mandatory.
+
+#### Step 1: SDK-Level Enablement (S32 Design Studio)
+
+This setting activates the hardware initialization of the MPU before the FreeRTOS scheduler starts.
+
+  * **Where:** In the project properties in S32 Design Studio:
+    `Properties -> C/C++ Build -> Settings -> Standard S32 Compiler -> Preprocessor`
+  * **What to do:** Ensure that the **MPU enable** option is checked.
+  * **Purpose:** This option adds a compiler directive (e.g., `-D__MPU_ENABLE=1`) that is used by the NXP startup code to configure basic memory regions (Flash, SRAM) at microcontroller startup.
+
+#### Step 2: Operating System-Level Enablement (FreeRTOS)
+
+This setting tells FreeRTOS to use MPU features for task management.
+
+  * **Where:** In the `FreeRTOSConfig.h` configuration file.
+  * **What to do:** Add or verify the presence of the following macros:
+    ```c
+    /* Enable MPU support in FreeRTOS */
+    #define configENABLE_MPU                1
+
+    /* Enable modern MPU wrappers, simplifying task management */
+    #define portUSING_MPU_WRAPPERS          1
+
+    /* Static allocation is strongly recommended when using the MPU */
+    #define configSUPPORT_STATIC_ALLOCATION   1
+    #define configSUPPORT_DYNAMIC_ALLOCATION  1
+    ```
+
+#### Why are both flags necessary?
+
+Think of two levels that must work together:
+
+1.  **S32 DS Compiler Flag (`__MPU_ENABLE`):** 💡 This is the **hardware level**. Enabling it activates code in the NXP startup files that performs the very first MPU initialization at boot, setting up basic memory regions to allow the code to run before FreeRTOS starts. Without this, the MPU would remain off.
+2.  **FreeRTOS Flag (`configENABLE_MPU`):** 🔗 This is the **operating system level**. Enabling it tells FreeRTOS to use the MPU APIs to manage task memory protection, save/restore their regions during context switches, and create "restricted" tasks.
+
+In conclusion, you must enable both for correct operation.
