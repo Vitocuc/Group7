@@ -5338,7 +5338,7 @@ END GROUP
                 0x00002000                HEAP_SIZE = DEFINED (__heap_size__)?__heap_size__:0x2000
                 0x2040ffff                __STANDBY_RAM_LIMIT_END = 0x2040ffff
 
-.pflash         0x00400000    0x11e00
+.pflash         0x00400000    0x11e20
  *(.boot_header)
  .boot_header   0x00400000       0x30 ./Project_Settings/Startup_Code/startup_cm7.o
                 0x00400800                . = ALIGN (0x800)
@@ -5594,7 +5594,7 @@ END GROUP
  .text          0x00404ea4        0x0 ./generate/src/Lpspi_Ip_Sa_PBcfg.o
  .text          0x00404ea4        0x0 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
  .text          0x00404ea4        0x0 ./generate/src/OsIf_Cfg.o
- .text          0x00404ea4      0x178 ./src/main.o
+ .text          0x00404ea4      0x190 ./src/main.o
                 0x00404ea4                vTimerCallback
                 0x00404eb8                uint8_to_str
                 0x00404ec8                UART_send_byte
@@ -5603,685 +5603,686 @@ END GROUP
                 0x00404f68                TaskCodeC
                 0x00404f88                Motor_Sensor_ReadValue
                 0x00404fac                ReadSpeedTask
- .text          0x0040501c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
- .text          0x0040501c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memmove.o)
- .text          0x0040501c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
- .text          0x0040501c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
- .text          0x0040501c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
- .text          0x0040501c       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
-                0x0040501c                strlen
- .text          0x0040502c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-impure.o)
- .text          0x0040502c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
- .text          0x0040502c        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
- *fill*         0x0040502c        0x4 
- .text          0x00405030       0xa0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memchr.o)
-                0x00405030                memchr
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-freer.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-mallocr.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-reallocr.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sbrkr.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-msizer.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
- .text          0x004050d0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(sbrk.o)
+                0x0040501c                TestMPU
+ .text          0x00405034        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+ .text          0x00405034        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memmove.o)
+ .text          0x00405034        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .text          0x00405034        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
+ .text          0x00405034        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
+ .text          0x00405034       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
+                0x00405034                strlen
+ .text          0x00405044        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-impure.o)
+ .text          0x00405044        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+ .text          0x00405044        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+ *fill*         0x00405044        0xc 
+ .text          0x00405050       0xa0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memchr.o)
+                0x00405050                memchr
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-freer.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-reallocr.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sbrkr.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-msizer.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
+ .text          0x004050f0        0x0 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(sbrk.o)
  *(.text*)
- .text.memcpy   0x004050d0       0x1c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
-                0x004050d0                memcpy
- .text.memmove  0x004050ec       0x34 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memmove.o)
-                0x004050ec                memmove
- .text.memset   0x00405120       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
-                0x00405120                memset
+ .text.memcpy   0x004050f0       0x1c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+                0x004050f0                memcpy
+ .text.memmove  0x0040510c       0x34 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memmove.o)
+                0x0040510c                memmove
+ .text.memset   0x00405140       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+                0x00405140                memset
  .text._sprintf_r
-                0x00405130       0x38 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
-                0x00405130                _sprintf_r
-                0x00405130                _siprintf_r
- .text.sprintf  0x00405168       0x40 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
-                0x00405168                siprintf
-                0x00405168                sprintf
- .text.strcpy   0x004051a8       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
-                0x004051a8                strcpy
+                0x00405150       0x38 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
+                0x00405150                _sprintf_r
+                0x00405150                _siprintf_r
+ .text.sprintf  0x00405188       0x40 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sprintf.o)
+                0x00405188                siprintf
+                0x00405188                sprintf
+ .text.strcpy   0x004051c8       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
+                0x004051c8                strcpy
  .text.__ssputs_r
-                0x004051b8       0xb6 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x004051b8                __ssputs_r
+                0x004051d8       0xb6 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x004051d8                __ssputs_r
  .text.__ssprint_r
-                0x0040526e       0xf6 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0040526e                __ssprint_r
+                0x0040528e       0xf6 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0040528e                __ssprint_r
  .text._svfprintf_r
-                0x00405364      0x200 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x00405364                _svfiprintf_r
-                0x00405364                _svfprintf_r
+                0x00405384      0x200 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x00405384                _svfiprintf_r
+                0x00405384                _svfprintf_r
  .text._printf_common
-                0x00405564       0xda c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00405564                _printf_common
- *fill*         0x0040563e        0x2 
+                0x00405584       0xda c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00405584                _printf_common
+ *fill*         0x0040565e        0x2 
  .text._printf_i
-                0x00405640      0x24c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x00405640                _printf_i
- .text._free_r  0x0040588c       0x98 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-freer.o)
-                0x0040588c                _free_r
+                0x00405660      0x24c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x00405660                _printf_i
+ .text._free_r  0x004058ac       0x98 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-freer.o)
+                0x004058ac                _free_r
  .text._malloc_r
-                0x00405924       0xb4 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-mallocr.o)
-                0x00405924                _malloc_r
+                0x00405944       0xb4 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+                0x00405944                _malloc_r
  .text._realloc_r
-                0x004059d8       0x4c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-reallocr.o)
-                0x004059d8                _realloc_r
- .text._sbrk_r  0x00405a24       0x20 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sbrkr.o)
-                0x00405a24                _sbrk_r
+                0x004059f8       0x4c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-reallocr.o)
+                0x004059f8                _realloc_r
+ .text._sbrk_r  0x00405a44       0x20 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-sbrkr.o)
+                0x00405a44                _sbrk_r
  .text.__malloc_lock
-                0x00405a44        0x2 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
-                0x00405a44                __malloc_lock
+                0x00405a64        0x2 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
+                0x00405a64                __malloc_lock
  .text.__malloc_unlock
-                0x00405a46        0x2 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
-                0x00405a46                __malloc_unlock
+                0x00405a66        0x2 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-mlock.o)
+                0x00405a66                __malloc_unlock
  .text._malloc_usable_size_r
-                0x00405a48       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-msizer.o)
-                0x00405a48                _malloc_usable_size_r
+                0x00405a68       0x10 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-msizer.o)
+                0x00405a68                _malloc_usable_size_r
  .text.cleanup_glue
-                0x00405a58       0x1a c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
-                0x00405a58                cleanup_glue
- *fill*         0x00405a72        0x2 
+                0x00405a78       0x1a c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
+                0x00405a78                cleanup_glue
+ *fill*         0x00405a92        0x2 
  .text._reclaim_reent
-                0x00405a74       0xb8 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
-                0x00405a74                _reclaim_reent
- .text._sbrk    0x00405b2c       0x1c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(sbrk.o)
-                0x00405b2c                _sbrk
-                0x00405b48                . = ALIGN (0x4)
+                0x00405a94       0xb8 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-reent.o)
+                0x00405a94                _reclaim_reent
+ .text._sbrk    0x00405b4c       0x1c c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(sbrk.o)
+                0x00405b4c                _sbrk
+                0x00405b68                . = ALIGN (0x4)
  *(.mcal_text)
- .mcal_text     0x00405b48       0x14 ./Project_Settings/Startup_Code/exceptions.o
-                0x00405b48                NMI_Handler
-                0x00405b4a                HardFault_Handler
-                0x00405b4c                MemManage_Handler
-                0x00405b4e                BusFault_Handler
-                0x00405b50                UsageFault_Handler
-                0x00405b54                DebugMon_Handler
-                0x00405b5a                undefined_handler
- .mcal_text     0x00405b5c       0x52 ./Project_Settings/Startup_Code/nvic.o
-                0x00405b5c                NVIC_SetPriorityGrouping
-                0x00405b70                NVIC_EnableIRQ
-                0x00405b88                NVIC_DisableIRQ
-                0x00405ba0                NVIC_SetPriority
- *fill*         0x00405bae        0x2 
- .mcal_text     0x00405bb0       0xe8 ./Project_Settings/Startup_Code/startup.o
-                0x00405bb0                init_data_bss
-                0x00405c3c                init_data_bss_core2
- .mcal_text     0x00405c98      0x2f8 ./Project_Settings/Startup_Code/system.o
-                0x00405c98                startup_go_to_user_mode
-                0x00405c9a                default_interrupt_routine
-                0x00405c9c                SystemInit
- .mcal_text     0x00405f90      0x890 ./RTD/src/Clock_Ip.o
-                0x00405f92                Clock_Ip_InitClock
-                0x00406540                Clock_Ip_GetPllStatus
-                0x004065e4                Clock_Ip_DistributePll
-                0x004066d0                Clock_Ip_Init
-                0x004066f4                Clock_Ip_DisableClockMonitor
-                0x00406718                Clock_Ip_InstallNotificationsCallback
-                0x00406724                Clock_Ip_DisableModuleClock
-                0x0040674c                Clock_Ip_EnableModuleClock
-                0x00406774                Clock_Ip_GetClockFrequency
-                0x00406778                Clock_Ip_DisableFircInStandby
-                0x00406790                Clock_Ip_EnableFircInStandby
-                0x004067a8                Clock_Ip_DisableSircInStandby
-                0x004067c0                Clock_Ip_EnableSircInStandby
-                0x004067d8                Clock_Ip_ReportClockErrors
-                0x004067e4                Clock_Ip_StartTimeout
-                0x00406804                Clock_Ip_TimeoutExpired
- .mcal_text     0x00406820      0x120 ./RTD/src/Clock_Ip_Divider.o
- .mcal_text     0x00406940       0x9c ./RTD/src/Clock_Ip_DividerTrigger.o
- .mcal_text     0x004069dc      0x1dc ./RTD/src/Clock_Ip_ExtOsc.o
- .mcal_text     0x00406bb8        0x6 ./RTD/src/Clock_Ip_FracDiv.o
- *fill*         0x00406bbe        0x2 
- .mcal_text     0x00406bc0     0x184c ./RTD/src/Clock_Ip_Frequency.o
-                0x00408380                Clock_Ip_Get_RTC_CLK_Frequency_TrustedCall
-                0x004083c0                Clock_Ip_SetExternalOscillatorFrequency
-                0x004083dc                Clock_Ip_GetFreq
-                0x004083e8                Clock_Ip_SetExternalSignalFrequency
- .mcal_text     0x0040840c      0x128 ./RTD/src/Clock_Ip_Gate.o
- .mcal_text     0x00408534      0x104 ./RTD/src/Clock_Ip_IntOsc.o
- .mcal_text     0x00408638        0x4 ./RTD/src/Clock_Ip_Irq.o
-                0x00408638                Mcu_Cmu_ClockFail_IRQHandler
- .mcal_text     0x0040863c      0x204 ./RTD/src/Clock_Ip_Monitor.o
-                0x004087e8                Clock_Ip_CMU_GetInterruptStatus
-                0x004087fc                Clock_Ip_CMU_ClockFailInt
- .mcal_text     0x00408840      0x1c8 ./RTD/src/Clock_Ip_Pll.o
- .mcal_text     0x00408a08      0x154 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
- .mcal_text     0x00408b5c      0x3dc ./RTD/src/Clock_Ip_Selector.o
-                0x00408f0c                Clock_Ip_SetRtcRtccClksel_TrustedCall
- .mcal_text     0x00408f38      0x32c ./RTD/src/Clock_Ip_Specific.o
-                0x00408f38                Clock_Ip_McMeEnterKey
-                0x00408f4c                Clock_Ip_PowerClockIpModules
-                0x004091b0                DisableFircInStandbyMode
-                0x004091c0                EnableFircInStandbyMode
-                0x004091dc                DisableSircInStandbyMode
-                0x004091ec                EnableSircInStandbyMode
-                0x00409208                Clock_Ip_Command
-                0x00409258                Clock_Ip_FLASH_SetFlashIWS
-                0x0040925c                Clock_Ip_SetFlashWaitStates
-                0x00409260                Clock_Ip_SetRamWaitStates
- .mcal_text     0x00409264       0xa4 ./RTD/src/Det.o
-                0x00409264                Det_Init
-                0x00409266                Det_ReportError
-                0x0040929c                Det_ReportRuntimeError
-                0x004092d0                Det_ReportTransientFault
-                0x00409304                Det_Start
- .mcal_text     0x00409308      0x21c ./RTD/src/Det_stub.o
-                0x00409308                Det_TestLastReportError
-                0x00409370                Det_TestLastReportRuntimeError
-                0x004093d8                Det_TestLastReportTransientFault
-                0x00409440                Det_TestNoError
-                0x0040948c                Det_TestNoRuntimeError
-                0x004094d8                Det_TestNoTransientFault
- .mcal_text     0x00409524       0x4c ./RTD/src/Flexio_Mcl_Ip.o
-                0x00409524                Flexio_Mcl_Ip_InitDevice
-                0x00409554                Flexio_Mcl_Ip_DeinitDevice
- .mcal_text     0x00409570      0x192 ./RTD/src/Flexio_Mcl_Ip_HwAccess.o
-                0x00409570                Flexio_Mcl_Ip_SetSoftwareReset
-                0x00409594                Flexio_Mcl_Ip_SetDebugEnable
-                0x004095ba                Flexio_Mcl_Ip_SetEnable
-                0x004095d6                Flexio_Mcl_Ip_GetShifterStatus
-                0x004095e0                Flexio_Mcl_Ip_GetAllShifterStatus
-                0x004095e4                Flexio_Mcl_Ip_ClearShifterStatus
-                0x004095ee                Flexio_Mcl_Ip_GetShifterErrorStatus
-                0x004095f8                Flexio_Mcl_Ip_GetAllShifterErrorStatus
-                0x004095fc                Flexio_Mcl_Ip_ClearShifterErrorStatus
-                0x00409606                Flexio_Mcl_Ip_GetTimerStatus
-                0x00409610                Flexio_Mcl_Ip_GetTimerInterruptEnable
-                0x0040961a                Flexio_Mcl_Ip_GetAllTimerStatus
-                0x0040961e                Flexio_Mcl_Ip_ClearTimerStatus
-                0x00409628                Flexio_Mcl_Ip_GetAllShifterInterrupt
-                0x0040962c                Flexio_Mcl_Ip_GetAllShifterErrorInterrupt
-                0x00409630                Flexio_Mcl_Ip_SetShifterErrorInterrupt
-                0x00409652                Flexio_Mcl_Ip_SetShifterInterrupt
-                0x00409674                Flexio_Mcl_Ip_GetAllPinsStatus
-                0x00409678                Flexio_Mcl_Ip_GetAllPinsInterrupt
-                0x0040967c                Flexio_Mcl_Ip_SetShifterDMARequest
-                0x0040969e                Flexio_Mcl_Ip_GetAllTimerInterrupt
-                0x004096a2                Flexio_Mcl_Ip_SetTimerInterrupt
-                0x004096c4                Flexio_Mcl_Ip_Init
-                0x004096d4                Flexio_Mcl_Ip_SetTimerDMARequest
-                0x004096f6                Flexio_Mcl_Ip_ClearPinStatus
- *fill*         0x00409702        0x2 
- .mcal_text     0x00409704       0x84 ./RTD/src/Flexio_Mcl_Ip_Irq.o
-                0x00409704                MCL_FLEXIO_ISR
- .mcal_text     0x00409788      0x868 ./RTD/src/Flexio_Spi_Ip.o
-                0x00409a50                Flexio_Spi_Ip_DeInit
-                0x00409a84                Flexio_Spi_Ip_SyncTransmit
-                0x00409c0c                Flexio_Spi_Ip_AsyncTransmit
-                0x00409cc8                Flexio_Spi_Ip_ManageBuffers
-                0x00409d68                Flexio_Spi_Ip_UpdateFrameSize
-                0x00409db4                Flexio_Spi_Ip_UpdateLsb
-                0x00409de8                Flexio_Spi_Ip_UpdateDefaultTransmitData
-                0x00409e1c                Flexio_Spi_Ip_UpdateTransferMode
-                0x00409e4c                Flexio_Spi_Ip_Init
-                0x00409ea0                Flexio_Spi_Ip_Cancel
-                0x00409f54                Flexio_Spi_Ip_IrqHandler
-                0x00409fcc                Flexio_Spi_Ip_GetStatus
- .mcal_text     0x00409ff0      0x358 ./RTD/src/IntCtrl_Ip.o
-                0x00409ff0                IntCtrl_Ip_InstallHandlerPrivileged
-                0x0040a040                IntCtrl_Ip_EnableIrqPrivileged
-                0x0040a070                IntCtrl_Ip_DisableIrqPrivileged
-                0x0040a0a0                IntCtrl_Ip_SetPriorityPrivileged
-                0x0040a0d4                IntCtrl_Ip_GetPriorityPrivileged
-                0x0040a0f8                IntCtrl_Ip_ClearPendingPrivileged
-                0x0040a128                IntCtrl_Ip_SetPendingPrivileged
-                0x0040a158                IntCtrl_Ip_GetPendingPrivileged
-                0x0040a188                IntCtrl_Ip_GetActivePrivileged
-                0x0040a1b8                IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged
-                0x0040a1ec                IntCtrl_Ip_GetDirectedCpuInterruptPrivileged
-                0x0040a224                IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged
-                0x0040a28c                IntCtrl_Ip_Init
-                0x0040a2f8                IntCtrl_Ip_InstallHandler
-                0x0040a2fc                IntCtrl_Ip_EnableIrq
-                0x0040a300                IntCtrl_Ip_DisableIrq
-                0x0040a304                IntCtrl_Ip_SetPriority
-                0x0040a308                IntCtrl_Ip_GetPriority
-                0x0040a30c                IntCtrl_Ip_ClearPending
-                0x0040a310                IntCtrl_Ip_SetPending
-                0x0040a314                IntCtrl_Ip_GetPending
-                0x0040a322                IntCtrl_Ip_GetActive
-                0x0040a330                IntCtrl_Ip_ClearDirectedCpuInterrupt
-                0x0040a334                IntCtrl_Ip_GetDirectedCpuInterrupt
-                0x0040a342                IntCtrl_Ip_GenerateDirectedCpuInterrupt
- .mcal_text     0x0040a348      0xf8c ./RTD/src/Lpspi_Ip.o
-                0x0040a976                Lpspi_Ip_DeInit
-                0x0040a9c0                Lpspi_Ip_SyncTransmit
-                0x0040ac34                Lpspi_Ip_SyncTransmitHalfDuplex
-                0x0040aedc                Lpspi_Ip_AsyncTransmit
-                0x0040af88                Lpspi_Ip_AsyncTransmitHalfDuplex
-                0x0040b060                Lpspi_Ip_ManageBuffers
-                0x0040b0c4                Lpspi_Ip_UpdateFrameSize
-                0x0040b110                Lpspi_Ip_UpdateLsb
-                0x0040b144                Lpspi_Ip_UpdateDefaultTransmitData
-                0x0040b178                Lpspi_Ip_UpdateTransferMode
-                0x0040b1ac                Lpspi_Ip_Init
-                0x0040b214                Lpspi_Ip_Cancel
-                0x0040b274                Lpspi_Ip_IrqHandler
-                0x0040b2b4                Lpspi_Ip_GetStatus
- .mcal_text     0x0040b2d4        0xc ./RTD/src/Lpspi_Ip_Irq.o
-                0x0040b2d4                Lpspi_Ip_LPSPI_1_IRQHandler
-                0x0040b2da                Lpspi_Ip_LPSPI_2_IRQHandler
- .mcal_text     0x0040b2e0      0xdd4 ./RTD/src/Lpuart_Uart_Ip.o
-                0x0040b544                Lpuart_Uart_Ip_Init
-                0x0040b694                Lpuart_Uart_Ip_Deinit
-                0x0040b738                Lpuart_Uart_Ip_SyncSend
-                0x0040b824                Lpuart_Uart_Ip_AsyncSend
-                0x0040b8e4                Lpuart_Uart_Ip_GetTransmitStatus
-                0x0040b94c                Lpuart_Uart_Ip_AbortSendingData
-                0x0040b9b4                Lpuart_Uart_Ip_SyncReceive
-                0x0040bb28                Lpuart_Uart_Ip_AsyncReceive
-                0x0040bc20                Lpuart_Uart_Ip_GetReceiveStatus
-                0x0040bc88                Lpuart_Uart_Ip_AbortReceivingData
-                0x0040bd00                Lpuart_Uart_Ip_SetBaudRate
-                0x0040be00                Lpuart_Uart_Ip_GetBaudRate
-                0x0040be2c                Lpuart_Uart_Ip_SetTxBuffer
-                0x0040be60                Lpuart_Uart_Ip_SetRxBuffer
-                0x0040be94                Lpuart_Uart_Ip_IrqHandler
- .mcal_text     0x0040c0b4        0x6 ./RTD/src/Lpuart_Uart_Ip_Irq.o
-                0x0040c0b4                LPUART_UART_IP_3_IRQHandler
- .mcal_text     0x0040c0ba       0x1e ./RTD/src/OsIf_Timer.o
-                0x0040c0ba                OsIf_Init
-                0x0040c0c2                OsIf_GetCounter
-                0x0040c0c6                OsIf_GetElapsed
-                0x0040c0ce                OsIf_SetTimerFrequency
-                0x0040c0d0                OsIf_MicrosToTicks
- .mcal_text     0x0040c0d8       0x42 ./RTD/src/OsIf_Timer_System_Internal_Systick.o
-                0x0040c0d8                OsIf_Timer_System_Internal_Init
-                0x0040c0ee                OsIf_Timer_System_Internal_GetCounter
-                0x0040c0fa                OsIf_Timer_System_Internal_GetElapsed
- *fill*         0x0040c11a        0x2 
- .mcal_text     0x0040c11c       0xc8 ./RTD/src/SchM_Dio.o
-                0x0040c11c                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_00
-                0x0040c150                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_00
-                0x0040c180                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_01
-                0x0040c1b4                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_01
- .mcal_text     0x0040c1e4     0x125c ./RTD/src/SchM_Mcl.o
-                0x0040c1e4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_00
-                0x0040c218                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_00
-                0x0040c248                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_01
-                0x0040c27c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_01
-                0x0040c2ac                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_02
-                0x0040c2e0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_02
-                0x0040c310                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_03
-                0x0040c344                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_03
-                0x0040c374                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_04
-                0x0040c3a8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_04
-                0x0040c3d8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_05
-                0x0040c40c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_05
-                0x0040c43c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_06
-                0x0040c470                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_06
-                0x0040c4a0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_07
-                0x0040c4d4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_07
-                0x0040c504                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_08
-                0x0040c538                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_08
-                0x0040c568                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_09
-                0x0040c59c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_09
-                0x0040c5cc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_10
-                0x0040c600                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_10
-                0x0040c630                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_11
-                0x0040c664                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_11
-                0x0040c694                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_12
-                0x0040c6c8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_12
-                0x0040c6f8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_13
-                0x0040c72c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_13
-                0x0040c75c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_14
-                0x0040c790                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_14
-                0x0040c7c0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_15
-                0x0040c7f4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_15
-                0x0040c824                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_16
-                0x0040c858                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_16
-                0x0040c888                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_17
-                0x0040c8bc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_17
-                0x0040c8ec                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_18
-                0x0040c920                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_18
-                0x0040c950                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_19
-                0x0040c984                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_19
-                0x0040c9b4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_20
-                0x0040c9e8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_20
-                0x0040ca18                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_21
-                0x0040ca4c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_21
-                0x0040ca7c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_22
-                0x0040cab0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_22
-                0x0040cae0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_23
-                0x0040cb14                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_23
-                0x0040cb44                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_24
-                0x0040cb78                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_24
-                0x0040cba8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_25
-                0x0040cbdc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_25
-                0x0040cc0c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_26
-                0x0040cc40                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_26
-                0x0040cc70                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_27
-                0x0040cca4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_27
-                0x0040ccd4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_28
-                0x0040cd08                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_28
-                0x0040cd38                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_29
-                0x0040cd6c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_29
-                0x0040cd9c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_30
-                0x0040cdd0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_30
-                0x0040ce00                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_31
-                0x0040ce34                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_31
-                0x0040ce64                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_32
-                0x0040ce98                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_32
-                0x0040cec8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_33
-                0x0040cefc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_33
-                0x0040cf2c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_34
-                0x0040cf60                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_34
-                0x0040cf90                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_35
-                0x0040cfc4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_35
-                0x0040cff4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_36
-                0x0040d028                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_36
-                0x0040d058                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_37
-                0x0040d08c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_37
-                0x0040d0bc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_38
-                0x0040d0f0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_38
-                0x0040d120                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_39
-                0x0040d154                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_39
-                0x0040d184                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_40
-                0x0040d1b8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_40
-                0x0040d1e8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_41
-                0x0040d21c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_41
-                0x0040d24c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_42
-                0x0040d280                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_42
-                0x0040d2b0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_43
-                0x0040d2e4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_43
-                0x0040d314                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_44
-                0x0040d348                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_44
-                0x0040d378                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_45
-                0x0040d3ac                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_45
-                0x0040d3dc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_46
-                0x0040d410                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46
- .mcal_text     0x0040d440      0x12c ./RTD/src/SchM_Mcu.o
-                0x0040d440                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00
-                0x0040d474                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00
-                0x0040d4a4                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_01
-                0x0040d4d8                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_01
-                0x0040d508                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_02
-                0x0040d53c                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02
- .mcal_text     0x0040d56c      0xaf0 ./RTD/src/SchM_Port.o
-                0x0040d56c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_00
-                0x0040d5a0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_00
-                0x0040d5d0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_01
-                0x0040d604                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_01
-                0x0040d634                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02
-                0x0040d668                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02
-                0x0040d698                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_03
-                0x0040d6cc                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_03
-                0x0040d6fc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_04
-                0x0040d730                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_04
-                0x0040d760                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_05
-                0x0040d794                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_05
-                0x0040d7c4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_06
-                0x0040d7f8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_06
-                0x0040d828                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_07
-                0x0040d85c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_07
-                0x0040d88c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_08
-                0x0040d8c0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_08
-                0x0040d8f0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_09
-                0x0040d924                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_09
-                0x0040d954                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_10
-                0x0040d988                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_10
-                0x0040d9b8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_11
-                0x0040d9ec                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_11
-                0x0040da1c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_12
-                0x0040da50                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_12
-                0x0040da80                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_13
-                0x0040dab4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_13
-                0x0040dae4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_14
-                0x0040db18                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_14
-                0x0040db48                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_15
-                0x0040db7c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_15
-                0x0040dbac                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_16
-                0x0040dbe0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_16
-                0x0040dc10                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_17
-                0x0040dc44                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_17
-                0x0040dc74                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_18
-                0x0040dca8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_18
-                0x0040dcd8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_19
-                0x0040dd0c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_19
-                0x0040dd3c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_20
-                0x0040dd70                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_20
-                0x0040dda0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_21
-                0x0040ddd4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_21
-                0x0040de04                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_22
-                0x0040de38                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_22
-                0x0040de68                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_23
-                0x0040de9c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_23
-                0x0040decc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_24
-                0x0040df00                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_24
-                0x0040df30                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_25
-                0x0040df64                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_25
-                0x0040df94                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_26
-                0x0040dfc8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_26
-                0x0040dff8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_27
-                0x0040e02c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_27
- .mcal_text     0x0040e05c      0x76c ./RTD/src/SchM_Spi.o
-                0x0040e05c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_00
-                0x0040e090                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_00
-                0x0040e0c0                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_01
-                0x0040e0f4                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_01
-                0x0040e124                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_02
-                0x0040e158                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_02
-                0x0040e188                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_03
-                0x0040e1bc                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_03
-                0x0040e1ec                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_04
-                0x0040e220                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_04
-                0x0040e250                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_05
-                0x0040e284                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_05
-                0x0040e2b4                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_06
-                0x0040e2e8                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_06
-                0x0040e318                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_07
-                0x0040e34c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_07
-                0x0040e37c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_08
-                0x0040e3b0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_08
-                0x0040e3e0                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_09
-                0x0040e414                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_09
-                0x0040e444                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_10
-                0x0040e478                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_10
-                0x0040e4a8                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11
-                0x0040e4dc                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11
-                0x0040e50c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_12
-                0x0040e540                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_12
-                0x0040e570                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_13
-                0x0040e5a4                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_13
-                0x0040e5d4                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_14
-                0x0040e608                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_14
-                0x0040e638                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_15
-                0x0040e66c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_15
-                0x0040e69c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_16
-                0x0040e6d0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_16
-                0x0040e700                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_17
-                0x0040e734                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_17
-                0x0040e764                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_18
-                0x0040e798                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_18
- .mcal_text     0x0040e7c8      0x384 ./RTD/src/SchM_Uart.o
-                0x0040e7c8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_00
-                0x0040e7fc                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_00
-                0x0040e82c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_01
-                0x0040e860                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_01
-                0x0040e890                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_02
-                0x0040e8c4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02
-                0x0040e8f4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_03
-                0x0040e928                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_03
-                0x0040e958                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_04
-                0x0040e98c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_04
-                0x0040e9bc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_05
-                0x0040e9f0                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_05
-                0x0040ea20                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_06
-                0x0040ea54                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_06
-                0x0040ea84                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_07
-                0x0040eab8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_07
-                0x0040eae8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_08
-                0x0040eb1c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_08
- .mcal_text     0x0040eb4c      0x190 ./RTD/src/Siul2_Dio_Ip.o
-                0x0040eb82                Siul2_Dio_Ip_WritePin
-                0x0040ebd6                Siul2_Dio_Ip_WritePins
-                0x0040ebee                Siul2_Dio_Ip_GetPinsOutput
-                0x0040ec06                Siul2_Dio_Ip_SetPins
-                0x0040ec24                Siul2_Dio_Ip_ClearPins
-                0x0040ec44                Siul2_Dio_Ip_TogglePins
-                0x0040ec62                Siul2_Dio_Ip_ReadPins
-                0x0040ec7c                Siul2_Dio_Ip_ReadPin
-                0x0040ecae                Siul2_Dio_Ip_MaskedWritePins
- .mcal_text     0x0040ecdc      0x458 ./RTD/src/Siul2_Port_Ip.o
-                0x0040ee30                Siul2_Port_Ip_Init
-                0x0040ee60                Siul2_Port_Ip_SetPullSel
-                0x0040eebc                Siul2_Port_Ip_SetOutputBuffer
-                0x0040ef22                Siul2_Port_Ip_SetInputBuffer
-                0x0040ef92                Siul2_Port_Ip_SetPinDirection
-                0x0040f00a                Siul2_Port_Ip_RevertPinConfiguration
-                0x0040f06c                Siul2_Port_Ip_GetPinConfiguration
- .mcal_text     0x0040f134       0xd0 ./RTD/src/Tspc_Port_Ip.o
-                0x0040f134                Tspc_Port_Ip_EnableObeGroup
-                0x0040f164                Tspc_Port_Ip_ConfigureObeGroup
-                0x0040f204                . = ALIGN (0x4)
+ .mcal_text     0x00405b68       0x14 ./Project_Settings/Startup_Code/exceptions.o
+                0x00405b68                NMI_Handler
+                0x00405b6a                HardFault_Handler
+                0x00405b6c                MemManage_Handler
+                0x00405b6e                BusFault_Handler
+                0x00405b70                UsageFault_Handler
+                0x00405b74                DebugMon_Handler
+                0x00405b7a                undefined_handler
+ .mcal_text     0x00405b7c       0x52 ./Project_Settings/Startup_Code/nvic.o
+                0x00405b7c                NVIC_SetPriorityGrouping
+                0x00405b90                NVIC_EnableIRQ
+                0x00405ba8                NVIC_DisableIRQ
+                0x00405bc0                NVIC_SetPriority
+ *fill*         0x00405bce        0x2 
+ .mcal_text     0x00405bd0       0xe8 ./Project_Settings/Startup_Code/startup.o
+                0x00405bd0                init_data_bss
+                0x00405c5c                init_data_bss_core2
+ .mcal_text     0x00405cb8      0x2f8 ./Project_Settings/Startup_Code/system.o
+                0x00405cb8                startup_go_to_user_mode
+                0x00405cba                default_interrupt_routine
+                0x00405cbc                SystemInit
+ .mcal_text     0x00405fb0      0x890 ./RTD/src/Clock_Ip.o
+                0x00405fb2                Clock_Ip_InitClock
+                0x00406560                Clock_Ip_GetPllStatus
+                0x00406604                Clock_Ip_DistributePll
+                0x004066f0                Clock_Ip_Init
+                0x00406714                Clock_Ip_DisableClockMonitor
+                0x00406738                Clock_Ip_InstallNotificationsCallback
+                0x00406744                Clock_Ip_DisableModuleClock
+                0x0040676c                Clock_Ip_EnableModuleClock
+                0x00406794                Clock_Ip_GetClockFrequency
+                0x00406798                Clock_Ip_DisableFircInStandby
+                0x004067b0                Clock_Ip_EnableFircInStandby
+                0x004067c8                Clock_Ip_DisableSircInStandby
+                0x004067e0                Clock_Ip_EnableSircInStandby
+                0x004067f8                Clock_Ip_ReportClockErrors
+                0x00406804                Clock_Ip_StartTimeout
+                0x00406824                Clock_Ip_TimeoutExpired
+ .mcal_text     0x00406840      0x120 ./RTD/src/Clock_Ip_Divider.o
+ .mcal_text     0x00406960       0x9c ./RTD/src/Clock_Ip_DividerTrigger.o
+ .mcal_text     0x004069fc      0x1dc ./RTD/src/Clock_Ip_ExtOsc.o
+ .mcal_text     0x00406bd8        0x6 ./RTD/src/Clock_Ip_FracDiv.o
+ *fill*         0x00406bde        0x2 
+ .mcal_text     0x00406be0     0x184c ./RTD/src/Clock_Ip_Frequency.o
+                0x004083a0                Clock_Ip_Get_RTC_CLK_Frequency_TrustedCall
+                0x004083e0                Clock_Ip_SetExternalOscillatorFrequency
+                0x004083fc                Clock_Ip_GetFreq
+                0x00408408                Clock_Ip_SetExternalSignalFrequency
+ .mcal_text     0x0040842c      0x128 ./RTD/src/Clock_Ip_Gate.o
+ .mcal_text     0x00408554      0x104 ./RTD/src/Clock_Ip_IntOsc.o
+ .mcal_text     0x00408658        0x4 ./RTD/src/Clock_Ip_Irq.o
+                0x00408658                Mcu_Cmu_ClockFail_IRQHandler
+ .mcal_text     0x0040865c      0x204 ./RTD/src/Clock_Ip_Monitor.o
+                0x00408808                Clock_Ip_CMU_GetInterruptStatus
+                0x0040881c                Clock_Ip_CMU_ClockFailInt
+ .mcal_text     0x00408860      0x1c8 ./RTD/src/Clock_Ip_Pll.o
+ .mcal_text     0x00408a28      0x154 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+ .mcal_text     0x00408b7c      0x3dc ./RTD/src/Clock_Ip_Selector.o
+                0x00408f2c                Clock_Ip_SetRtcRtccClksel_TrustedCall
+ .mcal_text     0x00408f58      0x32c ./RTD/src/Clock_Ip_Specific.o
+                0x00408f58                Clock_Ip_McMeEnterKey
+                0x00408f6c                Clock_Ip_PowerClockIpModules
+                0x004091d0                DisableFircInStandbyMode
+                0x004091e0                EnableFircInStandbyMode
+                0x004091fc                DisableSircInStandbyMode
+                0x0040920c                EnableSircInStandbyMode
+                0x00409228                Clock_Ip_Command
+                0x00409278                Clock_Ip_FLASH_SetFlashIWS
+                0x0040927c                Clock_Ip_SetFlashWaitStates
+                0x00409280                Clock_Ip_SetRamWaitStates
+ .mcal_text     0x00409284       0xa4 ./RTD/src/Det.o
+                0x00409284                Det_Init
+                0x00409286                Det_ReportError
+                0x004092bc                Det_ReportRuntimeError
+                0x004092f0                Det_ReportTransientFault
+                0x00409324                Det_Start
+ .mcal_text     0x00409328      0x21c ./RTD/src/Det_stub.o
+                0x00409328                Det_TestLastReportError
+                0x00409390                Det_TestLastReportRuntimeError
+                0x004093f8                Det_TestLastReportTransientFault
+                0x00409460                Det_TestNoError
+                0x004094ac                Det_TestNoRuntimeError
+                0x004094f8                Det_TestNoTransientFault
+ .mcal_text     0x00409544       0x4c ./RTD/src/Flexio_Mcl_Ip.o
+                0x00409544                Flexio_Mcl_Ip_InitDevice
+                0x00409574                Flexio_Mcl_Ip_DeinitDevice
+ .mcal_text     0x00409590      0x192 ./RTD/src/Flexio_Mcl_Ip_HwAccess.o
+                0x00409590                Flexio_Mcl_Ip_SetSoftwareReset
+                0x004095b4                Flexio_Mcl_Ip_SetDebugEnable
+                0x004095da                Flexio_Mcl_Ip_SetEnable
+                0x004095f6                Flexio_Mcl_Ip_GetShifterStatus
+                0x00409600                Flexio_Mcl_Ip_GetAllShifterStatus
+                0x00409604                Flexio_Mcl_Ip_ClearShifterStatus
+                0x0040960e                Flexio_Mcl_Ip_GetShifterErrorStatus
+                0x00409618                Flexio_Mcl_Ip_GetAllShifterErrorStatus
+                0x0040961c                Flexio_Mcl_Ip_ClearShifterErrorStatus
+                0x00409626                Flexio_Mcl_Ip_GetTimerStatus
+                0x00409630                Flexio_Mcl_Ip_GetTimerInterruptEnable
+                0x0040963a                Flexio_Mcl_Ip_GetAllTimerStatus
+                0x0040963e                Flexio_Mcl_Ip_ClearTimerStatus
+                0x00409648                Flexio_Mcl_Ip_GetAllShifterInterrupt
+                0x0040964c                Flexio_Mcl_Ip_GetAllShifterErrorInterrupt
+                0x00409650                Flexio_Mcl_Ip_SetShifterErrorInterrupt
+                0x00409672                Flexio_Mcl_Ip_SetShifterInterrupt
+                0x00409694                Flexio_Mcl_Ip_GetAllPinsStatus
+                0x00409698                Flexio_Mcl_Ip_GetAllPinsInterrupt
+                0x0040969c                Flexio_Mcl_Ip_SetShifterDMARequest
+                0x004096be                Flexio_Mcl_Ip_GetAllTimerInterrupt
+                0x004096c2                Flexio_Mcl_Ip_SetTimerInterrupt
+                0x004096e4                Flexio_Mcl_Ip_Init
+                0x004096f4                Flexio_Mcl_Ip_SetTimerDMARequest
+                0x00409716                Flexio_Mcl_Ip_ClearPinStatus
+ *fill*         0x00409722        0x2 
+ .mcal_text     0x00409724       0x84 ./RTD/src/Flexio_Mcl_Ip_Irq.o
+                0x00409724                MCL_FLEXIO_ISR
+ .mcal_text     0x004097a8      0x868 ./RTD/src/Flexio_Spi_Ip.o
+                0x00409a70                Flexio_Spi_Ip_DeInit
+                0x00409aa4                Flexio_Spi_Ip_SyncTransmit
+                0x00409c2c                Flexio_Spi_Ip_AsyncTransmit
+                0x00409ce8                Flexio_Spi_Ip_ManageBuffers
+                0x00409d88                Flexio_Spi_Ip_UpdateFrameSize
+                0x00409dd4                Flexio_Spi_Ip_UpdateLsb
+                0x00409e08                Flexio_Spi_Ip_UpdateDefaultTransmitData
+                0x00409e3c                Flexio_Spi_Ip_UpdateTransferMode
+                0x00409e6c                Flexio_Spi_Ip_Init
+                0x00409ec0                Flexio_Spi_Ip_Cancel
+                0x00409f74                Flexio_Spi_Ip_IrqHandler
+                0x00409fec                Flexio_Spi_Ip_GetStatus
+ .mcal_text     0x0040a010      0x358 ./RTD/src/IntCtrl_Ip.o
+                0x0040a010                IntCtrl_Ip_InstallHandlerPrivileged
+                0x0040a060                IntCtrl_Ip_EnableIrqPrivileged
+                0x0040a090                IntCtrl_Ip_DisableIrqPrivileged
+                0x0040a0c0                IntCtrl_Ip_SetPriorityPrivileged
+                0x0040a0f4                IntCtrl_Ip_GetPriorityPrivileged
+                0x0040a118                IntCtrl_Ip_ClearPendingPrivileged
+                0x0040a148                IntCtrl_Ip_SetPendingPrivileged
+                0x0040a178                IntCtrl_Ip_GetPendingPrivileged
+                0x0040a1a8                IntCtrl_Ip_GetActivePrivileged
+                0x0040a1d8                IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged
+                0x0040a20c                IntCtrl_Ip_GetDirectedCpuInterruptPrivileged
+                0x0040a244                IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged
+                0x0040a2ac                IntCtrl_Ip_Init
+                0x0040a318                IntCtrl_Ip_InstallHandler
+                0x0040a31c                IntCtrl_Ip_EnableIrq
+                0x0040a320                IntCtrl_Ip_DisableIrq
+                0x0040a324                IntCtrl_Ip_SetPriority
+                0x0040a328                IntCtrl_Ip_GetPriority
+                0x0040a32c                IntCtrl_Ip_ClearPending
+                0x0040a330                IntCtrl_Ip_SetPending
+                0x0040a334                IntCtrl_Ip_GetPending
+                0x0040a342                IntCtrl_Ip_GetActive
+                0x0040a350                IntCtrl_Ip_ClearDirectedCpuInterrupt
+                0x0040a354                IntCtrl_Ip_GetDirectedCpuInterrupt
+                0x0040a362                IntCtrl_Ip_GenerateDirectedCpuInterrupt
+ .mcal_text     0x0040a368      0xf8c ./RTD/src/Lpspi_Ip.o
+                0x0040a996                Lpspi_Ip_DeInit
+                0x0040a9e0                Lpspi_Ip_SyncTransmit
+                0x0040ac54                Lpspi_Ip_SyncTransmitHalfDuplex
+                0x0040aefc                Lpspi_Ip_AsyncTransmit
+                0x0040afa8                Lpspi_Ip_AsyncTransmitHalfDuplex
+                0x0040b080                Lpspi_Ip_ManageBuffers
+                0x0040b0e4                Lpspi_Ip_UpdateFrameSize
+                0x0040b130                Lpspi_Ip_UpdateLsb
+                0x0040b164                Lpspi_Ip_UpdateDefaultTransmitData
+                0x0040b198                Lpspi_Ip_UpdateTransferMode
+                0x0040b1cc                Lpspi_Ip_Init
+                0x0040b234                Lpspi_Ip_Cancel
+                0x0040b294                Lpspi_Ip_IrqHandler
+                0x0040b2d4                Lpspi_Ip_GetStatus
+ .mcal_text     0x0040b2f4        0xc ./RTD/src/Lpspi_Ip_Irq.o
+                0x0040b2f4                Lpspi_Ip_LPSPI_1_IRQHandler
+                0x0040b2fa                Lpspi_Ip_LPSPI_2_IRQHandler
+ .mcal_text     0x0040b300      0xdd4 ./RTD/src/Lpuart_Uart_Ip.o
+                0x0040b564                Lpuart_Uart_Ip_Init
+                0x0040b6b4                Lpuart_Uart_Ip_Deinit
+                0x0040b758                Lpuart_Uart_Ip_SyncSend
+                0x0040b844                Lpuart_Uart_Ip_AsyncSend
+                0x0040b904                Lpuart_Uart_Ip_GetTransmitStatus
+                0x0040b96c                Lpuart_Uart_Ip_AbortSendingData
+                0x0040b9d4                Lpuart_Uart_Ip_SyncReceive
+                0x0040bb48                Lpuart_Uart_Ip_AsyncReceive
+                0x0040bc40                Lpuart_Uart_Ip_GetReceiveStatus
+                0x0040bca8                Lpuart_Uart_Ip_AbortReceivingData
+                0x0040bd20                Lpuart_Uart_Ip_SetBaudRate
+                0x0040be20                Lpuart_Uart_Ip_GetBaudRate
+                0x0040be4c                Lpuart_Uart_Ip_SetTxBuffer
+                0x0040be80                Lpuart_Uart_Ip_SetRxBuffer
+                0x0040beb4                Lpuart_Uart_Ip_IrqHandler
+ .mcal_text     0x0040c0d4        0x6 ./RTD/src/Lpuart_Uart_Ip_Irq.o
+                0x0040c0d4                LPUART_UART_IP_3_IRQHandler
+ .mcal_text     0x0040c0da       0x1e ./RTD/src/OsIf_Timer.o
+                0x0040c0da                OsIf_Init
+                0x0040c0e2                OsIf_GetCounter
+                0x0040c0e6                OsIf_GetElapsed
+                0x0040c0ee                OsIf_SetTimerFrequency
+                0x0040c0f0                OsIf_MicrosToTicks
+ .mcal_text     0x0040c0f8       0x42 ./RTD/src/OsIf_Timer_System_Internal_Systick.o
+                0x0040c0f8                OsIf_Timer_System_Internal_Init
+                0x0040c10e                OsIf_Timer_System_Internal_GetCounter
+                0x0040c11a                OsIf_Timer_System_Internal_GetElapsed
+ *fill*         0x0040c13a        0x2 
+ .mcal_text     0x0040c13c       0xc8 ./RTD/src/SchM_Dio.o
+                0x0040c13c                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_00
+                0x0040c170                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_00
+                0x0040c1a0                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_01
+                0x0040c1d4                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_01
+ .mcal_text     0x0040c204     0x125c ./RTD/src/SchM_Mcl.o
+                0x0040c204                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_00
+                0x0040c238                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_00
+                0x0040c268                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_01
+                0x0040c29c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_01
+                0x0040c2cc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_02
+                0x0040c300                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_02
+                0x0040c330                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_03
+                0x0040c364                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_03
+                0x0040c394                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_04
+                0x0040c3c8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_04
+                0x0040c3f8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_05
+                0x0040c42c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_05
+                0x0040c45c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_06
+                0x0040c490                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_06
+                0x0040c4c0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_07
+                0x0040c4f4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_07
+                0x0040c524                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_08
+                0x0040c558                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_08
+                0x0040c588                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_09
+                0x0040c5bc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_09
+                0x0040c5ec                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_10
+                0x0040c620                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_10
+                0x0040c650                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_11
+                0x0040c684                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_11
+                0x0040c6b4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_12
+                0x0040c6e8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_12
+                0x0040c718                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_13
+                0x0040c74c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_13
+                0x0040c77c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_14
+                0x0040c7b0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_14
+                0x0040c7e0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_15
+                0x0040c814                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_15
+                0x0040c844                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_16
+                0x0040c878                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_16
+                0x0040c8a8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_17
+                0x0040c8dc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_17
+                0x0040c90c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_18
+                0x0040c940                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_18
+                0x0040c970                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_19
+                0x0040c9a4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_19
+                0x0040c9d4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_20
+                0x0040ca08                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_20
+                0x0040ca38                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_21
+                0x0040ca6c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_21
+                0x0040ca9c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_22
+                0x0040cad0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_22
+                0x0040cb00                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_23
+                0x0040cb34                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_23
+                0x0040cb64                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_24
+                0x0040cb98                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_24
+                0x0040cbc8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_25
+                0x0040cbfc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_25
+                0x0040cc2c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_26
+                0x0040cc60                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_26
+                0x0040cc90                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_27
+                0x0040ccc4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_27
+                0x0040ccf4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_28
+                0x0040cd28                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_28
+                0x0040cd58                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_29
+                0x0040cd8c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_29
+                0x0040cdbc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_30
+                0x0040cdf0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_30
+                0x0040ce20                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_31
+                0x0040ce54                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_31
+                0x0040ce84                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_32
+                0x0040ceb8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_32
+                0x0040cee8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_33
+                0x0040cf1c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_33
+                0x0040cf4c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_34
+                0x0040cf80                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_34
+                0x0040cfb0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_35
+                0x0040cfe4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_35
+                0x0040d014                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_36
+                0x0040d048                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_36
+                0x0040d078                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_37
+                0x0040d0ac                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_37
+                0x0040d0dc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_38
+                0x0040d110                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_38
+                0x0040d140                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_39
+                0x0040d174                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_39
+                0x0040d1a4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_40
+                0x0040d1d8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_40
+                0x0040d208                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_41
+                0x0040d23c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_41
+                0x0040d26c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_42
+                0x0040d2a0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_42
+                0x0040d2d0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_43
+                0x0040d304                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_43
+                0x0040d334                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_44
+                0x0040d368                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_44
+                0x0040d398                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_45
+                0x0040d3cc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_45
+                0x0040d3fc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_46
+                0x0040d430                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46
+ .mcal_text     0x0040d460      0x12c ./RTD/src/SchM_Mcu.o
+                0x0040d460                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00
+                0x0040d494                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00
+                0x0040d4c4                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_01
+                0x0040d4f8                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_01
+                0x0040d528                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_02
+                0x0040d55c                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02
+ .mcal_text     0x0040d58c      0xaf0 ./RTD/src/SchM_Port.o
+                0x0040d58c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_00
+                0x0040d5c0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_00
+                0x0040d5f0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_01
+                0x0040d624                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_01
+                0x0040d654                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02
+                0x0040d688                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02
+                0x0040d6b8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_03
+                0x0040d6ec                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_03
+                0x0040d71c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_04
+                0x0040d750                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_04
+                0x0040d780                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_05
+                0x0040d7b4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_05
+                0x0040d7e4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_06
+                0x0040d818                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_06
+                0x0040d848                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_07
+                0x0040d87c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_07
+                0x0040d8ac                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_08
+                0x0040d8e0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_08
+                0x0040d910                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_09
+                0x0040d944                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_09
+                0x0040d974                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_10
+                0x0040d9a8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_10
+                0x0040d9d8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_11
+                0x0040da0c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_11
+                0x0040da3c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_12
+                0x0040da70                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_12
+                0x0040daa0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_13
+                0x0040dad4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_13
+                0x0040db04                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_14
+                0x0040db38                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_14
+                0x0040db68                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_15
+                0x0040db9c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_15
+                0x0040dbcc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_16
+                0x0040dc00                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_16
+                0x0040dc30                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_17
+                0x0040dc64                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_17
+                0x0040dc94                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_18
+                0x0040dcc8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_18
+                0x0040dcf8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_19
+                0x0040dd2c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_19
+                0x0040dd5c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_20
+                0x0040dd90                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_20
+                0x0040ddc0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_21
+                0x0040ddf4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_21
+                0x0040de24                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_22
+                0x0040de58                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_22
+                0x0040de88                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_23
+                0x0040debc                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_23
+                0x0040deec                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_24
+                0x0040df20                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_24
+                0x0040df50                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_25
+                0x0040df84                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_25
+                0x0040dfb4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_26
+                0x0040dfe8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_26
+                0x0040e018                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_27
+                0x0040e04c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_27
+ .mcal_text     0x0040e07c      0x76c ./RTD/src/SchM_Spi.o
+                0x0040e07c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_00
+                0x0040e0b0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_00
+                0x0040e0e0                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_01
+                0x0040e114                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_01
+                0x0040e144                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_02
+                0x0040e178                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_02
+                0x0040e1a8                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_03
+                0x0040e1dc                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_03
+                0x0040e20c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_04
+                0x0040e240                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_04
+                0x0040e270                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_05
+                0x0040e2a4                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_05
+                0x0040e2d4                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_06
+                0x0040e308                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_06
+                0x0040e338                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_07
+                0x0040e36c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_07
+                0x0040e39c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_08
+                0x0040e3d0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_08
+                0x0040e400                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_09
+                0x0040e434                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_09
+                0x0040e464                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_10
+                0x0040e498                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_10
+                0x0040e4c8                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11
+                0x0040e4fc                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11
+                0x0040e52c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_12
+                0x0040e560                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_12
+                0x0040e590                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_13
+                0x0040e5c4                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_13
+                0x0040e5f4                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_14
+                0x0040e628                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_14
+                0x0040e658                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_15
+                0x0040e68c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_15
+                0x0040e6bc                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_16
+                0x0040e6f0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_16
+                0x0040e720                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_17
+                0x0040e754                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_17
+                0x0040e784                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_18
+                0x0040e7b8                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_18
+ .mcal_text     0x0040e7e8      0x384 ./RTD/src/SchM_Uart.o
+                0x0040e7e8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_00
+                0x0040e81c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_00
+                0x0040e84c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_01
+                0x0040e880                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_01
+                0x0040e8b0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_02
+                0x0040e8e4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02
+                0x0040e914                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_03
+                0x0040e948                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_03
+                0x0040e978                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_04
+                0x0040e9ac                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_04
+                0x0040e9dc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_05
+                0x0040ea10                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_05
+                0x0040ea40                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_06
+                0x0040ea74                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_06
+                0x0040eaa4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_07
+                0x0040ead8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_07
+                0x0040eb08                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_08
+                0x0040eb3c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_08
+ .mcal_text     0x0040eb6c      0x190 ./RTD/src/Siul2_Dio_Ip.o
+                0x0040eba2                Siul2_Dio_Ip_WritePin
+                0x0040ebf6                Siul2_Dio_Ip_WritePins
+                0x0040ec0e                Siul2_Dio_Ip_GetPinsOutput
+                0x0040ec26                Siul2_Dio_Ip_SetPins
+                0x0040ec44                Siul2_Dio_Ip_ClearPins
+                0x0040ec64                Siul2_Dio_Ip_TogglePins
+                0x0040ec82                Siul2_Dio_Ip_ReadPins
+                0x0040ec9c                Siul2_Dio_Ip_ReadPin
+                0x0040ecce                Siul2_Dio_Ip_MaskedWritePins
+ .mcal_text     0x0040ecfc      0x458 ./RTD/src/Siul2_Port_Ip.o
+                0x0040ee50                Siul2_Port_Ip_Init
+                0x0040ee80                Siul2_Port_Ip_SetPullSel
+                0x0040eedc                Siul2_Port_Ip_SetOutputBuffer
+                0x0040ef42                Siul2_Port_Ip_SetInputBuffer
+                0x0040efb2                Siul2_Port_Ip_SetPinDirection
+                0x0040f02a                Siul2_Port_Ip_RevertPinConfiguration
+                0x0040f08c                Siul2_Port_Ip_GetPinConfiguration
+ .mcal_text     0x0040f154       0xd0 ./RTD/src/Tspc_Port_Ip.o
+                0x0040f154                Tspc_Port_Ip_EnableObeGroup
+                0x0040f184                Tspc_Port_Ip_ConfigureObeGroup
+                0x0040f224                . = ALIGN (0x4)
  *(.acmcu_code_rom)
-                0x0040f204                . = ALIGN (0x4)
-                0x0040f204                __acfls_code_rom_start = .
+                0x0040f224                . = ALIGN (0x4)
+                0x0040f224                __acfls_code_rom_start = .
  *(.acfls_code_rom)
  .acfls_code_rom
-                0x0040f204       0x58 ./RTD/src/Clock_Ip_Specific.o
-                0x0040f204                Clock_Ip_PRAMCSetRamIWS
- *fill*         0x0040f25c        0x4 
+                0x0040f224       0x58 ./RTD/src/Clock_Ip_Specific.o
+                0x0040f224                Clock_Ip_PRAMCSetRamIWS
+ *fill*         0x0040f27c        0x4 
  .acfls_code_rom.__stub
-                0x0040f260        0x8 linker stubs
-                0x0040f268                . = ALIGN (0x4)
-                0x0040f268                __acfls_code_rom_end = .
+                0x0040f280        0x8 linker stubs
+                0x0040f288                . = ALIGN (0x4)
+                0x0040f288                __acfls_code_rom_end = .
  *(.init)
-                0x0040f268                . = ALIGN (0x4)
+                0x0040f288                . = ALIGN (0x4)
  *(.fini)
-                0x0040f268                . = ALIGN (0x4)
+                0x0040f288                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x0040f268        0x5 ./FreeRTOS/Source/tasks.o
- .rodata        0x0040f26d        0x3 ./RTD/src/Clock_Ip_IntOsc.o
- .rodata        0x0040f270       0x30 ./RTD/src/Lpuart_Uart_Ip.o
- .rodata        0x0040f2a0        0x4 ./RTD/src/Siul2_Port_Ip.o
-                0x0040f2a0                Port_au32Siul2BaseAddr
- .rodata        0x0040f2a4        0x2 ./generate/src/Flexio_Mcl_Ip_PBcfg.o
-                0x0040f2a4                Flexio_Ip_xFlexioInit
+ .rodata        0x0040f288        0x5 ./FreeRTOS/Source/tasks.o
+ .rodata        0x0040f28d        0x3 ./RTD/src/Clock_Ip_IntOsc.o
+ .rodata        0x0040f290       0x30 ./RTD/src/Lpuart_Uart_Ip.o
+ .rodata        0x0040f2c0        0x4 ./RTD/src/Siul2_Port_Ip.o
+                0x0040f2c0                Port_au32Siul2BaseAddr
+ .rodata        0x0040f2c4        0x2 ./generate/src/Flexio_Mcl_Ip_PBcfg.o
+                0x0040f2c4                Flexio_Ip_xFlexioInit
  *(.rodata*)
  .rodata.str1.1
-                0x0040f2a6       0x14 ./FreeRTOS/Source/tasks.o
+                0x0040f2c6       0x14 ./FreeRTOS/Source/tasks.o
  .rodata.str1.1
-                0x0040f2ba        0xd ./FreeRTOS/Source/timers.o
+                0x0040f2da        0xd ./FreeRTOS/Source/timers.o
  .rodata.str1.1
-                0x0040f2c7      0x18c ./src/main.o
- *fill*         0x0040f453        0x1 
+                0x0040f2e7      0x18c ./src/main.o
+ *fill*         0x0040f473        0x1 
  .rodata._global_impure_ptr
-                0x0040f454        0x4 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-impure.o)
-                0x0040f454                _global_impure_ptr
+                0x0040f474        0x4 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-impure.o)
+                0x0040f474                _global_impure_ptr
  .rodata._svfprintf_r.str1.1
-                0x0040f458       0x11 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0040f478       0x11 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
  .rodata._printf_i.str1.1
-                0x0040f469       0x22 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0040f48c                . = ALIGN (0x4)
- *fill*         0x0040f48b        0x1 
+                0x0040f489       0x22 c:/nxp/s32ds.3.5/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0040f4ac                . = ALIGN (0x4)
+ *fill*         0x0040f4ab        0x1 
  *(.mcal_const_cfg)
  .mcal_const_cfg
-                0x0040f48c      0xb04 ./board/Siul2_Port_Ip_Cfg.o
-                0x0040f48c                g_pin_mux_InitConfigArr0
+                0x0040f4ac      0xb04 ./board/Siul2_Port_Ip_Cfg.o
+                0x0040f4ac                g_pin_mux_InitConfigArr0
  .mcal_const_cfg
-                0x0040ff90      0x6c0 ./generate/src/Clock_Ip_Cfg.o
-                0x0040ff90                Clock_Ip_aClockConfig
+                0x0040ffb0      0x6c0 ./generate/src/Clock_Ip_Cfg.o
+                0x0040ffb0                Clock_Ip_aClockConfig
  .mcal_const_cfg
-                0x00410650       0x54 ./generate/src/Flexio_Spi_Ip_Sa_PBcfg.o
-                0x00410650                Flexio_Spi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_0
-                0x0041066c                Flexio_Spi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_0
+                0x00410670       0x54 ./generate/src/Flexio_Spi_Ip_Sa_PBcfg.o
+                0x00410670                Flexio_Spi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_0
+                0x0041068c                Flexio_Spi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_0
  .mcal_const_cfg
-                0x004106a4       0x2c ./generate/src/IntCtrl_Ip_Cfg.o
-                0x004106a4                IntCtrlConfig_0
+                0x004106c4       0x2c ./generate/src/IntCtrl_Ip_Cfg.o
+                0x004106c4                IntCtrlConfig_0
  .mcal_const_cfg
-                0x004106d0       0x58 ./generate/src/Lpspi_Ip_Sa_PBcfg.o
-                0x004106d0                Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_1_Instance_1
-                0x004106e8                Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2
-                0x00410700                Lpspi_Ip_DeviceAttributes_SpiExternalDevice_1_Instance_2
-                0x00410714                Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2
+                0x004106f0       0x58 ./generate/src/Lpspi_Ip_Sa_PBcfg.o
+                0x004106f0                Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_1_Instance_1
+                0x00410708                Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2
+                0x00410720                Lpspi_Ip_DeviceAttributes_SpiExternalDevice_1_Instance_2
+                0x00410734                Lpspi_Ip_DeviceAttributes_SpiExternalDevice_0_Instance_2
  .mcal_const_cfg
-                0x00410728       0x28 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
-                0x00410728                Lpuart_Uart_Ip_xHwConfigPB_3
-                0x00410750                . = ALIGN (0x4)
+                0x00410748       0x28 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
+                0x00410748                Lpuart_Uart_Ip_xHwConfigPB_3
+                0x00410770                . = ALIGN (0x4)
  *(.mcal_const)
- .mcal_const    0x00410750     0x119c ./RTD/src/Clock_Ip_Data.o
-                0x00410750                Clock_Ip_axGateInfo
-                0x00410e28                Clock_Ip_axFeatureExtensions
-                0x00411048                Clock_Ip_aeHwDfsName
-                0x0041104c                Clock_Ip_aeHwPllName
-                0x00411054                Clock_Ip_aeSourceTypeClockName
-                0x004110c0                Clock_Ip_apxMcMeTriggerPartitions
-                0x004110d0                Clock_Ip_apxMcMeGetPartitions
-                0x004110e0                Clock_Ip_apxMcMeSetPartitions
-                0x004110f0                Clock_Ip_axCmuInfo
-                0x00411160                Clock_Ip_aeCmuNames
-                0x0041117c                Clock_Ip_apxCmu
-                0x00411198                Clock_Ip_apxPll
-                0x004111a8                Clock_Ip_apxXosc
-                0x004111b0                Clock_Ip_apxCgmPcfs
-                0x004111b4                Clock_Ip_apxCgm
-                0x00411204                Clock_Ip_au16SelectorEntryRtcHardwareValue
-                0x0041123a                Clock_Ip_au16SelectorEntryHardwareValue
-                0x00411270                Clock_Ip_au8SoftwareMuxResetValue
-                0x0041130d                Clock_Ip_au8ClockFeatures
-                0x00411892                Clock_Ip_au8CmuCallbackIndex
-                0x0041189b                Clock_Ip_au8PcfsCallbackIndex
-                0x004118a4                Clock_Ip_au8SelectorCallbackIndex
-                0x004118ad                Clock_Ip_au8PllCallbackIndex
-                0x004118b6                Clock_Ip_au8FractionalDividerCallbackIndex
-                0x004118bf                Clock_Ip_au8GateCallbackIndex
-                0x004118c8                Clock_Ip_au8IrcoscCallbackIndex
-                0x004118d1                Clock_Ip_au8XoscCallbackIndex
-                0x004118da                Clock_Ip_au8DividerTriggerCallbackIndex
-                0x004118e3                Clock_Ip_au8DividerCallbackIndex
- .mcal_const    0x004118ec       0x10 ./RTD/src/Clock_Ip_Divider.o
-                0x004118ec                Clock_Ip_axDividerCallbacks
- .mcal_const    0x004118fc       0x10 ./RTD/src/Clock_Ip_DividerTrigger.o
-                0x004118fc                Clock_Ip_axDividerTriggerCallbacks
- .mcal_const    0x0041190c       0x3c ./RTD/src/Clock_Ip_ExtOsc.o
-                0x0041190c                Clock_Ip_axExtOscCallbacks
- .mcal_const    0x00411948        0xc ./RTD/src/Clock_Ip_FracDiv.o
-                0x00411948                Clock_Ip_axFracDivCallbacks
- .mcal_const    0x00411954      0x31c ./RTD/src/Clock_Ip_Frequency.o
- .mcal_const    0x00411c70       0x10 ./RTD/src/Clock_Ip_Gate.o
-                0x00411c70                Clock_Ip_axGateCallbacks
- .mcal_const    0x00411c80       0x30 ./RTD/src/Clock_Ip_IntOsc.o
-                0x00411c80                Clock_Ip_axIntOscCallbacks
- .mcal_const    0x00411cb0       0x20 ./RTD/src/Clock_Ip_Monitor.o
-                0x00411cb0                Clock_Ip_axCmuCallbacks
- .mcal_const    0x00411cd0       0x3c ./RTD/src/Clock_Ip_Pll.o
-                0x00411cd0                Clock_Ip_axPllCallbacks
- .mcal_const    0x00411d0c        0x8 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
-                0x00411d0c                Clock_Ip_axPcfsCallbacks
- .mcal_const    0x00411d14       0x28 ./RTD/src/Clock_Ip_Selector.o
-                0x00411d14                Clock_Ip_axSelectorCallbacks
- .mcal_const    0x00411d3c        0x4 ./RTD/src/Flexio_Mcl_Ip.o
-                0x00411d3c                Flexio_Ip_paxBase
- .mcal_const    0x00411d40       0x18 ./RTD/src/Lpspi_Ip.o
- .mcal_const    0x00411d58       0x40 ./RTD/src/Lpuart_Uart_Ip.o
-                0x00411d98                . = ALIGN (0x4)
-                0x00411d98                __init_table = .
+ .mcal_const    0x00410770     0x119c ./RTD/src/Clock_Ip_Data.o
+                0x00410770                Clock_Ip_axGateInfo
+                0x00410e48                Clock_Ip_axFeatureExtensions
+                0x00411068                Clock_Ip_aeHwDfsName
+                0x0041106c                Clock_Ip_aeHwPllName
+                0x00411074                Clock_Ip_aeSourceTypeClockName
+                0x004110e0                Clock_Ip_apxMcMeTriggerPartitions
+                0x004110f0                Clock_Ip_apxMcMeGetPartitions
+                0x00411100                Clock_Ip_apxMcMeSetPartitions
+                0x00411110                Clock_Ip_axCmuInfo
+                0x00411180                Clock_Ip_aeCmuNames
+                0x0041119c                Clock_Ip_apxCmu
+                0x004111b8                Clock_Ip_apxPll
+                0x004111c8                Clock_Ip_apxXosc
+                0x004111d0                Clock_Ip_apxCgmPcfs
+                0x004111d4                Clock_Ip_apxCgm
+                0x00411224                Clock_Ip_au16SelectorEntryRtcHardwareValue
+                0x0041125a                Clock_Ip_au16SelectorEntryHardwareValue
+                0x00411290                Clock_Ip_au8SoftwareMuxResetValue
+                0x0041132d                Clock_Ip_au8ClockFeatures
+                0x004118b2                Clock_Ip_au8CmuCallbackIndex
+                0x004118bb                Clock_Ip_au8PcfsCallbackIndex
+                0x004118c4                Clock_Ip_au8SelectorCallbackIndex
+                0x004118cd                Clock_Ip_au8PllCallbackIndex
+                0x004118d6                Clock_Ip_au8FractionalDividerCallbackIndex
+                0x004118df                Clock_Ip_au8GateCallbackIndex
+                0x004118e8                Clock_Ip_au8IrcoscCallbackIndex
+                0x004118f1                Clock_Ip_au8XoscCallbackIndex
+                0x004118fa                Clock_Ip_au8DividerTriggerCallbackIndex
+                0x00411903                Clock_Ip_au8DividerCallbackIndex
+ .mcal_const    0x0041190c       0x10 ./RTD/src/Clock_Ip_Divider.o
+                0x0041190c                Clock_Ip_axDividerCallbacks
+ .mcal_const    0x0041191c       0x10 ./RTD/src/Clock_Ip_DividerTrigger.o
+                0x0041191c                Clock_Ip_axDividerTriggerCallbacks
+ .mcal_const    0x0041192c       0x3c ./RTD/src/Clock_Ip_ExtOsc.o
+                0x0041192c                Clock_Ip_axExtOscCallbacks
+ .mcal_const    0x00411968        0xc ./RTD/src/Clock_Ip_FracDiv.o
+                0x00411968                Clock_Ip_axFracDivCallbacks
+ .mcal_const    0x00411974      0x31c ./RTD/src/Clock_Ip_Frequency.o
+ .mcal_const    0x00411c90       0x10 ./RTD/src/Clock_Ip_Gate.o
+                0x00411c90                Clock_Ip_axGateCallbacks
+ .mcal_const    0x00411ca0       0x30 ./RTD/src/Clock_Ip_IntOsc.o
+                0x00411ca0                Clock_Ip_axIntOscCallbacks
+ .mcal_const    0x00411cd0       0x20 ./RTD/src/Clock_Ip_Monitor.o
+                0x00411cd0                Clock_Ip_axCmuCallbacks
+ .mcal_const    0x00411cf0       0x3c ./RTD/src/Clock_Ip_Pll.o
+                0x00411cf0                Clock_Ip_axPllCallbacks
+ .mcal_const    0x00411d2c        0x8 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+                0x00411d2c                Clock_Ip_axPcfsCallbacks
+ .mcal_const    0x00411d34       0x28 ./RTD/src/Clock_Ip_Selector.o
+                0x00411d34                Clock_Ip_axSelectorCallbacks
+ .mcal_const    0x00411d5c        0x4 ./RTD/src/Flexio_Mcl_Ip.o
+                0x00411d5c                Flexio_Ip_paxBase
+ .mcal_const    0x00411d60       0x18 ./RTD/src/Lpspi_Ip.o
+ .mcal_const    0x00411d78       0x40 ./RTD/src/Lpuart_Uart_Ip.o
+                0x00411db8                . = ALIGN (0x4)
+                0x00411db8                __init_table = .
  *(.init_table)
- .init_table    0x00411d98       0x4c ./Project_Settings/Startup_Code/startup_cm7.o
-                0x00411de4                . = ALIGN (0x4)
-                0x00411de4                __zero_table = .
+ .init_table    0x00411db8       0x4c ./Project_Settings/Startup_Code/startup_cm7.o
+                0x00411e04                . = ALIGN (0x4)
+                0x00411e04                __zero_table = .
  *(.zero_table)
- .zero_table    0x00411de4       0x1c ./Project_Settings/Startup_Code/startup_cm7.o
+ .zero_table    0x00411e04       0x1c ./Project_Settings/Startup_Code/startup_cm7.o
 
-.glue_7         0x00411e00        0x0
- .glue_7        0x00411e00        0x0 linker stubs
+.glue_7         0x00411e20        0x0
+ .glue_7        0x00411e20        0x0 linker stubs
 
-.glue_7t        0x00411e00        0x0
- .glue_7t       0x00411e00        0x0 linker stubs
+.glue_7t        0x00411e20        0x0
+ .glue_7t       0x00411e20        0x0 linker stubs
 
-.vfp11_veneer   0x00411e00        0x0
- .vfp11_veneer  0x00411e00        0x0 linker stubs
+.vfp11_veneer   0x00411e20        0x0
+ .vfp11_veneer  0x00411e20        0x0 linker stubs
 
-.v4_bx          0x00411e00        0x0
- .v4_bx         0x00411e00        0x0 linker stubs
+.v4_bx          0x00411e20        0x0
+ .v4_bx         0x00411e20        0x0 linker stubs
 
-.iplt           0x00411e00        0x0
- .iplt          0x00411e00        0x0 ./FreeRTOS/Source/event_groups.o
+.iplt           0x00411e20        0x0
+ .iplt          0x00411e20        0x0 ./FreeRTOS/Source/event_groups.o
 
-.rel.dyn        0x00411e00        0x0
- .rel.iplt      0x00411e00        0x0 ./FreeRTOS/Source/event_groups.o
-                0x00411e00                . = ALIGN (0x4)
-                0x00411e00                __text_end = .
-                0x00411e00                __sram_data_rom = __text_end
+.rel.dyn        0x00411e20        0x0
+ .rel.iplt      0x00411e20        0x0 ./FreeRTOS/Source/event_groups.o
+                0x00411e20                . = ALIGN (0x4)
+                0x00411e20                __text_end = .
+                0x00411e20                __sram_data_rom = __text_end
 
 .sram_bss       0x20400000     0x23a0
                 0x20400000                . = ALIGN (0x8)
@@ -6420,7 +6421,7 @@ END GROUP
                 0x204023a0                . = ALIGN (0x4)
                 0x204023a0                __sram_bss_end = .
 
-.sram_data      0x204023a0      0x15c load address 0x00411e00
+.sram_data      0x204023a0      0x15c load address 0x00411e20
                 0x204023a0                . = ALIGN (0x4)
                 0x204023a0                __sram_data_begin__ = .
                 0x204023a0                . = ALIGN (0x4)
@@ -6529,9 +6530,9 @@ END GROUP
  .mcal_data     0x204024e4       0x18 ./generate/src/Lpspi_Ip_Sa_PBcfg.o
                 0x204024fc                . = ALIGN (0x4)
                 0x204024fc                __sram_data_end__ = .
-                0x00411f5c                __sram_data_rom_end = (__sram_data_rom + (__sram_data_end__ - __sram_data_begin__))
+                0x00411f7c                __sram_data_rom_end = (__sram_data_rom + (__sram_data_end__ - __sram_data_begin__))
 
-.heap           0x204024fc     0x2000 load address 0x00411f5c
+.heap           0x204024fc     0x2000 load address 0x00411f7c
                 0x00000000                . = (. + ALIGN (0x4))
                 0x204024fc                _end = .
                 0x204024fc                end = .
@@ -6545,10 +6546,10 @@ END GROUP
                 0x2047ff00                acfls_code_ram_start = .
  *(.acfls_code_ram)
                 0x2047ff00                acfls_code_ram_stop = .
-                0x00411f5c                __non_cacheable_data_rom = __sram_data_rom_end
+                0x00411f7c                __non_cacheable_data_rom = __sram_data_rom_end
 
 .non_cacheable_data
-                0x20480000        0x4 load address 0x00411f5c
+                0x20480000        0x4 load address 0x00411f7c
                 0x20480000                . = ALIGN (0x4)
                 0x20480000                __non_cacheable_data_start__ = .
  *(.mcal_data_no_cacheable)
@@ -6558,13 +6559,13 @@ END GROUP
                 0x20480000                HSE_LOOP_ADDR = .
                 0x20480000        0x4 LONG 0x0
                 0x20480004                __non_cacheable_data_end__ = .
-                0x00411f60                __non_cacheable_data_rom_end = (__non_cacheable_data_rom + (__non_cacheable_data_end__ - __non_cacheable_data_start__))
+                0x00411f80                __non_cacheable_data_rom_end = (__non_cacheable_data_rom + (__non_cacheable_data_end__ - __non_cacheable_data_start__))
 
-.igot.plt       0x20480004        0x0 load address 0x00411f60
+.igot.plt       0x20480004        0x0 load address 0x00411f80
  .igot.plt      0x20480004        0x0 ./FreeRTOS/Source/event_groups.o
 
 .non_cacheable_bss
-                0x20480004      0xe6c load address 0x00411f60
+                0x20480004      0xe6c load address 0x00411f80
                 0x20480010                . = ALIGN (0x10)
  *fill*         0x20480004        0xc 
                 0x20480010                __non_cacheable_bss_start = .
@@ -6611,16 +6612,16 @@ END GROUP
  *(.int_results)
                 0x204bc000                . = (. + 0x100)
  *fill*         0x204bbf00      0x100 
-                0x00411f60                __shareable_data_rom = __non_cacheable_data_rom_end
+                0x00411f80                __shareable_data_rom = __non_cacheable_data_rom_end
 
 .shareable_data
-                0x204bc000        0x0 load address 0x00411f60
+                0x204bc000        0x0 load address 0x00411f80
                 0x204bc000                . = ALIGN (0x4)
                 0x204bc000                __shareable_data_start__ = .
  *(.mcal_shared_data)
                 0x204bc000                . = ALIGN (0x4)
                 0x204bc000                __shareable_data_end__ = .
-                0x00411f60                __shareable_data_rom_end = (__shareable_data_rom + (__shareable_data_end__ - __shareable_data_start__))
+                0x00411f80                __shareable_data_rom_end = (__shareable_data_rom + (__shareable_data_end__ - __shareable_data_start__))
 
 .int_vector     0x20000000      0x408
                 0x20000000                . = ALIGN (0x800)
@@ -6629,15 +6630,15 @@ END GROUP
  *fill*         0x20000000      0x408 
                 0x20000408                . = ALIGN (0x4)
                 0x20000408                __interrupts_ram_end = .
-                0x00411f60                __tcm_data_rom = __shareable_data_rom_end
+                0x00411f80                __tcm_data_rom = __shareable_data_rom_end
 
-.data_tcm_data  0x20000408        0x0 load address 0x00411f60
+.data_tcm_data  0x20000408        0x0 load address 0x00411f80
                 0x20000408                . = ALIGN (0x4)
                 0x20000408                __dtcm_data_start__ = .
  *(.dtcm_data*)
                 0x20000408                . = ALIGN (0x4)
                 0x20000408                __dtcm_data_end__ = .
-                0x00411f60                __tcm_data_rom_end = (__tcm_data_rom + (__dtcm_data_end__ - __dtcm_data_start__))
+                0x00411f80                __tcm_data_rom_end = (__tcm_data_rom + (__dtcm_data_end__ - __dtcm_data_start__))
 
 .bss_tcm_data   0x20000408        0x0
                 0x20000408                . = ALIGN (0x4)
@@ -6645,15 +6646,15 @@ END GROUP
  *(.dtcm_bss*)
                 0x20000408                . = ALIGN (0x4)
                 0x20000408                __dtcm_bss_end__ = .
-                0x00411f60                __tcm_code_rom_start = __tcm_data_rom_end
+                0x00411f80                __tcm_code_rom_start = __tcm_data_rom_end
 
-.itcm_text      0x00000000        0x0 load address 0x00411f60
+.itcm_text      0x00000000        0x0 load address 0x00411f80
                 0x00000000                . = ALIGN (0x4)
                 0x00000000                __itcm_start__ = .
  *(.itcm_text*)
                 0x00000000                . = ALIGN (0x4)
                 0x00000000                __itcm_end__ = .
-                0x00411f60                __tcm_code_rom_end = (__tcm_code_rom_start + (__itcm_end__ - __itcm_start__))
+                0x00411f80                __tcm_code_rom_end = (__tcm_code_rom_start + (__itcm_end__ - __itcm_start__))
 
 .shareable_bss  0x204bc000        0x0
                 0x204bc000                . = ALIGN (0x10)
@@ -6672,18 +6673,18 @@ END GROUP
                 0x204bc000                __RAM_SHAREABLE_START = ORIGIN (int_sram_shareable)
                 0x204c0000                __RAM_SHAREABLE_END = (ORIGIN (int_sram_shareable) + LENGTH (int_sram_shareable))
                 0x0000000e                __RAM_SHAREABLE_SIZE = 0xe
-                0x00411f60                __ROM_SHAREABLE_START = __shareable_data_rom
-                0x00411f60                __ROM_SHAREABLE_END = __shareable_data_rom_end
+                0x00411f80                __ROM_SHAREABLE_START = __shareable_data_rom
+                0x00411f80                __ROM_SHAREABLE_END = __shareable_data_rom_end
                 0x20480000                __RAM_NO_CACHEABLE_START = ORIGIN (int_sram_no_cacheable)
                 0x204bbfff                __RAM_NO_CACHEABLE_END = (ORIGIN (int_sram_shareable) - 0x1)
                 0x00000012                __RAM_NO_CACHEABLE_SIZE = 0x12
-                0x00411f5c                __ROM_NO_CACHEABLE_START = __non_cacheable_data_rom
-                0x00411f60                __ROM_NO_CACHEABLE_END = __non_cacheable_data_rom_end
+                0x00411f7c                __ROM_NO_CACHEABLE_START = __non_cacheable_data_rom
+                0x00411f80                __ROM_NO_CACHEABLE_END = __non_cacheable_data_rom_end
                 0x204023a0                __RAM_CACHEABLE_START = __sram_data_begin__
                 0x2047ffff                __RAM_CACHEABLE_END = (ORIGIN (int_sram_no_cacheable) - 0x1)
                 0x00000013                __RAM_CACHEABLE_SIZE = 0x13
-                0x00411e00                __ROM_CACHEABLE_START = __sram_data_rom
-                0x00411f5c                __ROM_CACHEABLE_END = __sram_data_rom_end
+                0x00411e20                __ROM_CACHEABLE_START = __sram_data_rom
+                0x00411f7c                __ROM_CACHEABLE_END = __sram_data_rom_end
                 0x00400000                __ROM_CODE_START = ORIGIN (int_pflash)
                 0x10000000                __ROM_DATA_START = ORIGIN (int_dflash)
                 0x20400000                __BSS_SRAM_START = __sram_bss_start
@@ -6699,21 +6700,21 @@ END GROUP
                 0x00400800                __INIT_INTERRUPT_START = __interrupts_init_start
                 0x00400c08                __INIT_INTERRUPT_END = __interrupts_init_end
                 0x00000000                __RAM_ITCM_START = __itcm_start__
-                0x00411f60                __ROM_ITCM_START = __tcm_code_rom_start
-                0x00411f60                __ROM_ITCM_END = __tcm_code_rom_end
+                0x00411f80                __ROM_ITCM_START = __tcm_code_rom_start
+                0x00411f80                __ROM_ITCM_END = __tcm_code_rom_end
                 0x20000408                __RAM_DTCM_DATA_START = __dtcm_data_start__
-                0x00411f60                __ROM_DTCM_DATA_START = __tcm_data_rom
-                0x00411f60                __ROM_DTCM_END = __tcm_data_rom_end
-                0x00411d98                __INIT_TABLE = __init_table
-                0x00411de4                __ZERO_TABLE = __zero_table
+                0x00411f80                __ROM_DTCM_DATA_START = __tcm_data_rom
+                0x00411f80                __ROM_DTCM_END = __tcm_data_rom_end
+                0x00411db8                __INIT_TABLE = __init_table
+                0x00411e04                __ZERO_TABLE = __zero_table
                 0x00000001                __RAM_INIT = 0x1
                 0x00000001                __ITCM_INIT = 0x1
                 0x00000001                __DTCM_INIT = 0x1
-                0x0040f204                Fls_ACEraseRomStart = __acfls_code_rom_start
-                0x0040f268                Fls_ACEraseRomEnd = __acfls_code_rom_end
+                0x0040f224                Fls_ACEraseRomStart = __acfls_code_rom_start
+                0x0040f288                Fls_ACEraseRomEnd = __acfls_code_rom_end
                 0x00000019                Fls_ACEraseSize = ((__acfls_code_rom_end - __acfls_code_rom_start) / 0x4)
-                0x0040f204                Fls_ACWriteRomStart = __acfls_code_rom_start
-                0x0040f268                Fls_ACWriteRomEnd = __acfls_code_rom_end
+                0x0040f224                Fls_ACWriteRomStart = __acfls_code_rom_start
+                0x0040f288                Fls_ACWriteRomEnd = __acfls_code_rom_end
                 0x00000019                Fls_ACWriteSize = ((__acfls_code_rom_end - __acfls_code_rom_start) / 0x4)
                 0x2047ff00                _ERASE_FUNC_ADDRESS_ = ADDR (.acfls_code_ram)
                 0x2047ff00                _WRITE_FUNC_ADDRESS_ = ADDR (.acfls_code_ram)
@@ -6726,7 +6727,7 @@ END GROUP
 OUTPUT(Demo_FreeRTOS.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000    0x3d194
+.debug_info     0x00000000    0x3d1df
  .debug_info    0x00000000       0x6f ./FreeRTOS/Source/croutine.o
  .debug_info    0x0000006f      0xeef ./FreeRTOS/Source/event_groups.o
  .debug_info    0x00000f5e      0x2dd ./FreeRTOS/Source/list.o
@@ -6792,9 +6793,9 @@ LOAD linker stubs
  .debug_info    0x00038725      0x2ea ./generate/src/Lpspi_Ip_Sa_PBcfg.o
  .debug_info    0x00038a0f      0x3b9 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
  .debug_info    0x00038dc8       0x7d ./generate/src/OsIf_Cfg.o
- .debug_info    0x00038e45     0x434f ./src/main.o
+ .debug_info    0x00038e45     0x439a ./src/main.o
 
-.debug_abbrev   0x00000000     0x6d94
+.debug_abbrev   0x00000000     0x6dbf
  .debug_abbrev  0x00000000       0x29 ./FreeRTOS/Source/croutine.o
  .debug_abbrev  0x00000029      0x2fd ./FreeRTOS/Source/event_groups.o
  .debug_abbrev  0x00000326      0x109 ./FreeRTOS/Source/list.o
@@ -6860,7 +6861,7 @@ LOAD linker stubs
  .debug_abbrev  0x000068ee       0xfa ./generate/src/Lpspi_Ip_Sa_PBcfg.o
  .debug_abbrev  0x000069e8       0xda ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
  .debug_abbrev  0x00006ac2       0x29 ./generate/src/OsIf_Cfg.o
- .debug_abbrev  0x00006aeb      0x2a9 ./src/main.o
+ .debug_abbrev  0x00006aeb      0x2d4 ./src/main.o
 
 .debug_aranges  0x00000000     0x1ac8
  .debug_aranges
@@ -7361,7 +7362,7 @@ LOAD linker stubs
  .debug_macro   0x0006ef23       0xee ./src/main.o
  .debug_macro   0x0006f011       0x34 ./src/main.o
 
-.debug_line     0x00000000    0x2a781
+.debug_line     0x00000000    0x2a7a9
  .debug_line    0x00000000      0x356 ./FreeRTOS/Source/croutine.o
  .debug_line    0x00000356      0xb80 ./FreeRTOS/Source/event_groups.o
  .debug_line    0x00000ed6      0x536 ./FreeRTOS/Source/list.o
@@ -7427,9 +7428,9 @@ LOAD linker stubs
  .debug_line    0x00028aea      0x4f7 ./generate/src/Lpspi_Ip_Sa_PBcfg.o
  .debug_line    0x00028fe1      0x55b ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
  .debug_line    0x0002953c      0x475 ./generate/src/OsIf_Cfg.o
- .debug_line    0x000299b1      0xdd0 ./src/main.o
+ .debug_line    0x000299b1      0xdf8 ./src/main.o
 
-.debug_str      0x00000000   0x2d9b0d
+.debug_str      0x00000000   0x2d9b32
  .debug_str     0x00000000     0x9210 ./FreeRTOS/Source/croutine.o
                                0x93fc (size before relaxing)
  .debug_str     0x00009210     0x3580 ./FreeRTOS/Source/event_groups.o
@@ -7560,8 +7561,8 @@ LOAD linker stubs
                               0x10ffc (size before relaxing)
  .debug_str     0x002d8d20      0x102 ./generate/src/OsIf_Cfg.o
                                0x841a (size before relaxing)
- .debug_str     0x002d8e22      0xceb ./src/main.o
-                              0xd1f10 (size before relaxing)
+ .debug_str     0x002d8e22      0xd10 ./src/main.o
+                              0xd1f35 (size before relaxing)
 
 .comment        0x00000000       0x88
  .comment       0x00000000       0x88 ./FreeRTOS/Source/croutine.o
@@ -7917,7 +7918,7 @@ LOAD linker stubs
  .debug_ranges  0x00002170       0x48 ./RTD/src/Tspc_Port_Ip.o
  .debug_ranges  0x000021b8       0x18 ./src/main.o
 
-.debug_frame    0x00000000     0x5400
+.debug_frame    0x00000000     0x5410
  .debug_frame   0x00000000      0x140 ./FreeRTOS/Source/event_groups.o
  .debug_frame   0x00000140       0x6c ./FreeRTOS/Source/list.o
  .debug_frame   0x000001ac      0x39c ./FreeRTOS/Source/queue.o
@@ -7966,4 +7967,4 @@ LOAD linker stubs
  .debug_frame   0x0000503c      0x138 ./RTD/src/Siul2_Dio_Ip.o
  .debug_frame   0x00005174      0x144 ./RTD/src/Siul2_Port_Ip.o
  .debug_frame   0x000052b8       0x58 ./RTD/src/Tspc_Port_Ip.o
- .debug_frame   0x00005310       0xf0 ./src/main.o
+ .debug_frame   0x00005310      0x100 ./src/main.o

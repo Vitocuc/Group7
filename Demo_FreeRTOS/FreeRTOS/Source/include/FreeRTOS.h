@@ -1110,7 +1110,7 @@
 /* Set configENABLE_MPU to 1 to enable MPU support and 0 to disable it. This is
  * currently used in ARMv8M ports. */
 #ifndef configENABLE_MPU
-    #define configENABLE_MPU    0
+    #define configENABLE_MPU    1
 #endif
 
 /* Set configENABLE_FPU to 1 to enable FPU support and 0 to disable it. This is

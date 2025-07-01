@@ -208,6 +208,12 @@ This setting tells FreeRTOS to use MPU features for task management.
     #define configSUPPORT_STATIC_ALLOCATION   1
     #define configSUPPORT_DYNAMIC_ALLOCATION  1
     ```
+This is the command that permits to check that the MPU is working, because in FreeRTOS implementation is present a function TestMPU that try to write on SRAM but the program crash. For this purpose we have builded another elf file.
+    ```
+
+./qemu-system-arm -M nxps32k358evb -nographic -kernel ../../Demo_FreeRTOS_MPU/Demo_FreeRTOS.elf -serial none -serial none -serial none -serial mon:stdio -d guest_errors
+    ```
+
 
 #### Why are both flags necessary?
 

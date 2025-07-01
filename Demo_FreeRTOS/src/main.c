@@ -134,6 +134,20 @@ void vTimerCallback( TimerHandle_t xTimer ){
     xSemaphoreGive(zSemaphore);
 }
 
+void TestMPU(){
+    //pointer to flash rom region
+    volatile uint32_t* flash_ptr = (uint32_t*)0x00400000;
+    //pointer to sram rwx region
+    volatile uint32_t* sram_ptr = (uint32_t*)0x20000000;
+
+    //no error since sram region has write permission
+    *sram_ptr = 0x12345678;
+    //no error since flash region has read permission
+    uint32_t flash_val = *flash_ptr;
+    //error detected since flash is a read-only memory region
+    *flash_ptr = 0x12345678;
+}
+
 // === MAIN ===
 int main(void)
 {
@@ -147,7 +161,7 @@ int main(void)
 
     // SPI INITIALIZATION
     Lpspi_Ip_Init(&Lpspi_Ip_PhyUnitConfig_SpiPhyUnit_0_Instance_2);
-
+    //TestMPU();
     // FREERTOS SEMAPHORES & MUTEX INIT
     xMutex = xSemaphoreCreateMutex();
     if(xMutex == NULL) print("Mutex init failed\r\n");
