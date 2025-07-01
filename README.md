@@ -1,6 +1,4 @@
-Certamente. Ho mantenuto le prime sezioni come richiesto e ho tradotto in inglese solo l'ultima parte relativa all'architettura del progetto.
-
-# Group7 Project - QEMU for NXP S32K3
+# Group7 Project - FreeRTOS Porting on Emulated S32K with LPUART/LPSPI
 
 This document describes the steps to configure, compile, run, and debug the modified QEMU project to support the NXP S32K3 board.
 
