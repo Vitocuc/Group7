@@ -238,6 +238,17 @@ In this project, we virtualized a complete master-slave system: the FreeRTOS app
 #### a. LPUART for Debugging
 
 The `Lpuart_Uart_Ip` driver is used to initialize and control the simulated serial port. In our project, its sole purpose is to provide a debug channel. The `print()` function uses it to send status messages from the microcontroller to the QEMU console, allowing us to monitor the application's behavior in real-time.
+`UART_send_byte`, transmits a single byte of data over a UART interface.
+
+It serves as a simplified wrapper for a more complex driver function, Lpuart_Uart_Ip_SyncSend. When called, it passes the following parameters to the driver:
+
+    UART_LPUART_INTERNAL_CHANNEL: A constant that specifies which LPUART hardware peripheral to use.
+
+    &byte: A pointer to the single byte of data that needs to be sent.
+
+    1: The number of bytes to transmit.
+
+    100: A timeout value (likely in milliseconds) that the function will wait for the transmission to complete before failing.
 
 #### b. The Virtual SPI System: Master and Slave
 
