@@ -244,8 +244,6 @@ In this project, we virtualized a complete master-slave system: the FreeRTOS app
 
 #### a. LPUART for Debugging
 
-Of course, here is the information formatted in Markdown.
-
 ## LPUART Driver and Functions
 
 The **`Lpuart_Uart_Ip`** driver is used to initialize and control the simulated serial port. In our project, its sole purpose is to provide a debug channel. The `print()` function uses it to send status messages from the microcontroller to the QEMU console, allowing us to monitor the application's behavior in real-time.
